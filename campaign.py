@@ -6,6 +6,7 @@ import concurrent.futures
 from dataclasses import asdict
 from datetime import datetime
 import hashlib
+import itertools
 import json
 import os
 from pathlib import Path
@@ -44,22 +45,21 @@ def make_plan(phase, model_revisions, selected="json-recovery"):
         raise ValueError("unknown phase")
     configs = [selected] if phase == "main" else (["json-recovery"] if phase == "probe" else
                                                 ["native-minimal", "native-recovery", "json-recovery"])
-    seeds = [11, 22, 33] if phase == "main" else [0]
+    seeds = [11, 22] if phase == "main" else [0]
+    scales = [2, 4] if phase == "main" else [2]
     cells = []
-    for family in ("offboarding", "reconciliation"):
-        for seed in seeds:
-            for fault in ([True] if phase == "probe" else [False, True]):
-                for model in MODELS:
-                    for config_name in configs:
-                        transport, strategy = config_name.split("-")
-                        config = asdict(ActorConfig(transport=transport, strategy=strategy))
-                        for repeat in range(2 if phase == "main" else 1):
-                            cell = {"family": family, "case_seed": seed, "scale": {11: 2, 22: 3, 33: 4}.get(seed, 2),
-                                    "fault": fault, "model": model, "model_revision": model_revisions[model],
-                                    "config_name": config_name, "config": config, "repeat": repeat,
-                                    "sampling_seed": 20260919 + repeat}
-                            cell["cell_id"] = digest(cell)[:20]
-                            cells.append(cell)
+    for family, seed, scale, fault, model, config_name, repeat in itertools.product(
+            ("offboarding", "reconciliation"), seeds, scales,
+            [True] if phase == "probe" else [False, True], MODELS, configs,
+            range(2 if phase == "main" else 1)):
+        transport, strategy = config_name.split("-")
+        config = asdict(ActorConfig(transport=transport, strategy=strategy))
+        cell = {"family": family, "case_seed": seed, "scale": scale,
+                "fault": fault, "model": model, "model_revision": model_revisions[model],
+                "config_name": config_name, "config": config, "repeat": repeat,
+                "sampling_seed": 20260919 + repeat}
+        cell["cell_id"] = digest(cell)[:20]
+        cells.append(cell)
     random.Random(20260919).shuffle(cells)
     plan = {"schema": 1, "phase": phase, "independent_business_families": 2,
             "scope": "synthetic family-conditional experiment; parameter seeds are not semantic roots",
@@ -92,6 +92,15 @@ def audit(folder, plan):
             raise ValueError("cell metadata mismatch")
         if digest(record["result"]) != record["result_sha256"]:
             raise ValueError("result hash mismatch")
+        if record.get("journal_sha256"):
+            journal = folder / "journals" / record["journal"]
+            if Path(record["journal"]).name != record["journal"] or not journal.is_file():
+                raise ValueError("missing or invalid response journal")
+            if hashlib.sha256(journal.read_bytes()).hexdigest() != record["journal_sha256"]:
+                raise ValueError("journal hash mismatch")
+            responses = [json.loads(line) for line in journal.read_text().splitlines() if line]
+            if responses != record["result"]["provider_responses"]:
+                raise ValueError("response journal differs from final artifact")
         result, cell = record["result"], expected[cid]
         expected_case = make_case(cell["family"], cell["case_seed"], cell["scale"], cell["fault"])
         if (result["case"] != asdict(expected_case) or result["model"] != cell["model"] or

@@ -7,11 +7,18 @@ import unittest
 from unittest.mock import patch
 
 from campaign import MODELS, atomic_json, audit, load_plan, make_plan
-from protocols import ActorConfig, actor_signature, run_actor
+from protocols import ActorConfig, action_schema, actor_signature, run_actor
 from workflows import BusinessEnvironment, digest, grade_snapshot, grader_hash, make_case, reference_solve
 
 
 class WorkflowContracts(unittest.TestCase):
+    def test_action_schema_keeps_tool_argument_sets_separate(self):
+        schema = action_schema(make_case("offboarding", 0))
+        branches = {b["properties"]["tool"]["enum"][0]: b["properties"]["arguments"] for b in schema["anyOf"]}
+        self.assertEqual(set(branches["revoke_access"]["required"]), {"access_id", "request_id"})
+        self.assertNotIn("user_id", branches["revoke_access"]["properties"])
+        self.assertEqual(branches["finish"]["properties"], {})
+
     def test_reference_alternative_orders_and_noop(self):
         for family in ("offboarding", "reconciliation"):
             for seed in (0, 11, 22, 33):

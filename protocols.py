@@ -30,7 +30,9 @@ def system_prompt(case, config):
                  "Track necessary actions and their prerequisites. Execute one action at a time. "
                  "After any write timeout, read the affected state or retry the identical operation with "
                  "the same request_id. Do not repeat already successful writes. A tool error is an observation; "
-                 "correct the problem and continue when possible. Preserve unrelated records.")
+                 "correct the problem and continue when possible. Use a DIFFERENT request_id for each "
+                 "distinct operation, such as transfer-asset123 versus revoke-access456. The task ID is "
+                 "not an operation ID. Preserve unrelated records.")
     elif config.strategy != "minimal":
         raise ValueError("unknown strategy")
     if config.transport == "json":
@@ -46,11 +48,11 @@ def system_prompt(case, config):
 
 def action_schema(case):
     specs = [tool["function"] for tool in tool_specs(case)]
-    properties = {key: value for spec in specs for key, value in spec["parameters"]["properties"].items()}
-    return {"type": "object", "properties": {
-        "tool": {"type": "string", "enum": [s["name"] for s in specs] + ["finish"]},
-        "arguments": {"type": "object", "properties": properties, "additionalProperties": False}},
-        "required": ["tool", "arguments"], "additionalProperties": False}
+    specs.append({"name": "finish", "parameters": {"type": "object", "properties": {},
+                                                    "additionalProperties": False}})
+    return {"anyOf": [{"type": "object", "properties": {
+        "tool": {"type": "string", "enum": [spec["name"]]}, "arguments": spec["parameters"]},
+        "required": ["tool", "arguments"], "additionalProperties": False} for spec in specs]}
 
 
 def actor_signature(case, config, model, model_revision):

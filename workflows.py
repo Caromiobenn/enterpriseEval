@@ -106,6 +106,11 @@ def tool_specs(case):
              {"payment_id": string, "request_id": string}),
             ("close_invoice", "Close invoice only when its active linked payments equal amount due.",
              {"invoice_id": string, "request_id": string})]
+    for _, _, properties in signatures:
+        if "request_id" in properties:
+            properties["request_id"] = {"type": "string", "description":
+                "Choose a unique ID per distinct write operation, e.g. action-record-ID. "
+                "Reuse it only for retries of that SAME operation; do not use one task ID for all writes."}
     return [{"type": "function", "function": {"name": n, "description": d,
              "parameters": {"type": "object", "properties": p, "required": list(p),
                             "additionalProperties": False}}} for n, d, p in signatures]
@@ -127,7 +132,7 @@ class BusinessEnvironment:
             spec = next(t["function"]["parameters"] for t in tool_specs(self.case)
                         if t["function"]["name"] == name)
             if not isinstance(args, dict) or set(args) != set(spec["required"]):
-                raise ValueError("exact tool argument names required")
+                raise ValueError(f"{name} requires exactly these arguments: {spec['required']}")
             if any(not isinstance(v, str) or not v for v in args.values()):
                 raise ValueError("arguments must be nonempty strings")
             result = self._call(name, args)
