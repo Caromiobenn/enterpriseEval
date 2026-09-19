@@ -5,6 +5,7 @@ The JSON-lines transport is orchestration, not an exposed network service.
 """
 import contextlib
 import io
+import inspect
 import json
 import os
 import re
@@ -65,9 +66,16 @@ def serve():
                     if world is not None:
                         raise ValueError('Already initialized')
                     task_id, experiment = message['task_id'], message['experiment_name']
-                    world = AppWorld(task_id=task_id, experiment_name=experiment,
-                                     load_ground_truth=False, raise_on_unsafe_syntax=True,
-                                     raise_on_unsafe_execution=True, max_interactions=100)
+                    config = dict(task_id=task_id, experiment_name=experiment,
+                                  load_ground_truth=False, raise_on_unsafe_syntax=True, max_interactions=100)
+                    supported = inspect.signature(AppWorld.__init__).parameters
+                    if 'raise_on_unsafe_execution' in supported:
+                        config['raise_on_unsafe_execution'] = True
+                    elif 'null_patch_unsafe_execution' in supported:
+                        config['null_patch_unsafe_execution'] = True
+                    else:
+                        raise RuntimeError('Unsupported AppWorld safety configuration')
+                    world = AppWorld(**config)
                     result = {'instruction': world.task.instruction, 'supervisor': dict(world.task.supervisor),
                               'apps': dict(world.task.app_descriptions)}
                 elif op == 'tool':
