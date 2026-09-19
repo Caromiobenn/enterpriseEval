@@ -1,0 +1,59 @@
+{
+  "reviewer": "Codex model; not independent human gold",
+  "reviewed_before_unmasking": true,
+  "status": "8 of 16 preselected records reviewed; do not unmask until complete",
+  "limitations": "Same assistant knows task design. Model identity, system prompt and automatic labels hidden; actual timeouts visible. Selection and blind IDs frozen before outcomes; completed selected records reviewed as they become available.",
+  "labels": [
+    {
+      "blind_id": "B00",
+      "success": true,
+      "evidence": "One malformed nested reserve request rejected without effect, then corrected. Three reservations and three shipments each once; stock 9,8 becomes 7,6, exactly three dispatches. Protected order unchanged; initial and final observations present."
+    },
+    {
+      "blind_id": "B01",
+      "success": false,
+      "evidence": "Only component release-0-0 receives security and owner approvals. Repeated req-001/req-002 conflicts prevent all deployment and activation; final release inactive, other two components unapproved. Same-ID retry of first security approval does not duplicate effects. Protected release remains intact."
+    },
+    {
+      "blind_id": "B03",
+      "success": false,
+      "evidence": "Only security approval for release-0-0 commits. Reusing release-approval-1 for other components/owner approval produces conflicts; repeated reads show no deployment or activation. Final state remains incomplete, protected release preserved."
+    },
+    {
+      "blind_id": "B04",
+      "success": false,
+      "evidence": "First request-0 security approval commits with lost response. Reusing request-0 for other components fails; final observation shows only first security approval, no owner approvals, deployment or activation. Protected release unchanged."
+    },
+    {
+      "blind_id": "B05",
+      "success": false,
+      "evidence": "First reservation timeout retried with same ID correctly without extra debit. All three orders reserved once, stock 7,6. Shipment calls reuse reservation IDs and conflict; no dispatch and all shipped flags false. Final read confirms incomplete task."
+    },
+    {
+      "blind_id": "B06",
+      "success": false,
+      "evidence": "All orders eventually shipped once, but after initial reservations and shipment-ID conflicts the actor reserves all orders again under order-0-* IDs. Stock falls to 5,4 rather than required 7,6; six reservation effects instead of three. Duplicate debits violate task even though shipped flags and dispatches look complete. Protected order intact."
+    },
+    {
+      "blind_id": "B11",
+      "success": false,
+      "evidence": "Only an initial read occurs; no committed effects. All approvals/deployments false and release inactive. Preserving protected release alone does not complete the task."
+    },
+    {
+      "blind_id": "B13",
+      "success": false,
+      "evidence": "IDs 0 through 4 are each reused across different operations causing conflicts. Final state has security for all components but owner approval only first two; no component deployed and release inactive. Last read precedes final security write, so final state was not observed either. Protected release preserved."
+    }
+  ],
+  "first_review_utc": "2026-09-19T16:13:19.9323886Z",
+  "blind_file_sha256": {
+    "B03": "15ED57159BB6EA7C1C0536D4A81EEC8929542CB11FB1536A0A77510163182D27",
+    "B06": "BB60D4703743084875EA5138C113C47CAF2BB933711184FD18FA9E024399E6A5",
+    "B11": "FA049ED815DC5E6F1F661C4A617438FA4D6F8A26CEBFE725465FC07FBDAEDBF7",
+    "B05": "7D210D43BB0AF317310FAD04AB8A946898450047A723E095438B1AFF59C39DD8",
+    "B13": "E1D7FD223F80F9ACEF43A9AD51EDF8130CEEEDE5A1823E7EE15D07AA1B22CD67",
+    "B04": "F45CE3986C9EA074A0A681B2BCFF5949A0D291FA7E856526251A3A899C1E7964",
+    "B00": "1AE2420B0AB80F6BC5618ACDA85A8FE2CD6876AD06D0F2BC0F84AC75E380F87C",
+    "B01": "8CA1BCCDB6566BB7DB1E5B8AEB29A2F14E57C7B13C325337F55CA72ED2D47833"
+  }
+}
