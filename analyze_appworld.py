@@ -34,6 +34,8 @@ def analyze(folder):
             continue
         assert record['task_id'] == cell['task_id'] and record['model'] == cell['model']
         assert record['phase'] == 'validation'
+        strategy = cell.get('strategy', 'baseline')
+        assert record['config'].get('strategy', 'baseline') == strategy
         assert record['experiment_name'] == 'frozen-' + case_id
         for name, value in record['code_hashes'].items():
             assert plan['code_hashes'][name] == value, 'Actor code drift'
@@ -42,13 +44,13 @@ def analyze(folder):
         if success is not None and type(success) is not bool:
             raise TypeError('Official success must be boolean')
         rows.append({'id': case_id, 'task_id': cell['task_id'], 'model': cell['model'],
-            'repeat': cell['repeat'], 'success': success, 'termination': record['termination'],
+            'repeat': cell['repeat'], 'strategy': strategy, 'success': success, 'termination': record['termination'],
             'known_tokens': sum(record['usage'].values()), 'usage_complete': record['usage_complete'],
             'model_calls': len(record['responses']), 'tool_calls': len(record['tool_events']),
             'record_sha256': hashlib.sha256(path.read_bytes()).hexdigest()})
     groups = defaultdict(list)
     for row in rows:
-        groups[row['model']].append(row)
+        groups[row['model'] + '|' + row['strategy']].append(row)
     by_model = {}
     for model, group in groups.items():
         by_model[model] = {'completed': len(group), 'official_graded': sum(r['success'] is not None for r in group),
@@ -60,28 +62,37 @@ def analyze(folder):
     # Pair only identical task+repeat across models. Average within task first:
     # repeat count is not treated as the number of independent benchmark tasks.
     models = sorted({c['model'] for c in planned.values()})
-    paired = {}
+    strategies = sorted({c.get('strategy', 'baseline') for c in planned.values()})
+    contrasts = []
     if len(models) == 2:
-        lookup = {(r['task_id'], r['repeat'], r['model']): r for r in rows if r['success'] is not None}
+        contrasts += [(models[0], s, models[1], s) for s in strategies]
+    if len(strategies) == 2:
+        contrasts += [(m, strategies[1], m, strategies[0]) for m in models]
+    paired = []
+    lookup = {(r['task_id'], r['repeat'], r['model'], r['strategy']): r for r in rows if r['success'] is not None}
+    assert len(lookup) == sum(r['success'] is not None for r in rows), 'Duplicate comparison cell'
+    for left_model, left_strategy, right_model, right_strategy in contrasts:
         differences = defaultdict(list)
         for task, repeat in sorted({(r['task_id'], r['repeat']) for r in rows}):
-            left, right = lookup.get((task, repeat, models[0])), lookup.get((task, repeat, models[1]))
+            left = lookup.get((task, repeat, left_model, left_strategy))
+            right = lookup.get((task, repeat, right_model, right_strategy))
             if left and right:
                 differences[task].append(int(left['success']) - int(right['success']))
         task_means = [sum(v) / len(v) for v in differences.values()]
-        paired = {'difference_direction': models[0] + ' minus ' + models[1],
+        comparison = {'difference_direction': f'{left_model}|{left_strategy} minus {right_model}|{right_strategy}',
             'matched_runs': sum(map(len, differences.values())), 'matched_tasks': len(task_means),
             'matched_repeats_by_task': {k: len(v) for k, v in differences.items()}}
         if task_means:
-            paired['task_macro_difference'] = sum(task_means) / len(task_means)
+            comparison['task_macro_difference'] = sum(task_means) / len(task_means)
         if len(task_means) >= 2:
             rng = random.Random(20260920)
             boot = [sum(rng.choices(task_means, k=len(task_means))) / len(task_means) for _ in range(10000)]
-            paired['selected_task_bootstrap_95_interval'] = [percentile(boot, .025), percentile(boot, .975)]
+            comparison['selected_task_bootstrap_95_interval'] = [percentile(boot, .025), percentile(boot, .975)]
+        paired.append(comparison)
     result = {'planned': len(planned), 'completed': len(rows), 'missing': missing, 'partial': partial,
         'plan_sha256': hashlib.sha256((folder / 'plan.json').read_bytes()).hexdigest(),
         'models': by_model, 'paired': paired, 'cells': rows,
-        'boundary': 'Fixed 16-task subset, structured API actor, AWQ weights. Bootstrap describes sensitivity to selected task composition, not population significance. Repeats are correlated. Missing and ungraded counts remain explicit. No protected task text or evaluator traces exported.'}
+        'boundary': 'Fixed selected-task subset, structured API actor, AWQ weights. Bootstrap describes sensitivity to selected task composition, not population significance. Repeats are correlated. Missing and ungraded counts remain explicit. No protected task text or evaluator traces exported.'}
     save(folder / 'aggregate-analysis.json', result)
     print(json.dumps({k: result[k] for k in ['planned', 'completed', 'models', 'paired']}))
     return result
