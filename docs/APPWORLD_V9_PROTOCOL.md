@@ -6,7 +6,7 @@ completed runs had zero official successes and many unknown-tool/API errors.
 This motivates a prompt-only discovery-guidance hypothesis, not a claim that a
 prompt has already improved model ability.
 
-Use the same two official train tasks for development. Choose the next 16 unique
+Use the same two official train tasks for development. Choose all remaining 40 unique
 test_normal prefixes by the original fixed SHA256 ordering, excluding *all*
 variants of the 16 previously observed prefixes. Do not inspect their text or
 solutions to select them. Preserve old v8 code, plans and results in their own
@@ -19,7 +19,7 @@ protocol, forbids guessing API names and identifiers, and asks the actor to
 execute rather than merely explain. This is one prompt-bundle treatment, not
 an isolation of each sentence. Realized token costs can differ despite equal caps.
 
-16 tasks x 2 models x 2 prompts x 8 repeats = 512 planned episodes, ordered to
+40 tasks x 2 models x 2 prompts x 8 repeats = 1280 maximum planned episodes, ordered to
 cover all tasks before later repeats. Randomize prompt order within each matched
 model/task/repeat pair. Stop before the 09:00 cutoff; report missing cells.
 Do not mutate frozen actor files after validation starts. Any further repair
