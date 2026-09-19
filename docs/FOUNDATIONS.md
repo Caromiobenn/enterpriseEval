@@ -26,7 +26,10 @@ AppWorld的会议奖项和τ-bench被其他企业实际用于模型评测，是�
 - [Anthropic — The “think” tool](https://www.anthropic.com/engineering/claude-think-tool)：同一模型搭配工具及提示变化可能影响评测结果。本项目比较明确记录的协议条件，不把harness变化归因为基础模型权重提升；没有复刻该文的think机制或成绩。
 - [Sierra — Benchmarking AI agents](https://sierra.ai/blog/benchmarking-ai-agents)：以数据库目标状态检查任务完成与可靠性。本项目借鉴其状态验证思路，保留工具故障是否真正触发的记录。
 
-这些博客提供工程方法依据，不替代正式实验，也不保证本项目得到同样结果。有关版本迁移的reuse/regrade/rerun划分是本项目对可复用证据条件的工程化设计，不冒充上述论文的原始算法。
+- [Terminal-Bench / Harbor — Continuous Benchmarks](https://www.tbench.ai/news/continuous-benchmarks)：官方维护者明确提出按变化复用、重判或重跑，并介绍任务版本管理。本项目的三分法直接参考该工程实践，补充私有grader反馈隔离、产物充分性和可重放证据检查；不宣称原创算法，也没有复现完整Harbor系统。
+- [Anthropic — Quantifying infrastructure noise in agentic coding evals](https://www.anthropic.com/engineering/infrastructure-noise)：资源与执行配置会改变评测结果。本轮将输出预算作为显式诊断变量；不搬用其资源实验的提升比例。
+
+这些官方文章提供工程方法依据，不替代独立实验，也不保证本项目得到同样结果。Terminal-Bench/Harbor属于基准维护团队的官方技术资料，与企业文章分别识别。
 
 ## 具体实验与基础模型岗位的关系
 
