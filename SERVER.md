@@ -1,3 +1,25 @@
+# 当前复跑入口（版本化实验）
+
+建议先在本机 `python -m unittest -q`，再按 README 的离线审计命令复算现有证据。`campaign.py` 为保持原始实验可重建，运行输出仍包含历史 v1 grader；最终业务判分通过 `audit_outcomes.py` 单独生成，不能混淆两者。
+
+双卡服务启动参数仍见下文。本轮新证据分别存于 `/mnt/enterprise-eval/enterpriseEval-auto-20260919/code-v2` 至 `code-v5`，旧 pilot 目录独立保留。新运行务必创建不存在的输出目录并显式传入未来截止时间；脚本内默认日期属于原实验冻结配置。
+
+例如在包含冻结源码的独立新工作目录执行：
+
+```bash
+python campaign.py plan --folder artifacts/recheck-main --phase main --selected native-recovery \
+  --inventory /mnt/enterprise-eval/enterpriseEval-20260919/model-sha256.txt
+python campaign.py run --folder artifacts/recheck-main \
+  --deadline "$(date -u -d '+1 hour' +%FT%T+00:00)"
+python audit_outcomes.py --campaign artifacts/recheck-main --output artifacts/recheck-outcome-audit.json
+```
+
+先确认模型路径与清单一致、两个端口对应正确模型；每个模型串行，不同时启动多个批次争用同一 GPU。新批次与原批次分别报告，不覆盖失败。使用 Python 推理环境时将 `python` 换成下文的完整路径。
+
+---
+
+以下保留早期 pilot 的历史入口；它不等于后续版本化主矩阵。
+
 # 服务器复跑入口
 
 工作目录：`/mnt/enterprise-eval/enterpriseEval-20260919`。模型仍在原盘，推理环境为`/home/ubuntu/miniforge3/bin/python`；harnesslab自己的`.venv`不包含vLLM。Python3.12.8、vLLM0.7.3、torch2.5.1、transformers4.49.0为今天核验版本。完整文件哈希与启动参数已归档。
