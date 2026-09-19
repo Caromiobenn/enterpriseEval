@@ -89,7 +89,8 @@ def main(args):
         record['messages'] = [
             {'role': 'system', 'content': 'Solve the user task through the provided public app APIs. '
              'Use list_apis and get_api_doc to discover required calls and parameters. All app data is simulated. '
-             'Check the results and use the supervisor completion API when done. Do not invent tool results.'},
+             'Make at most two tool calls per response to fit the output budget; continue remaining calls in later turns. '
+             'Keep narration brief. Check the results and use the supervisor completion API when done. Do not invent tool results.'},
             {'role': 'user', 'content': json.dumps(info['result'])}]
         opener = urllib.request.build_opener(urllib.request.ProxyHandler({}))
         for turn in range(40):
