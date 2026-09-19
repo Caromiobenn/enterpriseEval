@@ -1,0 +1,908 @@
+{
+  "plan_id": "8736553ccceecca442748061a46814fcc7e0bd8630a0e02f060835a3ae554ebc",
+  "job": {
+    "source_cell": "dd01d6a70774a0f4bc8d",
+    "mode": "actor_change_requires_rerun",
+    "config": {
+      "transport": "native",
+      "strategy": "minimal",
+      "max_model_calls": 24,
+      "max_tool_calls": 40,
+      "max_output_tokens": 512,
+      "max_seconds": 240,
+      "temperature": 0.2,
+      "top_p": 0.9
+    },
+    "case": {
+      "family": "offboarding",
+      "seed": 11,
+      "scale": 2,
+      "fault": false,
+      "initial": {
+        "users": {
+          "user-69294-leaving": {
+            "active": true
+          },
+          "user-69294-successor": {
+            "active": true
+          },
+          "user-69294-other": {
+            "active": true
+          }
+        },
+        "assets": {
+          "asset-69294-0": {
+            "owner": "user-69294-leaving",
+            "archived": false
+          },
+          "asset-69294-1": {
+            "owner": "user-69294-leaving",
+            "archived": false
+          },
+          "asset-69294-protected": {
+            "owner": "user-69294-other",
+            "archived": false
+          }
+        },
+        "access": {
+          "access-69294-0": {
+            "user": "user-69294-leaving",
+            "app": "app-0",
+            "enabled": true
+          },
+          "access-69294-1": {
+            "user": "user-69294-leaving",
+            "app": "app-1",
+            "enabled": true
+          },
+          "access-69294-protected": {
+            "user": "user-69294-other",
+            "app": "shared",
+            "enabled": true
+          }
+        }
+      },
+      "request": {
+        "target_user": "user-69294-leaving",
+        "successor": "user-69294-successor",
+        "instruction": "Offboard the target user: transfer every asset they own to the successor, revoke every access grant belonging to them, then disable their account. Preserve all other users, assets and grants. Read state before deciding actions. Writes can time out after committing: inspect state or retry with the SAME request_id. Each write has an audit side effect; do not repeat successful writes with new IDs. Verify the resulting state before finishing."
+      }
+    },
+    "model": "qwen2.5-7b-instruct-awq",
+    "revision": "667a1163cb0831892be2c82101b7b9653409419de5f8a0997aa84dc9a7a5e7fc",
+    "seed": 20260919,
+    "target_actor_hash": "2ed3cae23576b2cca7ae2c23629b65b6957edd46717a58f4654611f9b1c7e967",
+    "job_id": "533cd8ebc8f17786eb02"
+  },
+  "result": {
+    "case": {
+      "family": "offboarding",
+      "seed": 11,
+      "scale": 2,
+      "fault": false,
+      "initial": {
+        "users": {
+          "user-69294-leaving": {
+            "active": true
+          },
+          "user-69294-successor": {
+            "active": true
+          },
+          "user-69294-other": {
+            "active": true
+          }
+        },
+        "assets": {
+          "asset-69294-0": {
+            "owner": "user-69294-leaving",
+            "archived": false
+          },
+          "asset-69294-1": {
+            "owner": "user-69294-leaving",
+            "archived": false
+          },
+          "asset-69294-protected": {
+            "owner": "user-69294-other",
+            "archived": false
+          }
+        },
+        "access": {
+          "access-69294-0": {
+            "user": "user-69294-leaving",
+            "app": "app-0",
+            "enabled": true
+          },
+          "access-69294-1": {
+            "user": "user-69294-leaving",
+            "app": "app-1",
+            "enabled": true
+          },
+          "access-69294-protected": {
+            "user": "user-69294-other",
+            "app": "shared",
+            "enabled": true
+          }
+        }
+      },
+      "request": {
+        "target_user": "user-69294-leaving",
+        "successor": "user-69294-successor",
+        "instruction": "Offboard the target user: transfer every asset they own to the successor, revoke every access grant belonging to them, then disable their account. Preserve all other users, assets and grants. Read state before deciding actions. Writes can time out after committing: inspect state or retry with the SAME request_id. Each write has an audit side effect; do not repeat successful writes with new IDs. Verify the resulting state before finishing."
+      }
+    },
+    "case_id": "offboarding-s11-n2-f0",
+    "family": "offboarding",
+    "model": "qwen2.5-7b-instruct-awq",
+    "model_revision": "667a1163cb0831892be2c82101b7b9653409419de5f8a0997aa84dc9a7a5e7fc",
+    "seed": 20260919,
+    "config": {
+      "transport": "native",
+      "strategy": "minimal",
+      "max_model_calls": 24,
+      "max_tool_calls": 40,
+      "max_output_tokens": 512,
+      "max_seconds": 240,
+      "temperature": 0.2,
+      "top_p": 0.9
+    },
+    "actor_hash": "2ed3cae23576b2cca7ae2c23629b65b6957edd46717a58f4654611f9b1c7e967",
+    "grader_hash": "c1a58287f25f6afa35bb35a0e79f4d177aaff9e7978bb9e088504013af75cb08",
+    "grader_version": "v1",
+    "grading": {
+      "success": true,
+      "checks": {
+        "requested_goal": true,
+        "full_business_state": true,
+        "no_duplicate_effects": true,
+        "effect_count": true
+      },
+      "grader_version": "v1"
+    },
+    "legacy_grading": {
+      "success": true,
+      "checks": {
+        "requested_goal": true
+      },
+      "grader_version": "v0"
+    },
+    "termination": "actor_finished",
+    "error": null,
+    "model_calls": 7,
+    "tool_calls": 9,
+    "usage": {
+      "prompt_tokens": 9222,
+      "completion_tokens": 555
+    },
+    "usage_complete": true,
+    "seconds": 5.776871355999901,
+    "effective_time_budget_seconds": 240,
+    "fault_planned": false,
+    "fault_activated": false,
+    "messages": [
+      {
+        "role": "system",
+        "content": "Complete the user's business task using the available tools. Finish only after checking the state. Use the structured tool-call interface for actions; do not print calls in ordinary text."
+      },
+      {
+        "role": "user",
+        "content": "{\"case_id\": \"offboarding-s11-n2-f0\", \"target_user\": \"user-69294-leaving\", \"successor\": \"user-69294-successor\", \"instruction\": \"Offboard the target user: transfer every asset they own to the successor, revoke every access grant belonging to them, then disable their account. Preserve all other users, assets and grants. Read state before deciding actions. Writes can time out after committing: inspect state or retry with the SAME request_id. Each write has an audit side effect; do not repeat successful writes with new IDs. Verify the resulting state before finishing.\"}"
+      },
+      {
+        "role": "assistant",
+        "reasoning_content": null,
+        "content": null,
+        "tool_calls": [
+          {
+            "id": "chatcmpl-tool-683c9238887b410ca0fdac8794a7042a",
+            "type": "function",
+            "function": {
+              "name": "read_state",
+              "arguments": "{\"section\": \"all\"}"
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "tool_call_id": "chatcmpl-tool-683c9238887b410ca0fdac8794a7042a",
+        "content": "{\"users\": {\"user-69294-leaving\": {\"active\": true}, \"user-69294-successor\": {\"active\": true}, \"user-69294-other\": {\"active\": true}}, \"assets\": {\"asset-69294-0\": {\"owner\": \"user-69294-leaving\", \"archived\": false}, \"asset-69294-1\": {\"owner\": \"user-69294-leaving\", \"archived\": false}, \"asset-69294-protected\": {\"owner\": \"user-69294-other\", \"archived\": false}}, \"access\": {\"access-69294-0\": {\"user\": \"user-69294-leaving\", \"app\": \"app-0\", \"enabled\": true}, \"access-69294-1\": {\"user\": \"user-69294-leaving\", \"app\": \"app-1\", \"enabled\": true}, \"access-69294-protected\": {\"user\": \"user-69294-other\", \"app\": \"shared\", \"enabled\": true}}}"
+      },
+      {
+        "role": "assistant",
+        "reasoning_content": null,
+        "content": null,
+        "tool_calls": [
+          {
+            "id": "chatcmpl-tool-eb6c4dd45f2846f39f3cb89686a94b38",
+            "type": "function",
+            "function": {
+              "name": "transfer_asset",
+              "arguments": "{\"asset_id\": \"asset-69294-0\", \"new_owner\": \"user-69294-successor\", \"request_id\": \"offboarding-s11-n2-f0-0\"}"
+            }
+          },
+          {
+            "id": "chatcmpl-tool-89bb11fc339e42698d5881ebc0fe063d",
+            "type": "function",
+            "function": {
+              "name": "transfer_asset",
+              "arguments": "{\"asset_id\": \"asset-69294-1\", \"new_owner\": \"user-69294-successor\", \"request_id\": \"offboarding-s11-n2-f0-1\"}"
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "tool_call_id": "chatcmpl-tool-eb6c4dd45f2846f39f3cb89686a94b38",
+        "content": "{\"ok\": true, \"replayed\": false}"
+      },
+      {
+        "role": "tool",
+        "tool_call_id": "chatcmpl-tool-89bb11fc339e42698d5881ebc0fe063d",
+        "content": "{\"ok\": true, \"replayed\": false}"
+      },
+      {
+        "role": "assistant",
+        "reasoning_content": null,
+        "content": null,
+        "tool_calls": [
+          {
+            "id": "chatcmpl-tool-4947b8cc4be64b89ba5c602b19413148",
+            "type": "function",
+            "function": {
+              "name": "revoke_access",
+              "arguments": "{\"access_id\": \"access-69294-0\", \"request_id\": \"offboarding-s11-n2-f0-0\"}"
+            }
+          },
+          {
+            "id": "chatcmpl-tool-15ad503bb088416cae3fd7c8b6d5bf3a",
+            "type": "function",
+            "function": {
+              "name": "revoke_access",
+              "arguments": "{\"access_id\": \"access-69294-1\", \"request_id\": \"offboarding-s11-n2-f0-1\"}"
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "tool_call_id": "chatcmpl-tool-4947b8cc4be64b89ba5c602b19413148",
+        "content": "{\"error\": \"ValueError\", \"message\": \"request_id belongs to a different operation\"}"
+      },
+      {
+        "role": "tool",
+        "tool_call_id": "chatcmpl-tool-15ad503bb088416cae3fd7c8b6d5bf3a",
+        "content": "{\"error\": \"ValueError\", \"message\": \"request_id belongs to a different operation\"}"
+      },
+      {
+        "role": "assistant",
+        "reasoning_content": null,
+        "content": null,
+        "tool_calls": [
+          {
+            "id": "chatcmpl-tool-31e8cf884a5e42e8aa2ecae92ffb63f9",
+            "type": "function",
+            "function": {
+              "name": "revoke_access",
+              "arguments": "{\"access_id\": \"access-69294-0\", \"request_id\": \"offboarding-s11-n2-f0-2\"}"
+            }
+          },
+          {
+            "id": "chatcmpl-tool-fda0221a10144563915c2ca7660f0749",
+            "type": "function",
+            "function": {
+              "name": "revoke_access",
+              "arguments": "{\"access_id\": \"access-69294-1\", \"request_id\": \"offboarding-s11-n2-f0-3\"}"
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "tool_call_id": "chatcmpl-tool-31e8cf884a5e42e8aa2ecae92ffb63f9",
+        "content": "{\"ok\": true, \"replayed\": false}"
+      },
+      {
+        "role": "tool",
+        "tool_call_id": "chatcmpl-tool-fda0221a10144563915c2ca7660f0749",
+        "content": "{\"ok\": true, \"replayed\": false}"
+      },
+      {
+        "role": "assistant",
+        "reasoning_content": null,
+        "content": null,
+        "tool_calls": [
+          {
+            "id": "chatcmpl-tool-f94fb60a5c9c43209a0747427f21cf1b",
+            "type": "function",
+            "function": {
+              "name": "disable_user",
+              "arguments": "{\"user_id\": \"user-69294-leaving\", \"request_id\": \"offboarding-s11-n2-f0-4\"}"
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "tool_call_id": "chatcmpl-tool-f94fb60a5c9c43209a0747427f21cf1b",
+        "content": "{\"ok\": true, \"replayed\": false}"
+      },
+      {
+        "role": "assistant",
+        "reasoning_content": null,
+        "content": "The offboarding process for user-69294-leaving has been completed successfully. All assets have been transferred to user-69294-successor, all access grants have been revoked, and the user's account has been disabled.\n\nNow, let's check the final state to ensure everything was done correctly.\n",
+        "tool_calls": [
+          {
+            "id": "chatcmpl-tool-a43bcd907d924137a60b3663fb6b5bec",
+            "type": "function",
+            "function": {
+              "name": "read_state",
+              "arguments": "{\"section\": \"all\"}"
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "tool_call_id": "chatcmpl-tool-a43bcd907d924137a60b3663fb6b5bec",
+        "content": "{\"users\": {\"user-69294-leaving\": {\"active\": false}, \"user-69294-successor\": {\"active\": true}, \"user-69294-other\": {\"active\": true}}, \"assets\": {\"asset-69294-0\": {\"owner\": \"user-69294-successor\", \"archived\": false}, \"asset-69294-1\": {\"owner\": \"user-69294-successor\", \"archived\": false}, \"asset-69294-protected\": {\"owner\": \"user-69294-other\", \"archived\": false}}, \"access\": {\"access-69294-0\": {\"user\": \"user-69294-leaving\", \"app\": \"app-0\", \"enabled\": false}, \"access-69294-1\": {\"user\": \"user-69294-leaving\", \"app\": \"app-1\", \"enabled\": false}, \"access-69294-protected\": {\"user\": \"user-69294-other\", \"app\": \"shared\", \"enabled\": true}}}"
+      },
+      {
+        "role": "assistant",
+        "reasoning_content": null,
+        "content": "The final state confirms that the offboarding process was successful:\n\n- All assets owned by user-69294-leaving have been transferred to user-69294-successor.\n- All access grants belonging to user-69294-leaving have been revoked.\n- User-69294-leaving's account has been disabled.\n\nThe state is as expected. The task is complete.\n\n{\"status\": \"completed\"}",
+        "tool_calls": []
+      }
+    ],
+    "provider_responses": [
+      {
+        "id": "chatcmpl-a37ff3f7f5194ae389803123b33e0e00",
+        "object": "chat.completion",
+        "created": 1789811949,
+        "model": "qwen2.5-7b-instruct-awq",
+        "choices": [
+          {
+            "index": 0,
+            "message": {
+              "role": "assistant",
+              "reasoning_content": null,
+              "content": null,
+              "tool_calls": [
+                {
+                  "id": "chatcmpl-tool-683c9238887b410ca0fdac8794a7042a",
+                  "type": "function",
+                  "function": {
+                    "name": "read_state",
+                    "arguments": "{\"section\": \"all\"}"
+                  }
+                }
+              ]
+            },
+            "logprobs": null,
+            "finish_reason": "tool_calls",
+            "stop_reason": null
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 719,
+          "total_tokens": 739,
+          "completion_tokens": 20,
+          "prompt_tokens_details": null
+        },
+        "prompt_logprobs": null
+      },
+      {
+        "id": "chatcmpl-6bfbbafa2a5342e29555b93664a356fc",
+        "object": "chat.completion",
+        "created": 1789811949,
+        "model": "qwen2.5-7b-instruct-awq",
+        "choices": [
+          {
+            "index": 0,
+            "message": {
+              "role": "assistant",
+              "reasoning_content": null,
+              "content": null,
+              "tool_calls": [
+                {
+                  "id": "chatcmpl-tool-eb6c4dd45f2846f39f3cb89686a94b38",
+                  "type": "function",
+                  "function": {
+                    "name": "transfer_asset",
+                    "arguments": "{\"asset_id\": \"asset-69294-0\", \"new_owner\": \"user-69294-successor\", \"request_id\": \"offboarding-s11-n2-f0-0\"}"
+                  }
+                },
+                {
+                  "id": "chatcmpl-tool-89bb11fc339e42698d5881ebc0fe063d",
+                  "type": "function",
+                  "function": {
+                    "name": "transfer_asset",
+                    "arguments": "{\"asset_id\": \"asset-69294-1\", \"new_owner\": \"user-69294-successor\", \"request_id\": \"offboarding-s11-n2-f0-1\"}"
+                  }
+                }
+              ]
+            },
+            "logprobs": null,
+            "finish_reason": "tool_calls",
+            "stop_reason": null
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 1016,
+          "total_tokens": 1138,
+          "completion_tokens": 122,
+          "prompt_tokens_details": null
+        },
+        "prompt_logprobs": null
+      },
+      {
+        "id": "chatcmpl-fa746fc7e4874f279da4ae0e1af1016b",
+        "object": "chat.completion",
+        "created": 1789811950,
+        "model": "qwen2.5-7b-instruct-awq",
+        "choices": [
+          {
+            "index": 0,
+            "message": {
+              "role": "assistant",
+              "reasoning_content": null,
+              "content": null,
+              "tool_calls": [
+                {
+                  "id": "chatcmpl-tool-4947b8cc4be64b89ba5c602b19413148",
+                  "type": "function",
+                  "function": {
+                    "name": "revoke_access",
+                    "arguments": "{\"access_id\": \"access-69294-0\", \"request_id\": \"offboarding-s11-n2-f0-0\"}"
+                  }
+                },
+                {
+                  "id": "chatcmpl-tool-15ad503bb088416cae3fd7c8b6d5bf3a",
+                  "type": "function",
+                  "function": {
+                    "name": "revoke_access",
+                    "arguments": "{\"access_id\": \"access-69294-1\", \"request_id\": \"offboarding-s11-n2-f0-1\"}"
+                  }
+                }
+              ]
+            },
+            "logprobs": null,
+            "finish_reason": "tool_calls",
+            "stop_reason": null
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 1185,
+          "total_tokens": 1279,
+          "completion_tokens": 94,
+          "prompt_tokens_details": null
+        },
+        "prompt_logprobs": null
+      },
+      {
+        "id": "chatcmpl-4191c5dbb4084a4aa5eab4c94543361a",
+        "object": "chat.completion",
+        "created": 1789811951,
+        "model": "qwen2.5-7b-instruct-awq",
+        "choices": [
+          {
+            "index": 0,
+            "message": {
+              "role": "assistant",
+              "reasoning_content": null,
+              "content": null,
+              "tool_calls": [
+                {
+                  "id": "chatcmpl-tool-31e8cf884a5e42e8aa2ecae92ffb63f9",
+                  "type": "function",
+                  "function": {
+                    "name": "revoke_access",
+                    "arguments": "{\"access_id\": \"access-69294-0\", \"request_id\": \"offboarding-s11-n2-f0-2\"}"
+                  }
+                },
+                {
+                  "id": "chatcmpl-tool-fda0221a10144563915c2ca7660f0749",
+                  "type": "function",
+                  "function": {
+                    "name": "revoke_access",
+                    "arguments": "{\"access_id\": \"access-69294-1\", \"request_id\": \"offboarding-s11-n2-f0-3\"}"
+                  }
+                }
+              ]
+            },
+            "logprobs": null,
+            "finish_reason": "tool_calls",
+            "stop_reason": null
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 1342,
+          "total_tokens": 1436,
+          "completion_tokens": 94,
+          "prompt_tokens_details": null
+        },
+        "prompt_logprobs": null
+      },
+      {
+        "id": "chatcmpl-6f7c647206db446085d024c6b4cd768a",
+        "object": "chat.completion",
+        "created": 1789811952,
+        "model": "qwen2.5-7b-instruct-awq",
+        "choices": [
+          {
+            "index": 0,
+            "message": {
+              "role": "assistant",
+              "reasoning_content": null,
+              "content": null,
+              "tool_calls": [
+                {
+                  "id": "chatcmpl-tool-f94fb60a5c9c43209a0747427f21cf1b",
+                  "type": "function",
+                  "function": {
+                    "name": "disable_user",
+                    "arguments": "{\"user_id\": \"user-69294-leaving\", \"request_id\": \"offboarding-s11-n2-f0-4\"}"
+                  }
+                }
+              ]
+            },
+            "logprobs": null,
+            "finish_reason": "tool_calls",
+            "stop_reason": null
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 1483,
+          "total_tokens": 1529,
+          "completion_tokens": 46,
+          "prompt_tokens_details": null
+        },
+        "prompt_logprobs": null
+      },
+      {
+        "id": "chatcmpl-ebbb1147d5ee4592abf09e0c4aa51f81",
+        "object": "chat.completion",
+        "created": 1789811953,
+        "model": "qwen2.5-7b-instruct-awq",
+        "choices": [
+          {
+            "index": 0,
+            "message": {
+              "role": "assistant",
+              "reasoning_content": null,
+              "content": "The offboarding process for user-69294-leaving has been completed successfully. All assets have been transferred to user-69294-successor, all access grants have been revoked, and the user's account has been disabled.\n\nNow, let's check the final state to ensure everything was done correctly.\n",
+              "tool_calls": [
+                {
+                  "id": "chatcmpl-tool-a43bcd907d924137a60b3663fb6b5bec",
+                  "type": "function",
+                  "function": {
+                    "name": "read_state",
+                    "arguments": "{\"section\": \"all\"}"
+                  }
+                }
+              ]
+            },
+            "logprobs": null,
+            "finish_reason": "tool_calls",
+            "stop_reason": null
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 1557,
+          "total_tokens": 1643,
+          "completion_tokens": 86,
+          "prompt_tokens_details": null
+        },
+        "prompt_logprobs": null
+      },
+      {
+        "id": "chatcmpl-e28abe86ea04400b9c8e76beb1326fb1",
+        "object": "chat.completion",
+        "created": 1789811954,
+        "model": "qwen2.5-7b-instruct-awq",
+        "choices": [
+          {
+            "index": 0,
+            "message": {
+              "role": "assistant",
+              "reasoning_content": null,
+              "content": "The final state confirms that the offboarding process was successful:\n\n- All assets owned by user-69294-leaving have been transferred to user-69294-successor.\n- All access grants belonging to user-69294-leaving have been revoked.\n- User-69294-leaving's account has been disabled.\n\nThe state is as expected. The task is complete.\n\n{\"status\": \"completed\"}",
+              "tool_calls": []
+            },
+            "logprobs": null,
+            "finish_reason": "stop",
+            "stop_reason": null
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 1920,
+          "total_tokens": 2013,
+          "completion_tokens": 93,
+          "prompt_tokens_details": null
+        },
+        "prompt_logprobs": null
+      }
+    ],
+    "events": [
+      {
+        "tool": "read_state",
+        "arguments": {
+          "section": "all"
+        },
+        "result": {
+          "users": {
+            "user-69294-leaving": {
+              "active": true
+            },
+            "user-69294-successor": {
+              "active": true
+            },
+            "user-69294-other": {
+              "active": true
+            }
+          },
+          "assets": {
+            "asset-69294-0": {
+              "owner": "user-69294-leaving",
+              "archived": false
+            },
+            "asset-69294-1": {
+              "owner": "user-69294-leaving",
+              "archived": false
+            },
+            "asset-69294-protected": {
+              "owner": "user-69294-other",
+              "archived": false
+            }
+          },
+          "access": {
+            "access-69294-0": {
+              "user": "user-69294-leaving",
+              "app": "app-0",
+              "enabled": true
+            },
+            "access-69294-1": {
+              "user": "user-69294-leaving",
+              "app": "app-1",
+              "enabled": true
+            },
+            "access-69294-protected": {
+              "user": "user-69294-other",
+              "app": "shared",
+              "enabled": true
+            }
+          }
+        },
+        "before": "d3a73b7ed3403866725aa58e19fc36b2f48a090c89367717ec7d869313293a9e",
+        "after": "d3a73b7ed3403866725aa58e19fc36b2f48a090c89367717ec7d869313293a9e"
+      },
+      {
+        "tool": "transfer_asset",
+        "arguments": {
+          "asset_id": "asset-69294-0",
+          "new_owner": "user-69294-successor",
+          "request_id": "offboarding-s11-n2-f0-0"
+        },
+        "result": {
+          "ok": true,
+          "replayed": false
+        },
+        "before": "d3a73b7ed3403866725aa58e19fc36b2f48a090c89367717ec7d869313293a9e",
+        "after": "846c5c76878c9c09265ded8ced65180242f0347c1a4f12461b1a738968c80e0a"
+      },
+      {
+        "tool": "transfer_asset",
+        "arguments": {
+          "asset_id": "asset-69294-1",
+          "new_owner": "user-69294-successor",
+          "request_id": "offboarding-s11-n2-f0-1"
+        },
+        "result": {
+          "ok": true,
+          "replayed": false
+        },
+        "before": "846c5c76878c9c09265ded8ced65180242f0347c1a4f12461b1a738968c80e0a",
+        "after": "1d21a396c1408abf7bcbafefceefd399f437d6812275f8abea3fb72c1d6251f2"
+      },
+      {
+        "tool": "revoke_access",
+        "arguments": {
+          "access_id": "access-69294-0",
+          "request_id": "offboarding-s11-n2-f0-0"
+        },
+        "result": {
+          "error": "ValueError",
+          "message": "request_id belongs to a different operation"
+        },
+        "before": "1d21a396c1408abf7bcbafefceefd399f437d6812275f8abea3fb72c1d6251f2",
+        "after": "1d21a396c1408abf7bcbafefceefd399f437d6812275f8abea3fb72c1d6251f2"
+      },
+      {
+        "tool": "revoke_access",
+        "arguments": {
+          "access_id": "access-69294-1",
+          "request_id": "offboarding-s11-n2-f0-1"
+        },
+        "result": {
+          "error": "ValueError",
+          "message": "request_id belongs to a different operation"
+        },
+        "before": "1d21a396c1408abf7bcbafefceefd399f437d6812275f8abea3fb72c1d6251f2",
+        "after": "1d21a396c1408abf7bcbafefceefd399f437d6812275f8abea3fb72c1d6251f2"
+      },
+      {
+        "tool": "revoke_access",
+        "arguments": {
+          "access_id": "access-69294-0",
+          "request_id": "offboarding-s11-n2-f0-2"
+        },
+        "result": {
+          "ok": true,
+          "replayed": false
+        },
+        "before": "1d21a396c1408abf7bcbafefceefd399f437d6812275f8abea3fb72c1d6251f2",
+        "after": "0204cd92a259fdc7b776de95dccdf75bf709ebde4d650eb6a9d0148dbf9952d3"
+      },
+      {
+        "tool": "revoke_access",
+        "arguments": {
+          "access_id": "access-69294-1",
+          "request_id": "offboarding-s11-n2-f0-3"
+        },
+        "result": {
+          "ok": true,
+          "replayed": false
+        },
+        "before": "0204cd92a259fdc7b776de95dccdf75bf709ebde4d650eb6a9d0148dbf9952d3",
+        "after": "e36adba781c82a9dc3d03303830490d1f8acb56e6e17ccb11d1cf2a2e82b833b"
+      },
+      {
+        "tool": "disable_user",
+        "arguments": {
+          "user_id": "user-69294-leaving",
+          "request_id": "offboarding-s11-n2-f0-4"
+        },
+        "result": {
+          "ok": true,
+          "replayed": false
+        },
+        "before": "e36adba781c82a9dc3d03303830490d1f8acb56e6e17ccb11d1cf2a2e82b833b",
+        "after": "2b43dca6f9e22f0b7d6b2ef258a934dba401671bf6efb323bd68969e05f2bb0d"
+      },
+      {
+        "tool": "read_state",
+        "arguments": {
+          "section": "all"
+        },
+        "result": {
+          "users": {
+            "user-69294-leaving": {
+              "active": false
+            },
+            "user-69294-successor": {
+              "active": true
+            },
+            "user-69294-other": {
+              "active": true
+            }
+          },
+          "assets": {
+            "asset-69294-0": {
+              "owner": "user-69294-successor",
+              "archived": false
+            },
+            "asset-69294-1": {
+              "owner": "user-69294-successor",
+              "archived": false
+            },
+            "asset-69294-protected": {
+              "owner": "user-69294-other",
+              "archived": false
+            }
+          },
+          "access": {
+            "access-69294-0": {
+              "user": "user-69294-leaving",
+              "app": "app-0",
+              "enabled": false
+            },
+            "access-69294-1": {
+              "user": "user-69294-leaving",
+              "app": "app-1",
+              "enabled": false
+            },
+            "access-69294-protected": {
+              "user": "user-69294-other",
+              "app": "shared",
+              "enabled": true
+            }
+          }
+        },
+        "before": "2b43dca6f9e22f0b7d6b2ef258a934dba401671bf6efb323bd68969e05f2bb0d",
+        "after": "2b43dca6f9e22f0b7d6b2ef258a934dba401671bf6efb323bd68969e05f2bb0d"
+      }
+    ],
+    "final_state": {
+      "state": {
+        "users": {
+          "user-69294-leaving": {
+            "active": false
+          },
+          "user-69294-successor": {
+            "active": true
+          },
+          "user-69294-other": {
+            "active": true
+          }
+        },
+        "assets": {
+          "asset-69294-0": {
+            "owner": "user-69294-successor",
+            "archived": false
+          },
+          "asset-69294-1": {
+            "owner": "user-69294-successor",
+            "archived": false
+          },
+          "asset-69294-protected": {
+            "owner": "user-69294-other",
+            "archived": false
+          }
+        },
+        "access": {
+          "access-69294-0": {
+            "user": "user-69294-leaving",
+            "app": "app-0",
+            "enabled": false
+          },
+          "access-69294-1": {
+            "user": "user-69294-leaving",
+            "app": "app-1",
+            "enabled": false
+          },
+          "access-69294-protected": {
+            "user": "user-69294-other",
+            "app": "shared",
+            "enabled": true
+          }
+        }
+      },
+      "effects": [
+        {
+          "tool": "transfer_asset",
+          "arguments": {
+            "asset_id": "asset-69294-0",
+            "new_owner": "user-69294-successor"
+          }
+        },
+        {
+          "tool": "transfer_asset",
+          "arguments": {
+            "asset_id": "asset-69294-1",
+            "new_owner": "user-69294-successor"
+          }
+        },
+        {
+          "tool": "revoke_access",
+          "arguments": {
+            "access_id": "access-69294-0"
+          }
+        },
+        {
+          "tool": "revoke_access",
+          "arguments": {
+            "access_id": "access-69294-1"
+          }
+        },
+        {
+          "tool": "disable_user",
+          "arguments": {
+            "user_id": "user-69294-leaving"
+          }
+        }
+      ]
+    }
+  },
+  "result_sha256": "782f2a4895d7d096d26f566e3250a59a05bc5521d31cca832bded5088d8492ab",
+  "journal": "533cd8ebc8f17786eb02-1789811949462973415.jsonl",
+  "journal_sha256": "80e8099e4690f7d18d5288ad5d129bca75ac5b71121b7fd6609e2f1dcee3ae82"
+}
