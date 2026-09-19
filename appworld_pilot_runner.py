@@ -62,6 +62,9 @@ class Bridge:
 
 
 def main(args):
+    api_key = os.environ[args.api_key_env] if args.api_key_env else None
+    if api_key and args.base_url.rstrip('/') != 'https://api.deepseek.com':
+        raise ValueError('API credentials restricted to the verified official endpoint')
     folder = args.output.resolve()
     folder.mkdir(parents=True, exist_ok=False)
     record = {'task_id': args.task_id, 'model': args.model, 'phase': args.phase,
@@ -72,12 +75,17 @@ def main(args):
                        for name in ['appworld_pilot_runner.py', 'appworld_tool_bridge.py']},
         'responses': [], 'messages': [], 'tool_events': [], 'usage': {'prompt_tokens': 0, 'completion_tokens': 0},
         'usage_complete': True, 'termination': 'model_call_limit'}
+    record['api_cost_upper_usd'] = 0.0
+    record['api_cost_cap_usd'] = args.api_cost_cap if api_key else None
+    record['billing_uncertain'] = False
     save(folder / 'record.json', record)
     bridge = Bridge(args.python, args.root.resolve(), folder / 'worker-stderr.log')
+    initialized = False
     try:
         info = bridge.send({'op': 'initialize', 'task_id': args.task_id, 'experiment_name': args.experiment})
         if not info.get('ok'):
             raise RuntimeError('AppWorld initialization: ' + info.get('error_type', 'unknown'))
+        initialized = True
         record['messages'] = [
             {'role': 'system', 'content': 'Solve the user task through the provided public app APIs. '
              'Use list_apis and get_api_doc to discover required calls and parameters. All app data is simulated. '
@@ -90,11 +98,23 @@ def main(args):
                 break
             payload = {'model': args.model, 'messages': record['messages'], 'tools': TOOLS,
                        'max_tokens': 1024, 'temperature': 0.2, 'stream': False}
+            headers = {'Content-Type': 'application/json'}
+            if api_key:
+                payload['thinking'] = {'type': 'disabled'}
+                reserve = ((len(json.dumps(payload).encode()) + 4096) * 1.32 + 1024 * 3.96) / 1e6
+                if record['api_cost_upper_usd'] + reserve > args.api_cost_cap:
+                    record['termination'] = 'api_cost_cap'
+                    break
+                headers['Authorization'] = 'Bearer ' + api_key
+                record['billing_uncertain'] = True
+                save(folder / 'record.json', record)
             req = urllib.request.Request(args.base_url.rstrip('/') + '/chat/completions',
-                data=json.dumps(payload).encode(), headers={'Content-Type': 'application/json'})
+                data=json.dumps(payload).encode(), headers=headers)
             start = time.monotonic()
             with opener.open(req, timeout=120) as response:
                 raw = json.load(response)
+            if api_key and api_key in json.dumps(raw):
+                raise RuntimeError('Credential found in response; refusing to save')
             record['responses'].append({'raw': raw, 'seconds': time.monotonic() - start})
             for key in record['usage']:
                 value = (raw.get('usage') or {}).get(key)
@@ -102,6 +122,12 @@ def main(args):
                     record['usage'][key] += value
                 else:
                     record['usage_complete'] = False
+            if api_key:
+                usage = raw.get('usage') or {}
+                if not all(isinstance(usage.get(k), int) for k in ['prompt_tokens', 'completion_tokens']):
+                    raise RuntimeError('Missing API usage; billing needs review')
+                record['api_cost_upper_usd'] += (usage['prompt_tokens'] * 1.32 + usage['completion_tokens'] * 3.96) / 1e6
+                record['billing_uncertain'] = False
             choice = raw['choices'][0]
             message = choice['message']
             record['messages'].append(message)
@@ -126,13 +152,17 @@ def main(args):
                 record['tool_events'].append({'name': name, 'arguments': arguments, 'result': result})
                 record['messages'].append({'role': 'tool', 'tool_call_id': call['id'], 'content': text})
                 save(folder / 'record.json', record)
-        # Official private grading is never returned to the actor.
-        record['official_grade'] = bridge.send({'op': 'finish_and_grade'})
     except Exception as exc:
         record['termination'] = 'execution_error'
         record['error_type'] = type(exc).__name__
         record['error'] = str(exc)[:300]
     finally:
+        # Grade a partial state even after actor failure, without model feedback.
+        if initialized:
+            try:
+                record['official_grade'] = bridge.send({'op': 'finish_and_grade'})
+            except Exception as exc:
+                record['official_grade'] = {'ok': False, 'error_type': type(exc).__name__}
         bridge.close()
         record['completed'] = True
         save(folder / 'record.json', record)
@@ -150,4 +180,6 @@ if __name__ == '__main__':
     p.add_argument('--output', type=Path, required=True)
     p.add_argument('--experiment', required=True)
     p.add_argument('--phase', choices=['development', 'validation'], default='development')
+    p.add_argument('--api-key-env', default=None)
+    p.add_argument('--api-cost-cap', type=float, default=0.5)
     main(p.parse_args())
