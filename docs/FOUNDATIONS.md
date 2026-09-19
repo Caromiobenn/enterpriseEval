@@ -13,12 +13,26 @@
 | 文献 | 真实出版／影响证据 | 本项目采用的部分 | 未复现的部分 |
 |---|---|---|---|
 | **AppWorld: A Controllable World of Apps and People for Benchmarking Interactive Coding Agents** | [ACL 2024正式论文](https://aclanthology.org/2024.acl-long.850/)；[会议官方Best Resource Paper Award](https://2024.aclweb.org/program/best_papers/) | 以环境终态和附带影响判分；允许不同合法执行顺序；显式保护无关记录 | 未运行完整AppWorld，未复制其应用生态；本项目不能称AppWorld复现 |
-| **τ-bench: A Benchmark for Tool-Agent-User Interaction in Real-World Domains** | [原论文](https://arxiv.org/abs/2406.12045)；[Sierra官方方法介绍](https://sierra.ai/blog/benchmarking-ai-agents)；[Anthropic使用τ-bench做工具消融](https://www.anthropic.com/engineering/claude-think-tool) | 目标数据库状态、工具及业务约束、重复运行可靠性 | 不含用户模拟器；两次重复不足以给稳定高阶可靠性估计；未在此声称会议录用 |
+| **τ-bench: A Benchmark for Tool-Agent-User Interaction in Real-World Domains** | [原论文](https://arxiv.org/abs/2406.12045)；[Sierra官方方法介绍](https://sierra.ai/blog/benchmarking-ai-agents)；[Anthropic使用τ-bench做工具消融](https://www.anthropic.com/engineering/claude-think-tool) | 目标数据库状态、工具及业务约束、重复运行可靠性 | 不含用户模拟器；两次重复不足以给稳定高阶可靠性估计；正式身份已核实为 ICLR 2025，见下方更正 |
 | **Dynabench: Rethinking Benchmarking in NLP** | [NAACL 2021正式论文](https://aclanthology.org/2021.naacl-main.324/) | 固定静态集合饱和后需要持续构建挑战；开发反馈与验证必须分开 | 当前未实现完整人机对抗收集；参数增大本身不等于有质量的动态难题 |
 | **AgentBoard: An Analytical Evaluation Board of Multi-turn LLM Agents** | [NeurIPS 2024 Datasets and Benchmarks正式论文](https://proceedings.neurips.cc/paper_files/paper/2024/file/877b40688e330a0e2a3fc24084208dfa-Paper-Datasets_and_Benchmarks_Track.pdf) | 将最终成功与过程诊断分开，失败不能只看单一总分 | 未复现其多环境评测或人工验证的progress metric；借鉴纯文本工具/状态分析 |
 | **tinyBenchmarks: evaluating LLMs with fewer examples** | [ICML 2024正式论文与原始方法入口](https://proceedings.mlr.press/v235/maia-polo24a.html) | 小样本评测经济性必须相对于明确目标分布验证 | 本轮不拟合IRT、不声称复现tinyBenchmarks或少量样本可普遍替代全库 |
 
 AppWorld的会议奖项和τ-bench被其他企业实际用于模型评测，是直接可检查的影响证据。其余会议论文作为方法背景，不把仅有录用记录夸大为引用量证明。已读相关方法部分不等于完成全文复现。
+
+## 2025–2026 年正式会议补充与更正
+
+2026-09-19 再核验：原清单并非全部是 2024 年论文，但漏标了 τ-bench 的正式会议身份，也缺少 2026 年正式会议工作。以下补充进入核心阅读路线；这是实验完成后的文献审计，不倒推声称它们已指导此前运行。
+
+| 文献 | 核验入口与影响证据 | 下一阶段采用方式与边界 |
+|---|---|---|
+| **τ-bench: A Benchmark for Tool-Agent-User Interaction in Real-World Domains** | [ICLR 2025 正式论文集](https://proceedings.iclr.cc/paper_files/paper/2025/hash/1b126cc38b8638e07bef37e7b2bb72bf-Abstract-Conference.html)；上表 Sierra / Anthropic 官方使用证据 | 更正上表“未在此声称会议录用”的旧标注：已核实 ICLR 2025。阅读目标状态验证与 pass^k；区分预印本 2024 和会议 2025，不能把重复两次包装为稳定的高阶可靠性估计。 |
+| **Establishing Best Practices in Building Rigorous Agentic Benchmarks (ABC)** | [NeurIPS 2025 Datasets and Benchmarks 正式论文](https://papers.nips.cc/paper_files/paper/2025/hash/f316275b44ee2de533102913828a8107-Abstract-Datasets_and_Benchmarks_Track.html)；论文对既有基准进行具体判分审计，HAL 论文亦引用该工作 | 将任务歧义、奖励缺漏、合法替代解和捷径检查纳入下一轮判分审计；先冻结规范，再独立盲审。论文报告的问题针对其审计版本，不能直接断言当前最新版仍有同样漏洞；尚未完整复现 ABC。 |
+| **Holistic Agent Leaderboard: The Missing Infrastructure for AI Agent Evaluation (HAL)** | [Princeton 官方项目页明确宣布 ICLR 2026 录用](https://hal.cs.princeton.edu/)；[OpenReview 论文正文](https://openreview.net/pdf?id=vUaY1t64ZZ)。官方项目提供实际多基准运行、成本与轨迹；不据此编造高被引排名 | 参考模型 × scaffold × benchmark 的分离分析、成本记录和轨迹审计；只接入纯文本任务。下一轮先选一个因素做配对比较，报告完整 token、失败和成本缺失；不复现其大规模集群，也不将 HAL 后续可靠性面板全部当作原论文结果。 |
+
+阅读顺序修正为：AppWorld（ACL 2024，状态与合法解）→ τ-bench（ICLR 2025，重复可靠性）→ ABC（NeurIPS 2025，判分有效性）→ HAL（ICLR 2026，可复现与成本比较）→ Harbor Continuous Benchmarks（官方工程资料，版本迁移）。2024 基础论文保留，2025–2026 工作补上评测方法前沿；会议录用、工程采用和长期学术影响是不同证据。
+
+下一轮先产出冻结的判分规范、独立轨迹审核记录和公开纯文本任务小试，再决定扩大实验。当前结果仍是两个合成任务族上的探索性证据；这次文献更新不改变已有数字，不触发 GPU 重跑。
 
 ## 企业官方技术依据
 
