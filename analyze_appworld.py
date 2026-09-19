@@ -84,7 +84,10 @@ def analyze(folder):
             'matched_repeats_by_task': {k: len(v) for k, v in differences.items()}}
         if task_means:
             comparison['task_macro_difference'] = sum(task_means) / len(task_means)
-        if len(task_means) >= 2:
+        if len(task_means) >= 2 and len(set(task_means)) == 1:
+            comparison['bootstrap_degenerate'] = True
+            comparison['uncertainty_note'] = 'Identical observed task differences; a zero-width empirical bootstrap is not evidence of equivalence or zero uncertainty.'
+        elif len(task_means) >= 2:
             rng = random.Random(20260920)
             boot = [sum(rng.choices(task_means, k=len(task_means))) / len(task_means) for _ in range(10000)]
             comparison['selected_task_bootstrap_95_interval'] = [percentile(boot, .025), percentile(boot, .975)]
