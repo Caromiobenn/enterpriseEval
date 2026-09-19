@@ -1,14 +1,17 @@
-# enterpriseEval — v0 minimal pilot
+# enterpriseEval — v0 tool-call diagnostic
 
-Research prototype for verifiable multi-step tool tasks and evaluation version migration.
+This branch preserves the second 8-run development protocol: an explicit tool-use/recovery prompt and `parallel_tool_calls=false`. Full source, protocol, model responses, state and usage are retained.
 
-This branch freezes the original 2026-09-19 minimal actor implementation and its 8 development runs. One dependency-chain template, one entity seed, depths 4/8, clean/fault, one run per condition and model. Qwen2.5-7B-Instruct-AWQ: 2/4 successful; Qwen2.5-14B-Instruct-AWQ: 0/4. These are engineering observations, not model rankings or independent-task generalization results.
+| Protocol | 7B AWQ | 14B AWQ |
+|---|---:|---:|
+| Initial minimal actor | 2/4 | 0/4 |
+| Diagnostic actor | 0/4 | 2/4 |
 
-- `artifacts/live-pilot-20260919/`: protocol, summary, full responses, tool events and final states.
-- `artifacts/cpu-smoke-20260919/`: 72 parameter variants; 72 reference passes, 72 no-op rejections, 216 mutant rejections. Scripted tests are not model-quality results.
-- `enterprise_eval.py`: environment, independent final-state grader, migration decision prototype, HTTP actor loop.
-- `test_enterprise_eval.py`: 10 contract tests. Run `python -m unittest -v`.
+These results are from one workflow template, one entity seed, depths 4/8, clean/fault, one sample per cell. They demonstrate protocol sensitivity, not a model ranking. The diagnostic service sometimes still returned multiple calls. Fault recovery claims require an actually activated fault.
 
-The original actor-stop label also includes unparsed tool-shaped text and truncation; inspect raw provider responses. Migration is a decision function, not a complete execution pipeline. Object boundaries are not a process sandbox. Different identifier seeds are not independent business tasks.
+- `artifacts/live-diagnostic-20260919/`: second protocol and full evidence.
+- `artifacts/live-pilot-20260919/`: historical first-protocol evidence; its original source is on `exp/v0-minimal-pilot`.
+- `artifacts/cpu-smoke-20260919/`: 72 parameter variants and 216 invalid-state rejections, not independent business tasks.
+- Run `python -m unittest -v` for 10 contract tests.
 
-Later protocols live on separate experiment branches. The `exp/v0-toolcall-diagnostic` branch changes prompting and records another 8 development runs; do not pool the protocols. A negative result remains part of the evidence.
+The actor records truncation and unparsed tool-shaped text separately. Migration remains a decision function; actual multi-workflow migration experiments are on later branches. No process sandbox, formal generalization claim or cost-reduction result is implied.

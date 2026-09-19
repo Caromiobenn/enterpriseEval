@@ -198,11 +198,20 @@ TOOLS = [{"type": "function", "function": {"name": name, "description": descript
 
 
 def run_live(task: Task, base_url: str, model: str, seed: int, max_calls: int = 40,
-             api_key: str | None = None) -> dict:
+             api_key: str | None = None, single_call: bool = False) -> dict:
     """OpenAI-compatible local endpoint; no private grader information in messages."""
     import time
     env = Environment(task)
-    messages = [{"role": "system", "content": "Use tools to complete the public workflow task."},
+    actor_instruction = "Use tools to complete the public workflow task."
+    if single_call:
+        actor_instruction += (
+            " Issue exactly one structured tool call per turn, using the supplied tool-call format. "
+            "Do not describe intended calls or print raw JSON in ordinary prose. "
+            "Inspect unmet prerequisites before trying to complete a node. "
+            "Continue after recoverable tool errors; inspect state rather than assuming success. "
+            "Check status before your final response."
+        )
+    messages = [{"role": "system", "content": actor_instruction},
                 {"role": "user", "content": json.dumps(task.public_request())}]
     usage = {"prompt_tokens": 0, "completion_tokens": 0}
     usage_complete = True
@@ -217,6 +226,8 @@ def run_live(task: Task, base_url: str, model: str, seed: int, max_calls: int = 
         payload = {"model": model, "messages": messages, "tools": TOOLS,
                    "temperature": .6, "top_p": .9, "seed": seed, "max_tokens": 1024,
                    "stream": False}
+        if single_call:
+            payload["parallel_tool_calls"] = False
         headers = {"Content-Type": "application/json"}
         if api_key:
             headers["Authorization"] = f"Bearer {api_key}"
@@ -234,7 +245,13 @@ def run_live(task: Task, base_url: str, model: str, seed: int, max_calls: int = 
             messages.append(message)
             calls = message.get("tool_calls", [])
             if not calls:
-                termination = "actor_stopped"
+                content = message.get("content") or ""
+                if result["choices"][0].get("finish_reason") == "length":
+                    termination = "output_truncated"
+                elif "<tool_call>" in content or ('"name"' in content and '"arguments"' in content):
+                    termination = "unparsed_tool_text"
+                else:
+                    termination = "actor_stopped"
                 break
             if len(calls) > 16:
                 raise ValueError("too many tool calls in one response")
@@ -254,8 +271,14 @@ def run_live(task: Task, base_url: str, model: str, seed: int, max_calls: int = 
             termination = "execution_error"
             usage_complete = False
             break
+    manifest = task_manifest(task)
+    manifest["actor_hash"] = digest({"task_actor_hash": manifest["actor_hash"],
+                                     "system_prompt": actor_instruction, "single_call": single_call,
+                                     "max_calls": max_calls, "temperature": .6, "top_p": .9,
+                                     "max_tokens": 1024, "model": model})
     return {"mode": "live", "task_id": task.id, "root_id": task.root_id,
-            "seed": seed, "model": model, "manifest": task_manifest(task),
+            "seed": seed, "model": model, "manifest": manifest,
+            "actor_protocol": "single_call_diagnostic" if single_call else "minimal",
             "grading": grade(task, env.snapshot()), "termination": termination, "error": error,
             "usage": usage, "usage_complete": usage_complete,
             "duration_seconds": time.monotonic() - started, "events": env.events,
