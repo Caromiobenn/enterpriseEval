@@ -35,16 +35,19 @@ def plan(args):
         random.Random(20260920 + repeat).shuffle(order)
         for task in order:
             for model, url in MODELS.items():
-                cell = dict(task_id=task, model=model, base_url=url, repeat=repeat)
-                cell['id'] = hashlib.sha256(json.dumps(cell, sort_keys=True).encode()).hexdigest()[:20]
-                cells.append(cell)
+                strategies = ['baseline', 'discovery_guidance']
+                random.Random(f'{repeat}:{task}:{model}').shuffle(strategies)
+                for strategy in strategies:
+                    cell = dict(task_id=task, model=model, base_url=url, repeat=repeat, strategy=strategy)
+                    cell['id'] = hashlib.sha256(json.dumps(cell, sort_keys=True).encode()).hexdigest()[:20]
+                    cells.append(cell)
     args.output.mkdir(parents=True)
     save(args.output / 'plan.json', {'cells': cells, 'code_hashes': hashes(),
         'selection_sha256': hashlib.sha256(args.selection.read_bytes()).hexdigest(),
         'selection': selection, 'created_utc': datetime.now(timezone.utc).isoformat(),
         'deadline_utc': '2026-09-20T01:00:00+00:00',
         'repeats': 8, 'episode_timeout_seconds': 1200,
-        'purpose': 'External task coverage first, then repeated-run variance under one frozen actor configuration.',
+        'purpose': 'On disjoint task prefixes, test discovery-guidance prompt only; same tools, model, decoding and episode caps. Match within task/model/repeat. Equal caps, not equal realized token cost.',
         'limits': 'Structured API actor, not official code-agent baseline. AWQ local models. Repeats not independent semantic tasks. Incomplete cells retained; no score-dependent selection.'})
     print(json.dumps({'planned': len(cells), 'unique_tasks': len(tasks)}))
 
@@ -68,7 +71,7 @@ def run(args):
             command = [sys.executable, str(Path(__file__).with_name('appworld_pilot_runner.py')),
                 '--task-id', cell['task_id'], '--model', model, '--base-url', cell['base_url'],
                 '--root', str(args.root.resolve()), '--output', str(out.resolve()),
-                '--experiment', 'frozen-' + cell['id'], '--phase', 'validation']
+                '--experiment', 'frozen-' + cell['id'], '--phase', 'validation', '--strategy', cell['strategy']]
             started = datetime.now(timezone.utc).isoformat()
             with (out.parent / (cell['id'] + '.log')).open('w') as log:
                 process = subprocess.Popen(command, stdout=log, stderr=subprocess.STDOUT,

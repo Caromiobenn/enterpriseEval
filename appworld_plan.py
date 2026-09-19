@@ -25,17 +25,24 @@ if __name__ == '__main__':
     p = argparse.ArgumentParser()
     p.add_argument('--output', type=Path, required=True)
     p.add_argument('--validation-count', type=int, default=16)
+    p.add_argument('--exclude-selection', type=Path)
     args = p.parse_args()
     if args.output.exists():
         raise RuntimeError('Refusing to overwrite frozen selection')
     from appworld import load_task_ids
     train = list(load_task_ids('train'))
     test = list(load_task_ids('test_normal'))
+    excluded_prefixes = set()
+    if args.exclude_selection:
+        prior = json.loads(args.exclude_selection.read_text(encoding='utf-8'))
+        excluded_prefixes = {x.rsplit('_', 1)[0] for x in prior['validation_ids']}
+    eligible_test = [x for x in test if x.rsplit('_', 1)[0] not in excluded_prefixes]
     assert not set(train) & set(test)
     result = {'appworld_version': importlib.metadata.version('appworld'),
               'selection': 'SHA256(20260920:task_id), first unique underscore prefix; no model-result selection',
               'development_split': 'train', 'development_ids': select_ids(train, 2),
-              'validation_split': 'test_normal', 'validation_ids': select_ids(test, args.validation_count),
+              'validation_split': 'test_normal', 'validation_ids': select_ids(eligible_test, args.validation_count),
+              'excluded_prior_validation_prefixes': sorted(excluded_prefixes),
               'split_id_hashes': {name: hashlib.sha256(json.dumps(sorted(ids)).encode()).hexdigest()
                                  for name, ids in [('train', train), ('test_normal', test)]},
               'status': 'selection only; actor configuration must be frozen after development before validation'}

@@ -93,7 +93,7 @@ def main(args):
     folder.mkdir(parents=True, exist_ok=False)
     record = {'task_id': args.task_id, 'model': args.model, 'phase': args.phase,
         'experiment_name': args.experiment, 'started_utc': time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()),
-        'config': {'max_model_calls': 40, 'max_output_tokens': 1024, 'temperature': 0.2,
+        'config': {'strategy': args.strategy, 'max_model_calls': 40, 'max_output_tokens': 1024, 'temperature': 0.2,
                    'max_message_bytes': 44000, 'context_target_bytes': 36000,
                    'context_policy': 'evict_largest_old_tool_observations_preserve_last_two_rounds',
                    'max_tool_result_chars': 12000},
@@ -118,6 +118,17 @@ def main(args):
              'Make at most two tool calls per response to fit the output budget; continue remaining calls in later turns. '
              'Keep narration brief. Check the results and use the supervisor completion API when done. Do not invent tool results.'},
             {'role': 'user', 'content': json.dumps(info['result'])}]
+        if args.strategy == 'discovery_guidance':
+            record['messages'][0]['content'] += (
+                ' The only callable tools are list_apis, get_api_doc, and call_api. '
+                'App API names are NOT top-level tool names. First list the relevant app APIs, '
+                'then read get_api_doc for the exact API name, then use call_api with its documented arguments. '
+                'Never guess API names, record IDs, credentials, or argument fields. Discover them through tools. '
+                'On an error, inspect the API documentation and actual response before choosing the next call. '
+                'Do the requested actions in the simulated apps; do not merely give the user instructions. '
+                'Use supervisor APIs to obtain simulated account information when required. '
+                'After verifying the result, discover and call the documented supervisor completion API. '
+                'Do not stop with a prose claim while actions remain incomplete.')
         opener = urllib.request.build_opener(urllib.request.ProxyHandler({}))
         for turn in range(40):
             request_messages, evicted = context_view(record['messages'])
@@ -211,4 +222,5 @@ if __name__ == '__main__':
     p.add_argument('--phase', choices=['development', 'validation'], default='development')
     p.add_argument('--api-key-env', default=None)
     p.add_argument('--api-cost-cap', type=float, default=0.5)
+    p.add_argument('--strategy', choices=['baseline', 'discovery_guidance'], default='baseline')
     main(p.parse_args())
