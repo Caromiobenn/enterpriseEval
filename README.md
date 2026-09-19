@@ -18,6 +18,6 @@ The two synthetic families are offboarding (assets/access) and invoice reconcili
 
 64 cells: 2 families × 2 entity seeds × 2 sizes × 2 fault conditions × 2 models × 2 repeats. Size varies within seed, avoiding a seed/size confound. These are two business families, not 64 independent tasks. Qwen2.5-7B/14B-Instruct-AWQ run on separate RTX4090 GPUs. All runs retain original responses, per-response journals, state and usage. Missing, incompatible and duplicate cells are explicitly audited.
 
-The matrix is running as of 2026-09-19 17:50 Asia/Shanghai. Later commits add audited results. No long-horizon capability, cross-domain generalization or cost-saving result is claimed at this stage.
+The matrix completed 64/64 planned cells. Strict success: 14B offboarding 16/16, reconciliation 12/16; 7B offboarding 10/16, reconciliation 6/16. Total 44/64. [Audited summary](artifacts/v2-main/summary.json). This is a small, correlated synthetic workload, not a broad model ranking. No long-horizon capability or cross-domain generalization is claimed.
 
 `python -m unittest -v` checks contracts. `campaign.py plan`, `run`, and `summarize` freeze and execute schedules. Keep source hashes fixed within a batch. A completed or failed cell is not silently overwritten; interruptions remain visible in the attempt ledger.
