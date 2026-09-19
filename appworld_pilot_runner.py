@@ -1,5 +1,6 @@
 """Server-private AppWorld pilot. Raw task/trajectory outputs must not be published."""
 import argparse
+import copy
 import hashlib
 import json
 import os
@@ -27,6 +28,29 @@ TOOLS = [tool('list_apis', 'List public API names and descriptions for an app.',
          tool('get_api_doc', 'Read full public parameter documentation before calling an API.', {'app': STRING, 'api': STRING}),
          tool('call_api', 'Call one documented public app API using named arguments.',
               {'app': STRING, 'api': STRING, 'arguments': {'type': 'object'}})]
+
+
+def context_view(messages, budget=36000):
+    """Keep full audit history, explicitly evict old observations in the request only.
+
+    Never invent a summary, alter a tool-call ID, or remove the task. Preserve
+    the latest two assistant rounds. Actor can query public APIs again.
+    """
+    view = copy.deepcopy(messages)
+    rounds = [i for i, m in enumerate(view) if m['role'] == 'assistant']
+    cutoff = rounds[-2] if len(rounds) >= 2 else 2
+    candidates = sorted((i for i in range(2, cutoff) if view[i]['role'] == 'tool'),
+                        key=lambda i: len(view[i]['content']), reverse=True)
+    evicted = []
+    for i in candidates:
+        if len(json.dumps(view).encode()) <= budget:
+            break
+        if len(view[i]['content']) < 300:
+            continue
+        view[i]['content'] = json.dumps({'observation_omitted': True,
+            'reason': 'Older observation removed from context budget. Query the public API again if needed.'})
+        evicted.append(i)
+    return view, evicted
 
 
 class Bridge:
@@ -70,10 +94,12 @@ def main(args):
     record = {'task_id': args.task_id, 'model': args.model, 'phase': args.phase,
         'experiment_name': args.experiment, 'started_utc': time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()),
         'config': {'max_model_calls': 40, 'max_output_tokens': 1024, 'temperature': 0.2,
-                   'max_message_bytes': 44000, 'max_tool_result_chars': 12000},
+                   'max_message_bytes': 44000, 'context_target_bytes': 36000,
+                   'context_policy': 'evict_largest_old_tool_observations_preserve_last_two_rounds',
+                   'max_tool_result_chars': 12000},
         'code_hashes': {name: hashlib.sha256(Path(__file__).with_name(name).read_bytes()).hexdigest()
                        for name in ['appworld_pilot_runner.py', 'appworld_tool_bridge.py']},
-        'responses': [], 'messages': [], 'tool_events': [], 'usage': {'prompt_tokens': 0, 'completion_tokens': 0},
+        'responses': [], 'messages': [], 'context_requests': [], 'tool_events': [], 'usage': {'prompt_tokens': 0, 'completion_tokens': 0},
         'usage_complete': True, 'termination': 'model_call_limit'}
     record['api_cost_upper_usd'] = 0.0
     record['api_cost_cap_usd'] = args.api_cost_cap if api_key else None
@@ -94,10 +120,12 @@ def main(args):
             {'role': 'user', 'content': json.dumps(info['result'])}]
         opener = urllib.request.build_opener(urllib.request.ProxyHandler({}))
         for turn in range(40):
-            if len(json.dumps(record['messages']).encode()) > 44000:
+            request_messages, evicted = context_view(record['messages'])
+            if len(json.dumps(request_messages).encode()) > 44000:
                 record['termination'] = 'context_budget'
                 break
-            payload = {'model': args.model, 'messages': record['messages'], 'tools': TOOLS,
+            record['context_requests'].append({'turn': turn, 'messages': request_messages, 'evicted_indices': evicted})
+            payload = {'model': args.model, 'messages': request_messages, 'tools': TOOLS,
                        'max_tokens': 1024, 'temperature': 0.2, 'stream': False}
             headers = {'Content-Type': 'application/json'}
             if api_key:
