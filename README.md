@@ -1,17 +1,11 @@
-# enterpriseEval — v0 tool-call diagnostic
+# enterpriseEval — v1 business workflow probe
 
-This branch preserves the second 8-run development protocol: an explicit tool-use/recovery prompt and `parallel_tool_calls=false`. Full source, protocol, model responses, state and usage are retained.
+Pure-text evaluation methods for foundation models: protocol sensitivity, business-state grading, fault recovery and evaluation version migration. See [verified research foundations](docs/FOUNDATIONS.md).
 
-| Protocol | 7B AWQ | 14B AWQ |
-|---|---:|---:|
-| Initial minimal actor | 2/4 | 0/4 |
-| Diagnostic actor | 0/4 | 2/4 |
+This version adds two synthetic families: employee offboarding (ownership and access invariants) and invoice reconciliation (duplicate payments, matching and cash conservation). 21 contract tests pass, including alternate valid action orders and seeded invalid states. These are small controlled environments, not a reproduction of AppWorld or tau-bench.
 
-These results are from one workflow template, one entity seed, depths 4/8, clean/fault, one sample per cell. They demonstrate protocol sensitivity, not a model ranking. The diagnostic service sometimes still returned multiple calls. Fault recovery claims require an actually activated fault.
+The four constrained-JSON preflight runs in `artifacts/v1-probe` all failed. Traces show two concrete problems: the action-envelope schema allowed the argument sets of different tools to mix, and both models reused a task ID across distinct write operations. One response was truncated. Raw evidence is retained; no bad text is silently repaired into an action.
 
-- `artifacts/live-diagnostic-20260919/`: second protocol and full evidence.
-- `artifacts/live-pilot-20260919/`: historical first-protocol evidence; its original source is on `exp/v0-minimal-pilot`.
-- `artifacts/cpu-smoke-20260919/`: 72 parameter variants and 216 invalid-state rejections, not independent business tasks.
-- Run `python -m unittest -v` for 10 contract tests.
+The next version tests a discriminated action schema and an explicit per-operation request-ID contract. This v1 branch remains the original failed probe. Historical v0 pilots remain in their own branches and artifact directories. No broad model ranking or long-horizon capability claim follows from these probes.
 
-The actor records truncation and unparsed tool-shaped text separately. Migration remains a decision function; actual multi-workflow migration experiments are on later branches. No process sandbox, formal generalization claim or cost-reduction result is implied.
+Run `python -m unittest -v`. `campaign.py` freezes planned cells, records per-response journals, rejects incompatible/duplicate results and reports wholly missing conditions. CPU tests are not model success rates.
