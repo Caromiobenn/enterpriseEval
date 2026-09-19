@@ -29,6 +29,12 @@ TOOLS = [tool('list_apis', 'List public API names and descriptions for an app.',
          tool('call_api', 'Call one documented public app API using named arguments.',
               {'app': STRING, 'api': STRING, 'arguments': {'type': 'object'}})]
 
+ACTION_SCHEMA = {'type': 'object', 'properties': {
+    'tool_calls': {'type': 'array', 'maxItems': 2, 'items': {'type': 'object', 'properties': {
+        'name': {'type': 'string', 'enum': ['list_apis', 'get_api_doc', 'call_api']},
+        'arguments': {'type': 'object'}}, 'required': ['name', 'arguments'], 'additionalProperties': False}},
+    'final': {'type': 'string'}}, 'required': ['tool_calls', 'final'], 'additionalProperties': False}
+
 
 def context_view(messages, budget=36000):
     """Keep full audit history, explicitly evict old observations in the request only.
@@ -39,7 +45,8 @@ def context_view(messages, budget=36000):
     view = copy.deepcopy(messages)
     rounds = [i for i, m in enumerate(view) if m['role'] == 'assistant']
     cutoff = rounds[-2] if len(rounds) >= 2 else 2
-    candidates = sorted((i for i in range(2, cutoff) if view[i]['role'] == 'tool'),
+    candidates = sorted((i for i in range(2, cutoff) if view[i]['role'] == 'tool' or
+                         (view[i]['role'] == 'user' and view[i].get('content', '').startswith('Tool observation: '))),
                         key=lambda i: len(view[i]['content']), reverse=True)
     evicted = []
     for i in candidates:
@@ -93,7 +100,7 @@ def main(args):
     folder.mkdir(parents=True, exist_ok=False)
     record = {'task_id': args.task_id, 'model': args.model, 'phase': args.phase,
         'experiment_name': args.experiment, 'started_utc': time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()),
-        'config': {'strategy': args.strategy, 'max_model_calls': 40, 'max_output_tokens': 1024, 'temperature': 0.2,
+        'config': {'strategy': args.strategy, 'protocol': args.protocol, 'max_model_calls': 40, 'max_output_tokens': 1024, 'temperature': 0.2,
                    'max_message_bytes': 44000, 'context_target_bytes': 36000,
                    'context_policy': 'evict_largest_old_tool_observations_preserve_last_two_rounds',
                    'max_tool_result_chars': 12000},
@@ -129,6 +136,13 @@ def main(args):
                 'Use supervisor APIs to obtain simulated account information when required. '
                 'After verifying the result, discover and call the documented supervisor completion API. '
                 'Do not stop with a prose claim while actions remain incomplete.')
+        if args.protocol == 'constrained_json':
+            if api_key:
+                raise ValueError('Constrained JSON experiment is local-vLLM only')
+            record['messages'][0]['content'] += (
+                ' Respond only with JSON matching this action schema: ' + json.dumps(ACTION_SCHEMA) +
+                '. Set final to an empty string while taking actions. To finish, use an empty tool_calls array. '
+                'Tool definitions: ' + json.dumps(TOOLS))
         opener = urllib.request.build_opener(urllib.request.ProxyHandler({}))
         for turn in range(40):
             request_messages, evicted = context_view(record['messages'])
@@ -138,6 +152,9 @@ def main(args):
             record['context_requests'].append({'turn': turn, 'messages': request_messages, 'evicted_indices': evicted})
             payload = {'model': args.model, 'messages': request_messages, 'tools': TOOLS,
                        'max_tokens': 1024, 'temperature': 0.2, 'stream': False}
+            if args.protocol == 'constrained_json':
+                payload.pop('tools')
+                payload['guided_json'] = ACTION_SCHEMA
             headers = {'Content-Type': 'application/json'}
             if api_key:
                 payload['thinking'] = {'type': 'disabled'}
@@ -176,6 +193,11 @@ def main(args):
                 record['termination'] = 'output_truncated'
                 break
             calls = message.get('tool_calls') or []
+            if args.protocol == 'constrained_json':
+                action = json.loads(message['content'])
+                calls = [{'id': f'json-{turn}-{index}', 'function': {
+                    'name': c['name'], 'arguments': json.dumps(c['arguments'])}}
+                    for index, c in enumerate(action['tool_calls'])]
             if not calls:
                 record['termination'] = 'actor_finished'
                 break
@@ -190,7 +212,10 @@ def main(args):
                 if len(text) > 12000:
                     text = json.dumps({'truncated': True, 'prefix': text[:12000]})
                 record['tool_events'].append({'name': name, 'arguments': arguments, 'result': result})
-                record['messages'].append({'role': 'tool', 'tool_call_id': call['id'], 'content': text})
+                if args.protocol == 'constrained_json':
+                    record['messages'].append({'role': 'user', 'content': 'Tool observation: ' + text})
+                else:
+                    record['messages'].append({'role': 'tool', 'tool_call_id': call['id'], 'content': text})
                 save(folder / 'record.json', record)
     except Exception as exc:
         record['termination'] = 'execution_error'
@@ -223,4 +248,5 @@ if __name__ == '__main__':
     p.add_argument('--api-key-env', default=None)
     p.add_argument('--api-cost-cap', type=float, default=0.5)
     p.add_argument('--strategy', choices=['baseline', 'discovery_guidance'], default='baseline')
+    p.add_argument('--protocol', choices=['native', 'constrained_json'], default='native')
     main(p.parse_args())
