@@ -1,0 +1,711 @@
+{
+  "plan_id": "cd8d2ca88749c21334d27aef3556c4ed1708cde6e50acee2ac47a3b81fb31e58",
+  "cell_id": "6259d10c9772b54c3a0d",
+  "cell": {
+    "family": "reconciliation",
+    "case_seed": 0,
+    "scale": 2,
+    "fault": false,
+    "model": "qwen2.5-14b-instruct-awq",
+    "model_revision": "c316319844016ef12b0af11c8971988a2b69f80d9df71318ec40f3b6c7961825",
+    "config_name": "native-recovery",
+    "config": {
+      "transport": "native",
+      "strategy": "recovery",
+      "max_model_calls": 24,
+      "max_tool_calls": 40,
+      "max_output_tokens": 512,
+      "max_seconds": 240,
+      "temperature": 0.2,
+      "top_p": 0.9
+    },
+    "repeat": 0,
+    "sampling_seed": 20260919,
+    "cell_id": "6259d10c9772b54c3a0d"
+  },
+  "result": {
+    "case": {
+      "family": "reconciliation",
+      "seed": 0,
+      "scale": 2,
+      "fault": false,
+      "initial": {
+        "invoices": {
+          "invoice-60494-0": {
+            "customer": "customer-60494",
+            "amount": 200,
+            "status": "open"
+          },
+          "invoice-60494-1": {
+            "customer": "customer-60494",
+            "amount": 50,
+            "status": "open"
+          },
+          "invoice-60494-protected": {
+            "customer": "customer-60494-other",
+            "amount": 75,
+            "status": "open"
+          }
+        },
+        "payments": {
+          "payment-60494-0": {
+            "customer": "customer-60494",
+            "amount": 200,
+            "invoice_reference": "invoice-60494-0",
+            "invoice_id": "invoice-60494-0",
+            "bank_reference": "bank-60494-0",
+            "sequence": 0,
+            "refunded": false
+          },
+          "payment-60494-1": {
+            "customer": "customer-60494",
+            "amount": 200,
+            "invoice_reference": "invoice-60494-0",
+            "invoice_id": "invoice-60494-0",
+            "bank_reference": "bank-60494-0",
+            "sequence": 1,
+            "refunded": false
+          },
+          "payment-60494-2": {
+            "customer": "customer-60494",
+            "amount": 50,
+            "invoice_reference": "invoice-60494-1",
+            "invoice_id": null,
+            "bank_reference": "bank-60494-1",
+            "sequence": 2,
+            "refunded": false
+          },
+          "payment-60494-protected": {
+            "customer": "customer-60494-other",
+            "amount": 75,
+            "invoice_reference": "invoice-60494-protected",
+            "invoice_id": "invoice-60494-protected",
+            "bank_reference": "bank-protected",
+            "sequence": 999,
+            "refunded": false
+          }
+        },
+        "refunds": [],
+        "cash": 5000
+      },
+      "request": {
+        "customer": "customer-60494",
+        "instruction": "Reconcile only the requested customer's invoices and payments. Link unlinked payments using invoice_reference. Payments sharing a bank_reference are duplicates: keep the smallest-sequence payment and refund each later one exactly once. Close every invoice of this customer when its active linked payments equal its amount. Preserve all other customers' records. Read state before acting and verify before finishing. A write can time out after committing; inspect state or retry with the SAME request_id. A refund repeated with a different request_id debits cash again."
+      }
+    },
+    "case_id": "reconciliation-s0-n2-f0",
+    "family": "reconciliation",
+    "model": "qwen2.5-14b-instruct-awq",
+    "model_revision": "c316319844016ef12b0af11c8971988a2b69f80d9df71318ec40f3b6c7961825",
+    "seed": 20260919,
+    "config": {
+      "transport": "native",
+      "strategy": "recovery",
+      "max_model_calls": 24,
+      "max_tool_calls": 40,
+      "max_output_tokens": 512,
+      "max_seconds": 240,
+      "temperature": 0.2,
+      "top_p": 0.9
+    },
+    "actor_hash": "30640b81fb9474e4e5b53af431996de347099d8f85aa1d61f303da9de25049b1",
+    "grader_hash": "c1a58287f25f6afa35bb35a0e79f4d177aaff9e7978bb9e088504013af75cb08",
+    "grader_version": "v1",
+    "grading": {
+      "success": true,
+      "checks": {
+        "requested_goal": true,
+        "full_business_state": true,
+        "no_duplicate_effects": true,
+        "effect_count": true
+      },
+      "grader_version": "v1"
+    },
+    "legacy_grading": {
+      "success": true,
+      "checks": {
+        "requested_goal": true
+      },
+      "grader_version": "v0"
+    },
+    "termination": "actor_finished",
+    "error": null,
+    "model_calls": 4,
+    "tool_calls": 6,
+    "usage": {
+      "prompt_tokens": 5979,
+      "completion_tokens": 344
+    },
+    "usage_complete": true,
+    "seconds": 6.087978408000254,
+    "effective_time_budget_seconds": 240,
+    "fault_planned": false,
+    "fault_activated": false,
+    "messages": [
+      {
+        "role": "system",
+        "content": "Complete the user's business task using the available tools. Finish only after checking the state. First inspect current records and identify exactly which records are in scope. Track necessary actions and their prerequisites. Execute one action at a time. After any write timeout, read the affected state or retry the identical operation with the same request_id. Do not repeat already successful writes. A tool error is an observation; correct the problem and continue when possible. Use a DIFFERENT request_id for each distinct operation, such as transfer-asset123 versus revoke-access456. The task ID is not an operation ID. Preserve unrelated records. Use the structured tool-call interface for actions; do not print calls in ordinary text."
+      },
+      {
+        "role": "user",
+        "content": "{\"case_id\": \"reconciliation-s0-n2-f0\", \"customer\": \"customer-60494\", \"instruction\": \"Reconcile only the requested customer's invoices and payments. Link unlinked payments using invoice_reference. Payments sharing a bank_reference are duplicates: keep the smallest-sequence payment and refund each later one exactly once. Close every invoice of this customer when its active linked payments equal its amount. Preserve all other customers' records. Read state before acting and verify before finishing. A write can time out after committing; inspect state or retry with the SAME request_id. A refund repeated with a different request_id debits cash again.\"}"
+      },
+      {
+        "role": "assistant",
+        "reasoning_content": null,
+        "content": null,
+        "tool_calls": [
+          {
+            "id": "chatcmpl-tool-ffb7d19f1cdd4254b7e58f26155fa81b",
+            "type": "function",
+            "function": {
+              "name": "read_state",
+              "arguments": "{\"section\": \"all\"}"
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "tool_call_id": "chatcmpl-tool-ffb7d19f1cdd4254b7e58f26155fa81b",
+        "content": "{\"invoices\": {\"invoice-60494-0\": {\"customer\": \"customer-60494\", \"amount\": 200, \"status\": \"open\"}, \"invoice-60494-1\": {\"customer\": \"customer-60494\", \"amount\": 50, \"status\": \"open\"}, \"invoice-60494-protected\": {\"customer\": \"customer-60494-other\", \"amount\": 75, \"status\": \"open\"}}, \"payments\": {\"payment-60494-0\": {\"customer\": \"customer-60494\", \"amount\": 200, \"invoice_reference\": \"invoice-60494-0\", \"invoice_id\": \"invoice-60494-0\", \"bank_reference\": \"bank-60494-0\", \"sequence\": 0, \"refunded\": false}, \"payment-60494-1\": {\"customer\": \"customer-60494\", \"amount\": 200, \"invoice_reference\": \"invoice-60494-0\", \"invoice_id\": \"invoice-60494-0\", \"bank_reference\": \"bank-60494-0\", \"sequence\": 1, \"refunded\": false}, \"payment-60494-2\": {\"customer\": \"customer-60494\", \"amount\": 50, \"invoice_reference\": \"invoice-60494-1\", \"invoice_id\": null, \"bank_reference\": \"bank-60494-1\", \"sequence\": 2, \"refunded\": false}, \"payment-60494-protected\": {\"customer\": \"customer-60494-other\", \"amount\": 75, \"invoice_reference\": \"invoice-60494-protected\", \"invoice_id\": \"invoice-60494-protected\", \"bank_reference\": \"bank-protected\", \"sequence\": 999, \"refunded\": false}}, \"refunds\": [], \"cash\": 5000}"
+      },
+      {
+        "role": "assistant",
+        "reasoning_content": null,
+        "content": null,
+        "tool_calls": [
+          {
+            "id": "chatcmpl-tool-85c5091bfcbb4a75b3b5c0327094032b",
+            "type": "function",
+            "function": {
+              "name": "link_payment",
+              "arguments": "{\"payment_id\": \"payment-60494-2\", \"invoice_id\": \"invoice-60494-1\", \"request_id\": \"link-payment-60494-2\"}"
+            }
+          },
+          {
+            "id": "chatcmpl-tool-8cae406ecb5041aea866cf39eb732d8a",
+            "type": "function",
+            "function": {
+              "name": "refund_payment",
+              "arguments": "{\"payment_id\": \"payment-60494-1\", \"request_id\": \"refund-payment-60494-1\"}"
+            }
+          },
+          {
+            "id": "chatcmpl-tool-934c7de493164fae9ec64739ee71e0f5",
+            "type": "function",
+            "function": {
+              "name": "close_invoice",
+              "arguments": "{\"invoice_id\": \"invoice-60494-0\", \"request_id\": \"close-invoice-60494-0\"}"
+            }
+          },
+          {
+            "id": "chatcmpl-tool-e41f84fbaa4b4be884bd985459fa0eb2",
+            "type": "function",
+            "function": {
+              "name": "close_invoice",
+              "arguments": "{\"invoice_id\": \"invoice-60494-1\", \"request_id\": \"close-invoice-60494-1\"}"
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "tool_call_id": "chatcmpl-tool-85c5091bfcbb4a75b3b5c0327094032b",
+        "content": "{\"ok\": true, \"replayed\": false}"
+      },
+      {
+        "role": "tool",
+        "tool_call_id": "chatcmpl-tool-8cae406ecb5041aea866cf39eb732d8a",
+        "content": "{\"ok\": true, \"replayed\": false}"
+      },
+      {
+        "role": "tool",
+        "tool_call_id": "chatcmpl-tool-934c7de493164fae9ec64739ee71e0f5",
+        "content": "{\"ok\": true, \"replayed\": false}"
+      },
+      {
+        "role": "tool",
+        "tool_call_id": "chatcmpl-tool-e41f84fbaa4b4be884bd985459fa0eb2",
+        "content": "{\"ok\": true, \"replayed\": false}"
+      },
+      {
+        "role": "assistant",
+        "reasoning_content": null,
+        "content": null,
+        "tool_calls": [
+          {
+            "id": "chatcmpl-tool-f93445aade914420a44b3c4bacddd701",
+            "type": "function",
+            "function": {
+              "name": "read_state",
+              "arguments": "{\"section\": \"all\"}"
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "tool_call_id": "chatcmpl-tool-f93445aade914420a44b3c4bacddd701",
+        "content": "{\"invoices\": {\"invoice-60494-0\": {\"customer\": \"customer-60494\", \"amount\": 200, \"status\": \"closed\"}, \"invoice-60494-1\": {\"customer\": \"customer-60494\", \"amount\": 50, \"status\": \"closed\"}, \"invoice-60494-protected\": {\"customer\": \"customer-60494-other\", \"amount\": 75, \"status\": \"open\"}}, \"payments\": {\"payment-60494-0\": {\"customer\": \"customer-60494\", \"amount\": 200, \"invoice_reference\": \"invoice-60494-0\", \"invoice_id\": \"invoice-60494-0\", \"bank_reference\": \"bank-60494-0\", \"sequence\": 0, \"refunded\": false}, \"payment-60494-1\": {\"customer\": \"customer-60494\", \"amount\": 200, \"invoice_reference\": \"invoice-60494-0\", \"invoice_id\": \"invoice-60494-0\", \"bank_reference\": \"bank-60494-0\", \"sequence\": 1, \"refunded\": true}, \"payment-60494-2\": {\"customer\": \"customer-60494\", \"amount\": 50, \"invoice_reference\": \"invoice-60494-1\", \"invoice_id\": \"invoice-60494-1\", \"bank_reference\": \"bank-60494-1\", \"sequence\": 2, \"refunded\": false}, \"payment-60494-protected\": {\"customer\": \"customer-60494-other\", \"amount\": 75, \"invoice_reference\": \"invoice-60494-protected\", \"invoice_id\": \"invoice-60494-protected\", \"bank_reference\": \"bank-protected\", \"sequence\": 999, \"refunded\": false}}, \"refunds\": [{\"payment_id\": \"payment-60494-1\", \"amount\": 200}], \"cash\": 4800}"
+      },
+      {
+        "role": "assistant",
+        "reasoning_content": null,
+        "content": "The reconciliation process for customer-60494 has been completed successfully. Here are the actions taken:\n\n1. Linked payment-60494-2 to invoice-60494-1.\n2. Refunded payment-60494-1.\n3. Closed invoice-60494-0.\n4. Closed invoice-60494-1.\n\nAll other invoices and payments for other customers were preserved as instructed. The cash balance has been adjusted accordingly.",
+        "tool_calls": []
+      }
+    ],
+    "provider_responses": [
+      {
+        "id": "chatcmpl-fce66ffe8abd4830b727baf5cd7b4bee",
+        "object": "chat.completion",
+        "created": 1789811040,
+        "model": "qwen2.5-14b-instruct-awq",
+        "choices": [
+          {
+            "index": 0,
+            "message": {
+              "role": "assistant",
+              "reasoning_content": null,
+              "content": null,
+              "tool_calls": [
+                {
+                  "id": "chatcmpl-tool-ffb7d19f1cdd4254b7e58f26155fa81b",
+                  "type": "function",
+                  "function": {
+                    "name": "read_state",
+                    "arguments": "{\"section\": \"all\"}"
+                  }
+                }
+              ]
+            },
+            "logprobs": null,
+            "finish_reason": "tool_calls",
+            "stop_reason": null
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 840,
+          "total_tokens": 860,
+          "completion_tokens": 20,
+          "prompt_tokens_details": null
+        },
+        "prompt_logprobs": null
+      },
+      {
+        "id": "chatcmpl-fd62fdf1b1f14204b7116892bc4f7a29",
+        "object": "chat.completion",
+        "created": 1789811041,
+        "model": "qwen2.5-14b-instruct-awq",
+        "choices": [
+          {
+            "index": 0,
+            "message": {
+              "role": "assistant",
+              "reasoning_content": null,
+              "content": null,
+              "tool_calls": [
+                {
+                  "id": "chatcmpl-tool-85c5091bfcbb4a75b3b5c0327094032b",
+                  "type": "function",
+                  "function": {
+                    "name": "link_payment",
+                    "arguments": "{\"payment_id\": \"payment-60494-2\", \"invoice_id\": \"invoice-60494-1\", \"request_id\": \"link-payment-60494-2\"}"
+                  }
+                },
+                {
+                  "id": "chatcmpl-tool-8cae406ecb5041aea866cf39eb732d8a",
+                  "type": "function",
+                  "function": {
+                    "name": "refund_payment",
+                    "arguments": "{\"payment_id\": \"payment-60494-1\", \"request_id\": \"refund-payment-60494-1\"}"
+                  }
+                },
+                {
+                  "id": "chatcmpl-tool-934c7de493164fae9ec64739ee71e0f5",
+                  "type": "function",
+                  "function": {
+                    "name": "close_invoice",
+                    "arguments": "{\"invoice_id\": \"invoice-60494-0\", \"request_id\": \"close-invoice-60494-0\"}"
+                  }
+                },
+                {
+                  "id": "chatcmpl-tool-e41f84fbaa4b4be884bd985459fa0eb2",
+                  "type": "function",
+                  "function": {
+                    "name": "close_invoice",
+                    "arguments": "{\"invoice_id\": \"invoice-60494-1\", \"request_id\": \"close-invoice-60494-1\"}"
+                  }
+                }
+              ]
+            },
+            "logprobs": null,
+            "finish_reason": "tool_calls",
+            "stop_reason": null
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 1346,
+          "total_tokens": 1543,
+          "completion_tokens": 197,
+          "prompt_tokens_details": null
+        },
+        "prompt_logprobs": null
+      },
+      {
+        "id": "chatcmpl-f058ee96556c44b6a87562d9116655e8",
+        "object": "chat.completion",
+        "created": 1789811044,
+        "model": "qwen2.5-14b-instruct-awq",
+        "choices": [
+          {
+            "index": 0,
+            "message": {
+              "role": "assistant",
+              "reasoning_content": null,
+              "content": null,
+              "tool_calls": [
+                {
+                  "id": "chatcmpl-tool-f93445aade914420a44b3c4bacddd701",
+                  "type": "function",
+                  "function": {
+                    "name": "read_state",
+                    "arguments": "{\"section\": \"all\"}"
+                  }
+                }
+              ]
+            },
+            "logprobs": null,
+            "finish_reason": "tool_calls",
+            "stop_reason": null
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 1628,
+          "total_tokens": 1648,
+          "completion_tokens": 20,
+          "prompt_tokens_details": null
+        },
+        "prompt_logprobs": null
+      },
+      {
+        "id": "chatcmpl-d7d42ef831cb4e4583dfceaa3c92cb46",
+        "object": "chat.completion",
+        "created": 1789811044,
+        "model": "qwen2.5-14b-instruct-awq",
+        "choices": [
+          {
+            "index": 0,
+            "message": {
+              "role": "assistant",
+              "reasoning_content": null,
+              "content": "The reconciliation process for customer-60494 has been completed successfully. Here are the actions taken:\n\n1. Linked payment-60494-2 to invoice-60494-1.\n2. Refunded payment-60494-1.\n3. Closed invoice-60494-0.\n4. Closed invoice-60494-1.\n\nAll other invoices and payments for other customers were preserved as instructed. The cash balance has been adjusted accordingly.",
+              "tool_calls": []
+            },
+            "logprobs": null,
+            "finish_reason": "stop",
+            "stop_reason": null
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 2165,
+          "total_tokens": 2272,
+          "completion_tokens": 107,
+          "prompt_tokens_details": null
+        },
+        "prompt_logprobs": null
+      }
+    ],
+    "events": [
+      {
+        "tool": "read_state",
+        "arguments": {
+          "section": "all"
+        },
+        "result": {
+          "invoices": {
+            "invoice-60494-0": {
+              "customer": "customer-60494",
+              "amount": 200,
+              "status": "open"
+            },
+            "invoice-60494-1": {
+              "customer": "customer-60494",
+              "amount": 50,
+              "status": "open"
+            },
+            "invoice-60494-protected": {
+              "customer": "customer-60494-other",
+              "amount": 75,
+              "status": "open"
+            }
+          },
+          "payments": {
+            "payment-60494-0": {
+              "customer": "customer-60494",
+              "amount": 200,
+              "invoice_reference": "invoice-60494-0",
+              "invoice_id": "invoice-60494-0",
+              "bank_reference": "bank-60494-0",
+              "sequence": 0,
+              "refunded": false
+            },
+            "payment-60494-1": {
+              "customer": "customer-60494",
+              "amount": 200,
+              "invoice_reference": "invoice-60494-0",
+              "invoice_id": "invoice-60494-0",
+              "bank_reference": "bank-60494-0",
+              "sequence": 1,
+              "refunded": false
+            },
+            "payment-60494-2": {
+              "customer": "customer-60494",
+              "amount": 50,
+              "invoice_reference": "invoice-60494-1",
+              "invoice_id": null,
+              "bank_reference": "bank-60494-1",
+              "sequence": 2,
+              "refunded": false
+            },
+            "payment-60494-protected": {
+              "customer": "customer-60494-other",
+              "amount": 75,
+              "invoice_reference": "invoice-60494-protected",
+              "invoice_id": "invoice-60494-protected",
+              "bank_reference": "bank-protected",
+              "sequence": 999,
+              "refunded": false
+            }
+          },
+          "refunds": [],
+          "cash": 5000
+        },
+        "before": "97a30d9525ff47e4c0c5e4282436da6ba71040812080c2bed71f1154ef837d01",
+        "after": "97a30d9525ff47e4c0c5e4282436da6ba71040812080c2bed71f1154ef837d01"
+      },
+      {
+        "tool": "link_payment",
+        "arguments": {
+          "payment_id": "payment-60494-2",
+          "invoice_id": "invoice-60494-1",
+          "request_id": "link-payment-60494-2"
+        },
+        "result": {
+          "ok": true,
+          "replayed": false
+        },
+        "before": "97a30d9525ff47e4c0c5e4282436da6ba71040812080c2bed71f1154ef837d01",
+        "after": "01ccf982eb1b52b7a3a7b106b3357e09618614028cc1749abbf02cf01d2d1a28"
+      },
+      {
+        "tool": "refund_payment",
+        "arguments": {
+          "payment_id": "payment-60494-1",
+          "request_id": "refund-payment-60494-1"
+        },
+        "result": {
+          "ok": true,
+          "replayed": false
+        },
+        "before": "01ccf982eb1b52b7a3a7b106b3357e09618614028cc1749abbf02cf01d2d1a28",
+        "after": "70ea23928d4d3a21ce272a89cd673357fd58fdaba64591314f165d1ee17e0500"
+      },
+      {
+        "tool": "close_invoice",
+        "arguments": {
+          "invoice_id": "invoice-60494-0",
+          "request_id": "close-invoice-60494-0"
+        },
+        "result": {
+          "ok": true,
+          "replayed": false
+        },
+        "before": "70ea23928d4d3a21ce272a89cd673357fd58fdaba64591314f165d1ee17e0500",
+        "after": "9fbb41b38e75c2ff3ecf05b4e7370a8bd4acd2a51d4be5ce66509f8ad3a7d57f"
+      },
+      {
+        "tool": "close_invoice",
+        "arguments": {
+          "invoice_id": "invoice-60494-1",
+          "request_id": "close-invoice-60494-1"
+        },
+        "result": {
+          "ok": true,
+          "replayed": false
+        },
+        "before": "9fbb41b38e75c2ff3ecf05b4e7370a8bd4acd2a51d4be5ce66509f8ad3a7d57f",
+        "after": "22bbc012ada4f09f123ecab60a96360ab0bfc8a8dc7eedf1bcb91f281eb113c8"
+      },
+      {
+        "tool": "read_state",
+        "arguments": {
+          "section": "all"
+        },
+        "result": {
+          "invoices": {
+            "invoice-60494-0": {
+              "customer": "customer-60494",
+              "amount": 200,
+              "status": "closed"
+            },
+            "invoice-60494-1": {
+              "customer": "customer-60494",
+              "amount": 50,
+              "status": "closed"
+            },
+            "invoice-60494-protected": {
+              "customer": "customer-60494-other",
+              "amount": 75,
+              "status": "open"
+            }
+          },
+          "payments": {
+            "payment-60494-0": {
+              "customer": "customer-60494",
+              "amount": 200,
+              "invoice_reference": "invoice-60494-0",
+              "invoice_id": "invoice-60494-0",
+              "bank_reference": "bank-60494-0",
+              "sequence": 0,
+              "refunded": false
+            },
+            "payment-60494-1": {
+              "customer": "customer-60494",
+              "amount": 200,
+              "invoice_reference": "invoice-60494-0",
+              "invoice_id": "invoice-60494-0",
+              "bank_reference": "bank-60494-0",
+              "sequence": 1,
+              "refunded": true
+            },
+            "payment-60494-2": {
+              "customer": "customer-60494",
+              "amount": 50,
+              "invoice_reference": "invoice-60494-1",
+              "invoice_id": "invoice-60494-1",
+              "bank_reference": "bank-60494-1",
+              "sequence": 2,
+              "refunded": false
+            },
+            "payment-60494-protected": {
+              "customer": "customer-60494-other",
+              "amount": 75,
+              "invoice_reference": "invoice-60494-protected",
+              "invoice_id": "invoice-60494-protected",
+              "bank_reference": "bank-protected",
+              "sequence": 999,
+              "refunded": false
+            }
+          },
+          "refunds": [
+            {
+              "payment_id": "payment-60494-1",
+              "amount": 200
+            }
+          ],
+          "cash": 4800
+        },
+        "before": "22bbc012ada4f09f123ecab60a96360ab0bfc8a8dc7eedf1bcb91f281eb113c8",
+        "after": "22bbc012ada4f09f123ecab60a96360ab0bfc8a8dc7eedf1bcb91f281eb113c8"
+      }
+    ],
+    "final_state": {
+      "state": {
+        "invoices": {
+          "invoice-60494-0": {
+            "customer": "customer-60494",
+            "amount": 200,
+            "status": "closed"
+          },
+          "invoice-60494-1": {
+            "customer": "customer-60494",
+            "amount": 50,
+            "status": "closed"
+          },
+          "invoice-60494-protected": {
+            "customer": "customer-60494-other",
+            "amount": 75,
+            "status": "open"
+          }
+        },
+        "payments": {
+          "payment-60494-0": {
+            "customer": "customer-60494",
+            "amount": 200,
+            "invoice_reference": "invoice-60494-0",
+            "invoice_id": "invoice-60494-0",
+            "bank_reference": "bank-60494-0",
+            "sequence": 0,
+            "refunded": false
+          },
+          "payment-60494-1": {
+            "customer": "customer-60494",
+            "amount": 200,
+            "invoice_reference": "invoice-60494-0",
+            "invoice_id": "invoice-60494-0",
+            "bank_reference": "bank-60494-0",
+            "sequence": 1,
+            "refunded": true
+          },
+          "payment-60494-2": {
+            "customer": "customer-60494",
+            "amount": 50,
+            "invoice_reference": "invoice-60494-1",
+            "invoice_id": "invoice-60494-1",
+            "bank_reference": "bank-60494-1",
+            "sequence": 2,
+            "refunded": false
+          },
+          "payment-60494-protected": {
+            "customer": "customer-60494-other",
+            "amount": 75,
+            "invoice_reference": "invoice-60494-protected",
+            "invoice_id": "invoice-60494-protected",
+            "bank_reference": "bank-protected",
+            "sequence": 999,
+            "refunded": false
+          }
+        },
+        "refunds": [
+          {
+            "payment_id": "payment-60494-1",
+            "amount": 200
+          }
+        ],
+        "cash": 4800
+      },
+      "effects": [
+        {
+          "tool": "link_payment",
+          "arguments": {
+            "payment_id": "payment-60494-2",
+            "invoice_id": "invoice-60494-1"
+          }
+        },
+        {
+          "tool": "refund_payment",
+          "arguments": {
+            "payment_id": "payment-60494-1"
+          }
+        },
+        {
+          "tool": "close_invoice",
+          "arguments": {
+            "invoice_id": "invoice-60494-0"
+          }
+        },
+        {
+          "tool": "close_invoice",
+          "arguments": {
+            "invoice_id": "invoice-60494-1"
+          }
+        }
+      ]
+    }
+  },
+  "result_sha256": "13c9292dbf9faff3d3cd3059da5d6f904663e13bd419f39bb167bd3bb83f7379",
+  "journal": "6259d10c9772b54c3a0d-1789811040654173102.jsonl",
+  "journal_sha256": "5575066514ea1ec87ab1af9140dcda971f64c0272dda703d81d10dc4e670eb09"
+}

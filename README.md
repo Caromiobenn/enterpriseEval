@@ -1,11 +1,23 @@
-# enterpriseEval — v1 business workflow probe
+# enterpriseEval — v2 strict action protocol
 
-Pure-text evaluation methods for foundation models: protocol sensitivity, business-state grading, fault recovery and evaluation version migration. See [verified research foundations](docs/FOUNDATIONS.md).
+Pure-text foundation-model evaluation: tool protocol sensitivity, state-based grading, reliable evidence reuse, and versioned challenge sets. [Research foundations and scope](docs/FOUNDATIONS.md) document ACL/NeurIPS/ICML publications, AppWorld's ACL award, and Sierra/Anthropic sources. Recent unvetted preprints are not prerequisites for this design.
 
-This version adds two synthetic families: employee offboarding (ownership and access invariants) and invoice reconciliation (duplicate payments, matching and cash conservation). 21 contract tests pass, including alternate valid action orders and seeded invalid states. These are small controlled environments, not a reproduction of AppWorld or tau-bench.
+## Development experiment
 
-The four constrained-JSON preflight runs in `artifacts/v1-probe` all failed. Traces show two concrete problems: the action-envelope schema allowed the argument sets of different tools to mix, and both models reused a task ID across distinct write operations. One response was truncated. Raw evidence is retained; no bad text is silently repaired into an action.
+The two synthetic families are offboarding (assets/access) and invoice reconciliation (matching/refunds/cash). This version separates each tool's JSON argument schema and documents unique per-operation request IDs. It preserves v1's failed probe and does not silently repair malformed model text.
 
-The next version tests a discriminated action schema and an explicit per-operation request-ID contract. This v1 branch remains the original failed probe. Historical v0 pilots remain in their own branches and artifact directories. No broad model ranking or long-horizon capability claim follows from these probes.
+| Frozen development protocol | Success | Transport/format errors |
+|---|---:|---:|
+| Native minimal | 6/8 | 0/8 |
+| Native recovery prompt | 7/8 | 0/8 |
+| Constrained JSON recovery | 6/8 | 0/8 |
 
-Run `python -m unittest -v`. `campaign.py` freezes planned cells, records per-response journals, rejects incompatible/duplicate results and reports wholly missing conditions. CPU tests are not model success rates.
+[Raw development evidence](artifacts/v2-dev/summary.json) and [selection record](artifacts/v2-dev/selection.json) are saved. One seed, two families, clean/fault, two models, one sample per cell. This is engineering selection, not a significant superiority claim. A shared native-recovery protocol was selected before running the parameter-holdout matrix.
+
+## Frozen matrix
+
+64 cells: 2 families × 2 entity seeds × 2 sizes × 2 fault conditions × 2 models × 2 repeats. Size varies within seed, avoiding a seed/size confound. These are two business families, not 64 independent tasks. Qwen2.5-7B/14B-Instruct-AWQ run on separate RTX4090 GPUs. All runs retain original responses, per-response journals, state and usage. Missing, incompatible and duplicate cells are explicitly audited.
+
+The matrix is running as of 2026-09-19 17:50 Asia/Shanghai. Later commits add audited results. No long-horizon capability, cross-domain generalization or cost-saving result is claimed at this stage.
+
+`python -m unittest -v` checks contracts. `campaign.py plan`, `run`, and `summarize` freeze and execute schedules. Keep source hashes fixed within a batch. A completed or failed cell is not silently overwritten; interruptions remain visible in the attempt ledger.
