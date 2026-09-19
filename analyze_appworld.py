@@ -36,6 +36,8 @@ def analyze(folder):
         assert record['phase'] == 'validation'
         strategy = cell.get('strategy', 'baseline')
         assert record['config'].get('strategy', 'baseline') == strategy
+        protocol = cell.get('protocol', 'native')
+        assert record['config'].get('protocol', 'native') == protocol
         assert record['experiment_name'] == 'frozen-' + case_id
         for name, value in record['code_hashes'].items():
             assert plan['code_hashes'][name] == value, 'Actor code drift'
@@ -44,13 +46,14 @@ def analyze(folder):
         if success is not None and type(success) is not bool:
             raise TypeError('Official success must be boolean')
         rows.append({'id': case_id, 'task_id': cell['task_id'], 'model': cell['model'],
-            'repeat': cell['repeat'], 'strategy': strategy, 'success': success, 'termination': record['termination'],
+            'repeat': cell['repeat'], 'strategy': strategy, 'protocol': protocol,
+            'condition': strategy + '|' + protocol, 'success': success, 'termination': record['termination'],
             'known_tokens': sum(record['usage'].values()), 'usage_complete': record['usage_complete'],
             'model_calls': len(record['responses']), 'tool_calls': len(record['tool_events']),
             'record_sha256': hashlib.sha256(path.read_bytes()).hexdigest()})
     groups = defaultdict(list)
     for row in rows:
-        groups[row['model'] + '|' + row['strategy']].append(row)
+        groups[row['model'] + '|' + row['condition']].append(row)
     by_model = {}
     for model, group in groups.items():
         by_model[model] = {'completed': len(group), 'official_graded': sum(r['success'] is not None for r in group),
@@ -62,14 +65,14 @@ def analyze(folder):
     # Pair only identical task+repeat across models. Average within task first:
     # repeat count is not treated as the number of independent benchmark tasks.
     models = sorted({c['model'] for c in planned.values()})
-    strategies = sorted({c.get('strategy', 'baseline') for c in planned.values()})
+    strategies = sorted({c.get('strategy', 'baseline') + '|' + c.get('protocol', 'native') for c in planned.values()})
     contrasts = []
     if len(models) == 2:
         contrasts += [(models[0], s, models[1], s) for s in strategies]
     if len(strategies) == 2:
         contrasts += [(m, strategies[1], m, strategies[0]) for m in models]
     paired = []
-    lookup = {(r['task_id'], r['repeat'], r['model'], r['strategy']): r for r in rows if r['success'] is not None}
+    lookup = {(r['task_id'], r['repeat'], r['model'], r['condition']): r for r in rows if r['success'] is not None}
     assert len(lookup) == sum(r['success'] is not None for r in rows), 'Duplicate comparison cell'
     for left_model, left_strategy, right_model, right_strategy in contrasts:
         differences = defaultdict(list)
