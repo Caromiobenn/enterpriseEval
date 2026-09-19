@@ -1,0 +1,83 @@
+{
+  "mode": "live",
+  "task_id": "workflow-r0-d4-f0",
+  "root_id": "r0",
+  "seed": 20260919,
+  "model": "qwen2.5-14b-instruct-awq",
+  "manifest": {
+    "task_id": "workflow-r0-d4-f0",
+    "root_id": "r0",
+    "split": "dev",
+    "actor_hash": "db9c50592b60b061813dda809b327ce0eec58b4efb8bf06c48ed31fc66e17b36",
+    "verifier_hash": "391552c099c101b131feaf24c5795a6a15bc8ec82015424e0d2b4274a369a0bf",
+    "note": ""
+  },
+  "grading": {
+    "success": false,
+    "checks": {
+      "goal_and_dependencies": false,
+      "no_unrelated_changes": true,
+      "no_duplicate_effects": true,
+      "state_ledger_agreement": true
+    },
+    "progress": 0.0
+  },
+  "termination": "actor_stopped",
+  "error": null,
+  "usage": {
+    "prompt_tokens": 432,
+    "completion_tokens": 72
+  },
+  "usage_complete": true,
+  "duration_seconds": 1.1164320059999682,
+  "events": [],
+  "messages": [
+    {
+      "role": "system",
+      "content": "Use tools to complete the public workflow task."
+    },
+    {
+      "role": "user",
+      "content": "{\"task_id\": \"workflow-r0-d4-f0\", \"instruction\": \"Complete workflow goal ticket-5242. Discover prerequisites with inspect. Do not complete unrelated work. Each completion has a side effect; avoid duplicates. A timeout may occur after a write commits. Reuse request_id to retry a write safely. Use status to verify the state before declaring completion.\", \"goal\": \"ticket-5242\", \"available_nodes\": [\"ticket-1663\", \"ticket-5242\", \"ticket-7311\", \"ticket-7890\", \"ticket-8961\", \"ticket-9376\"]}"
+    },
+    {
+      "role": "assistant",
+      "reasoning_content": null,
+      "content": "First, I need to inspect the node `ticket-5242` to understand its prerequisites and current status.\n\nLet's call the `inspect` function for the node `ticket-5242`.\n\n{\n  \"name\": \"inspect\",\n  \"arguments\": {\n    \"node\": \"ticket-5242\"\n  }\n}",
+      "tool_calls": []
+    }
+  ],
+  "provider_responses": [
+    {
+      "id": "chatcmpl-99d8e49ff1374952a06c44596e971a24",
+      "object": "chat.completion",
+      "created": 1789809160,
+      "model": "qwen2.5-14b-instruct-awq",
+      "choices": [
+        {
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "reasoning_content": null,
+            "content": "First, I need to inspect the node `ticket-5242` to understand its prerequisites and current status.\n\nLet's call the `inspect` function for the node `ticket-5242`.\n\n{\n  \"name\": \"inspect\",\n  \"arguments\": {\n    \"node\": \"ticket-5242\"\n  }\n}",
+            "tool_calls": []
+          },
+          "logprobs": null,
+          "finish_reason": "stop",
+          "stop_reason": null
+        }
+      ],
+      "usage": {
+        "prompt_tokens": 432,
+        "total_tokens": 504,
+        "completion_tokens": 72,
+        "prompt_tokens_details": null
+      },
+      "prompt_logprobs": null
+    }
+  ],
+  "final_state": {
+    "done": [],
+    "effects": []
+  }
+}

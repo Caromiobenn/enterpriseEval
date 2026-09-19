@@ -1,0 +1,360 @@
+{
+  "mode": "live",
+  "task_id": "workflow-r0-d8-f0",
+  "root_id": "r0",
+  "seed": 20260919,
+  "model": "qwen2.5-14b-instruct-awq",
+  "manifest": {
+    "task_id": "workflow-r0-d8-f0",
+    "root_id": "r0",
+    "split": "dev",
+    "actor_hash": "aa28abaa4bd23f010a059000d1e2e1d66da516c93ed14286f65ebcd9a8807cf6",
+    "verifier_hash": "391552c099c101b131feaf24c5795a6a15bc8ec82015424e0d2b4274a369a0bf",
+    "note": ""
+  },
+  "grading": {
+    "success": false,
+    "checks": {
+      "goal_and_dependencies": false,
+      "no_unrelated_changes": true,
+      "no_duplicate_effects": true,
+      "state_ledger_agreement": true
+    },
+    "progress": 0.0
+  },
+  "termination": "actor_stopped",
+  "error": null,
+  "usage": {
+    "prompt_tokens": 1936,
+    "completion_tokens": 918
+  },
+  "usage_complete": true,
+  "duration_seconds": 12.858107174999986,
+  "events": [
+    {
+      "tool": "inspect",
+      "arguments": {
+        "node": "ticket-5969"
+      },
+      "result": {
+        "node": "ticket-5969",
+        "prerequisites": [
+          "ticket-7634"
+        ],
+        "done": false
+      },
+      "before": "af8f8888010c93f47e793dd8c7b3d17c9f74211eef1a937e90070d13d5dbe0d3",
+      "after": "af8f8888010c93f47e793dd8c7b3d17c9f74211eef1a937e90070d13d5dbe0d3"
+    },
+    {
+      "tool": "inspect",
+      "arguments": {
+        "node": "ticket-7634"
+      },
+      "result": {
+        "node": "ticket-7634",
+        "prerequisites": [
+          "ticket-8961"
+        ],
+        "done": false
+      },
+      "before": "af8f8888010c93f47e793dd8c7b3d17c9f74211eef1a937e90070d13d5dbe0d3",
+      "after": "af8f8888010c93f47e793dd8c7b3d17c9f74211eef1a937e90070d13d5dbe0d3"
+    },
+    {
+      "tool": "complete",
+      "arguments": {
+        "node": "ticket-7634",
+        "request_id": "req_123456"
+      },
+      "result": {
+        "error": "ValueError",
+        "message": "prerequisites incomplete"
+      },
+      "before": "af8f8888010c93f47e793dd8c7b3d17c9f74211eef1a937e90070d13d5dbe0d3",
+      "after": "af8f8888010c93f47e793dd8c7b3d17c9f74211eef1a937e90070d13d5dbe0d3"
+    },
+    {
+      "tool": "inspect",
+      "arguments": {
+        "node": "ticket-5969"
+      },
+      "result": {
+        "node": "ticket-5969",
+        "prerequisites": [
+          "ticket-7634"
+        ],
+        "done": false
+      },
+      "before": "af8f8888010c93f47e793dd8c7b3d17c9f74211eef1a937e90070d13d5dbe0d3",
+      "after": "af8f8888010c93f47e793dd8c7b3d17c9f74211eef1a937e90070d13d5dbe0d3"
+    },
+    {
+      "tool": "complete",
+      "arguments": {
+        "node": "ticket-5969",
+        "request_id": "req_789012"
+      },
+      "result": {
+        "error": "ValueError",
+        "message": "prerequisites incomplete"
+      },
+      "before": "af8f8888010c93f47e793dd8c7b3d17c9f74211eef1a937e90070d13d5dbe0d3",
+      "after": "af8f8888010c93f47e793dd8c7b3d17c9f74211eef1a937e90070d13d5dbe0d3"
+    },
+    {
+      "tool": "status",
+      "arguments": {},
+      "result": {
+        "done": []
+      },
+      "before": "af8f8888010c93f47e793dd8c7b3d17c9f74211eef1a937e90070d13d5dbe0d3",
+      "after": "af8f8888010c93f47e793dd8c7b3d17c9f74211eef1a937e90070d13d5dbe0d3"
+    }
+  ],
+  "messages": [
+    {
+      "role": "system",
+      "content": "Use tools to complete the public workflow task."
+    },
+    {
+      "role": "user",
+      "content": "{\"task_id\": \"workflow-r0-d8-f0\", \"instruction\": \"Complete workflow goal ticket-5969. Discover prerequisites with inspect. Do not complete unrelated work. Each completion has a side effect; avoid duplicates. A timeout may occur after a write commits. Reuse request_id to retry a write safely. Use status to verify the state before declaring completion.\", \"goal\": \"ticket-5969\", \"available_nodes\": [\"ticket-1663\", \"ticket-5242\", \"ticket-5969\", \"ticket-6866\", \"ticket-7311\", \"ticket-7634\", \"ticket-7890\", \"ticket-8808\", \"ticket-8961\", \"ticket-9376\"]}"
+    },
+    {
+      "role": "assistant",
+      "reasoning_content": null,
+      "content": "First, I'll inspect the status of the goal node `ticket-5969` to see if it is already completed or if there are any prerequisites that need to be fulfilled.\n",
+      "tool_calls": [
+        {
+          "id": "chatcmpl-tool-c39a44dd5eb34c56b102913a4167a70a",
+          "type": "function",
+          "function": {
+            "name": "inspect",
+            "arguments": "{\"node\": \"ticket-5969\"}"
+          }
+        }
+      ]
+    },
+    {
+      "role": "tool",
+      "tool_call_id": "chatcmpl-tool-c39a44dd5eb34c56b102913a4167a70a",
+      "content": "{\"node\": \"ticket-5969\", \"prerequisites\": [\"ticket-7634\"], \"done\": false}"
+    },
+    {
+      "role": "assistant",
+      "reasoning_content": null,
+      "content": "The goal node `ticket-5969` is not yet done and has a prerequisite node `ticket-7634`. I'll inspect the status of the prerequisite node to see if it is already completed or if there are further prerequisites.\n\n",
+      "tool_calls": [
+        {
+          "id": "chatcmpl-tool-4fbbc5bb7a6e43c9839c26144d9f36e2",
+          "type": "function",
+          "function": {
+            "name": "inspect",
+            "arguments": "{\"node\": \"ticket-7634\"}"
+          }
+        },
+        {
+          "id": "chatcmpl-tool-f31d5225723e483bab8dfd08223bdc1f",
+          "type": "function",
+          "function": {
+            "name": "complete",
+            "arguments": "{\"node\": \"ticket-7634\", \"request_id\": \"req_123456\"}"
+          }
+        },
+        {
+          "id": "chatcmpl-tool-46baf2af131b40ffb642e84255d1510b",
+          "type": "function",
+          "function": {
+            "name": "inspect",
+            "arguments": "{\"node\": \"ticket-5969\"}"
+          }
+        },
+        {
+          "id": "chatcmpl-tool-1752c9b0d4b846daaeb2f3f3e052b82e",
+          "type": "function",
+          "function": {
+            "name": "complete",
+            "arguments": "{\"node\": \"ticket-5969\", \"request_id\": \"req_789012\"}"
+          }
+        },
+        {
+          "id": "chatcmpl-tool-8a061f6157514027bbd804b3ee860bc9",
+          "type": "function",
+          "function": {
+            "name": "status",
+            "arguments": "{}"
+          }
+        }
+      ]
+    },
+    {
+      "role": "tool",
+      "tool_call_id": "chatcmpl-tool-4fbbc5bb7a6e43c9839c26144d9f36e2",
+      "content": "{\"node\": \"ticket-7634\", \"prerequisites\": [\"ticket-8961\"], \"done\": false}"
+    },
+    {
+      "role": "tool",
+      "tool_call_id": "chatcmpl-tool-f31d5225723e483bab8dfd08223bdc1f",
+      "content": "{\"error\": \"ValueError\", \"message\": \"prerequisites incomplete\"}"
+    },
+    {
+      "role": "tool",
+      "tool_call_id": "chatcmpl-tool-46baf2af131b40ffb642e84255d1510b",
+      "content": "{\"node\": \"ticket-5969\", \"prerequisites\": [\"ticket-7634\"], \"done\": false}"
+    },
+    {
+      "role": "tool",
+      "tool_call_id": "chatcmpl-tool-1752c9b0d4b846daaeb2f3f3e052b82e",
+      "content": "{\"error\": \"ValueError\", \"message\": \"prerequisites incomplete\"}"
+    },
+    {
+      "role": "tool",
+      "tool_call_id": "chatcmpl-tool-8a061f6157514027bbd804b3ee860bc9",
+      "content": "{\"done\": []}"
+    },
+    {
+      "role": "assistant",
+      "reasoning_content": null,
+      "content": "The prerequisite node `ticket-7634` has another prerequisite `ticket-8961`. Since `ticket-7634` cannot be completed yet, I'll inspect the status of `ticket-8961` next.\n\nOnce `ticket-8961` is completed, I will attempt to complete `ticket-7634` and then `ticket-5969`.\n\nLet's start with inspecting `ticket-8961`.\n\n<tool_call>\n{\"name\": \"inspect\", \"arguments\": {\"node\": \"ticket-8961\"}}\n</tool_call>\n<tool_call>\n{\"name\": \"complete\", \"arguments\": {\"node\": \"ticket-8961\", \"request_id\": \"req_123456\"}}\n</tool_call>\n<tool_call>\n{\"name\": \"inspect\", \"arguments\": {\"node\": \"ticket-7634\"}}\n</tool_call>\n<tool_call>\n{\"name\": \"complete\", \"arguments\": {\"node\": \"ticket-7634\", \"request_id\": \"req_789012\"}}\n\u0438\u0447\u0435\u0441\u0442\u0432\u043e\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n<tool_call>\n{\"name\": \"inspect\", \"arguments\": {\"node\": \"ticket-8961\"}}\n</tool_call>\n<tool_call>\n{\"name\": \"complete\", \"arguments\": {\"node\": \"ticket-8961\", \"request_id\": \"req_123456\"}}\n</tool_call>\n<tool_call>\n{\"name\": \"inspect\", \"arguments\": {\"node\": \"ticket-7634\"}}\n</tool_call>\n<tool_call>\n{\"name\": \"complete\", \"arguments\": {\"node\": \"ticket-7634\", \"request_id\": \"req_789012\"}}\n</tool_call>\n<tool_call>\n{\"name\": \"inspect\", \"arguments\": {\"node\": \"ticket-5969\"}}\n</tool_call>\n<tool_call>\n{\"name\": \"complete\", \"arguments\": {\"node\": \"ticket-5969\", \"request_id\": \"req_012345\"}}\n</tool_call>",
+      "tool_calls": []
+    }
+  ],
+  "provider_responses": [
+    {
+      "id": "chatcmpl-7156544df82a4bd98a28ebfeb6cc8509",
+      "object": "chat.completion",
+      "created": 1789809112,
+      "model": "qwen2.5-14b-instruct-awq",
+      "choices": [
+        {
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "reasoning_content": null,
+            "content": "First, I'll inspect the status of the goal node `ticket-5969` to see if it is already completed or if there are any prerequisites that need to be fulfilled.\n",
+            "tool_calls": [
+              {
+                "id": "chatcmpl-tool-c39a44dd5eb34c56b102913a4167a70a",
+                "type": "function",
+                "function": {
+                  "name": "inspect",
+                  "arguments": "{\"node\": \"ticket-5969\"}"
+                }
+              }
+            ]
+          },
+          "logprobs": null,
+          "finish_reason": "tool_calls",
+          "stop_reason": null
+        }
+      ],
+      "usage": {
+        "prompt_tokens": 464,
+        "total_tokens": 526,
+        "completion_tokens": 62,
+        "prompt_tokens_details": null
+      },
+      "prompt_logprobs": null
+    },
+    {
+      "id": "chatcmpl-8dcea28158e0477b830ce3e177eb6134",
+      "object": "chat.completion",
+      "created": 1789809113,
+      "model": "qwen2.5-14b-instruct-awq",
+      "choices": [
+        {
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "reasoning_content": null,
+            "content": "The goal node `ticket-5969` is not yet done and has a prerequisite node `ticket-7634`. I'll inspect the status of the prerequisite node to see if it is already completed or if there are further prerequisites.\n\n",
+            "tool_calls": [
+              {
+                "id": "chatcmpl-tool-4fbbc5bb7a6e43c9839c26144d9f36e2",
+                "type": "function",
+                "function": {
+                  "name": "inspect",
+                  "arguments": "{\"node\": \"ticket-7634\"}"
+                }
+              },
+              {
+                "id": "chatcmpl-tool-f31d5225723e483bab8dfd08223bdc1f",
+                "type": "function",
+                "function": {
+                  "name": "complete",
+                  "arguments": "{\"node\": \"ticket-7634\", \"request_id\": \"req_123456\"}"
+                }
+              },
+              {
+                "id": "chatcmpl-tool-46baf2af131b40ffb642e84255d1510b",
+                "type": "function",
+                "function": {
+                  "name": "inspect",
+                  "arguments": "{\"node\": \"ticket-5969\"}"
+                }
+              },
+              {
+                "id": "chatcmpl-tool-1752c9b0d4b846daaeb2f3f3e052b82e",
+                "type": "function",
+                "function": {
+                  "name": "complete",
+                  "arguments": "{\"node\": \"ticket-5969\", \"request_id\": \"req_789012\"}"
+                }
+              },
+              {
+                "id": "chatcmpl-tool-8a061f6157514027bbd804b3ee860bc9",
+                "type": "function",
+                "function": {
+                  "name": "status",
+                  "arguments": "{}"
+                }
+              }
+            ]
+          },
+          "logprobs": null,
+          "finish_reason": "tool_calls",
+          "stop_reason": null
+        }
+      ],
+      "usage": {
+        "prompt_tokens": 571,
+        "total_tokens": 761,
+        "completion_tokens": 190,
+        "prompt_tokens_details": null
+      },
+      "prompt_logprobs": null
+    },
+    {
+      "id": "chatcmpl-16ffe0c502bd4463bf3b5089b51405f0",
+      "object": "chat.completion",
+      "created": 1789809116,
+      "model": "qwen2.5-14b-instruct-awq",
+      "choices": [
+        {
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "reasoning_content": null,
+            "content": "The prerequisite node `ticket-7634` has another prerequisite `ticket-8961`. Since `ticket-7634` cannot be completed yet, I'll inspect the status of `ticket-8961` next.\n\nOnce `ticket-8961` is completed, I will attempt to complete `ticket-7634` and then `ticket-5969`.\n\nLet's start with inspecting `ticket-8961`.\n\n<tool_call>\n{\"name\": \"inspect\", \"arguments\": {\"node\": \"ticket-8961\"}}\n</tool_call>\n<tool_call>\n{\"name\": \"complete\", \"arguments\": {\"node\": \"ticket-8961\", \"request_id\": \"req_123456\"}}\n</tool_call>\n<tool_call>\n{\"name\": \"inspect\", \"arguments\": {\"node\": \"ticket-7634\"}}\n</tool_call>\n<tool_call>\n{\"name\": \"complete\", \"arguments\": {\"node\": \"ticket-7634\", \"request_id\": \"req_789012\"}}\n\u0438\u0447\u0435\u0441\u0442\u0432\u043e\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n<tool_call>\n{\"name\": \"inspect\", \"arguments\": {\"node\": \"ticket-8961\"}}\n</tool_call>\n<tool_call>\n{\"name\": \"complete\", \"arguments\": {\"node\": \"ticket-8961\", \"request_id\": \"req_123456\"}}\n</tool_call>\n<tool_call>\n{\"name\": \"inspect\", \"arguments\": {\"node\": \"ticket-7634\"}}\n</tool_call>\n<tool_call>\n{\"name\": \"complete\", \"arguments\": {\"node\": \"ticket-7634\", \"request_id\": \"req_789012\"}}\n</tool_call>\n<tool_call>\n{\"name\": \"inspect\", \"arguments\": {\"node\": \"ticket-5969\"}}\n</tool_call>\n<tool_call>\n{\"name\": \"complete\", \"arguments\": {\"node\": \"ticket-5969\", \"request_id\": \"req_012345\"}}\n</tool_call>",
+            "tool_calls": []
+          },
+          "logprobs": null,
+          "finish_reason": "stop",
+          "stop_reason": null
+        }
+      ],
+      "usage": {
+        "prompt_tokens": 901,
+        "total_tokens": 1567,
+        "completion_tokens": 666,
+        "prompt_tokens_details": null
+      },
+      "prompt_logprobs": null
+    }
+  ],
+  "final_state": {
+    "done": [],
+    "effects": []
+  }
+}
