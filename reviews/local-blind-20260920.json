@@ -1,7 +1,7 @@
 {
   "reviewer": "Codex model; not independent human gold",
   "reviewed_before_unmasking": true,
-  "status": "8 of 16 preselected records reviewed; do not unmask until complete",
+  "status": "All 16 judgments saved before unmasking",
   "limitations": "Same assistant knows task design. Model identity, system prompt and automatic labels hidden; actual timeouts visible. Selection and blind IDs frozen before outcomes; completed selected records reviewed as they become available.",
   "labels": [
     {
@@ -13,6 +13,11 @@
       "blind_id": "B01",
       "success": false,
       "evidence": "Only component release-0-0 receives security and owner approvals. Repeated req-001/req-002 conflicts prevent all deployment and activation; final release inactive, other two components unapproved. Same-ID retry of first security approval does not duplicate effects. Protected release remains intact."
+    },
+    {
+      "blind_id": "B02",
+      "success": false,
+      "evidence": "Repeated reservations under new IDs exhaust both stocks to 0,0 instead of 7,6; thirteen reserve effects, no dispatches. Shipment calls conflict with reservation IDs. Initial read only, protected order unchanged."
     },
     {
       "blind_id": "B03",
@@ -35,25 +40,69 @@
       "evidence": "All orders eventually shipped once, but after initial reservations and shipment-ID conflicts the actor reserves all orders again under order-0-* IDs. Stock falls to 5,4 rather than required 7,6; six reservation effects instead of three. Duplicate debits violate task even though shipped flags and dispatches look complete. Protected order intact."
     },
     {
+      "blind_id": "B07",
+      "success": false,
+      "evidence": "First security approval commits despite lost response; same-ID retry safely returns cached result. All other operations reuse req-001 and conflict. Only first security approved, release inactive; repeated reads confirm failure."
+    },
+    {
+      "blind_id": "B08",
+      "success": true,
+      "evidence": "First reservation timeout recovered by exact same-ID retry with no extra effect. Three reserves and three ships each once, stock7,6 and three distinct dispatches. Protected order unchanged, initial and final reads present."
+    },
+    {
+      "blind_id": "B09",
+      "success": false,
+      "evidence": "Three reservations commit exactly once, stock7,6. Ships reuse reservation IDs and conflict, including repeated final-order attempt. Repeated reads confirm all shipped flags false and no dispatch; task incomplete."
+    },
+    {
+      "blind_id": "B10",
+      "success": false,
+      "evidence": "Only first two orders reserved, stock8,6. Same-ID retries are cached; shipments conflict and third order remains unreserved. No dispatch, protected order preserved, task incomplete."
+    },
+    {
       "blind_id": "B11",
       "success": false,
       "evidence": "Only an initial read occurs; no committed effects. All approvals/deployments false and release inactive. Preserving protected release alone does not complete the task."
     },
     {
+      "blind_id": "B12",
+      "success": false,
+      "evidence": "First approval timeout followed by repeated ID conflicts. Eventually all six approvals commit once under IDs0..5, but no deployment. activate with6 rejected components_not_deployed; final read confirms inactive release."
+    },
+    {
       "blind_id": "B13",
       "success": false,
       "evidence": "IDs 0 through 4 are each reused across different operations causing conflicts. Final state has security for all components but owner approval only first two; no component deployed and release inactive. Last read precedes final security write, so final state was not observed either. Protected release preserved."
+    },
+    {
+      "blind_id": "B14",
+      "success": false,
+      "evidence": "Lost first reserve response retried with same ID without duplicate stock debit. Three reserves complete; shipment calls use reservation IDs and all conflict. Reads show no shipments or dispatches, stock7,6, protected order unchanged."
+    },
+    {
+      "blind_id": "B15",
+      "success": false,
+      "evidence": "req-0 security approval commits with response loss, owner approval with same ID conflicts. Final read shows only first security approval, other prerequisites/deployment/activation incomplete."
     }
   ],
   "first_review_utc": "2026-09-19T16:13:19.9323886Z",
   "blind_file_sha256": {
-    "B03": "15ED57159BB6EA7C1C0536D4A81EEC8929542CB11FB1536A0A77510163182D27",
-    "B06": "BB60D4703743084875EA5138C113C47CAF2BB933711184FD18FA9E024399E6A5",
-    "B11": "FA049ED815DC5E6F1F661C4A617438FA4D6F8A26CEBFE725465FC07FBDAEDBF7",
-    "B05": "7D210D43BB0AF317310FAD04AB8A946898450047A723E095438B1AFF59C39DD8",
-    "B13": "E1D7FD223F80F9ACEF43A9AD51EDF8130CEEEDE5A1823E7EE15D07AA1B22CD67",
-    "B04": "F45CE3986C9EA074A0A681B2BCFF5949A0D291FA7E856526251A3A899C1E7964",
-    "B00": "1AE2420B0AB80F6BC5618ACDA85A8FE2CD6876AD06D0F2BC0F84AC75E380F87C",
-    "B01": "8CA1BCCDB6566BB7DB1E5B8AEB29A2F14E57C7B13C325337F55CA72ED2D47833"
-  }
+    "B03": "15ed57159bb6ea7c1c0536d4a81eec8929542cb11fb1536a0a77510163182d27",
+    "B06": "bb60d4703743084875ea5138c113c47caf2bb933711184fd18fa9e024399e6a5",
+    "B11": "fa049ed815dc5e6f1f661c4a617438fa4d6f8a26cebfe725465fc07fbdaedbf7",
+    "B05": "7d210d43bb0af317310fad04ab8a946898450047a723e095438b1aff59c39dd8",
+    "B13": "e1d7fd223f80f9acef43a9ad51edf8130ceeede5a1823e7ee15d07aa1b22cd67",
+    "B04": "f45ce3986c9ea074a0a681b2bcff5949a0d291fa7e856526251a3a899c1e7964",
+    "B00": "1ae2420b0ab80f6bc5618acda85a8fe2cd6876ad06d0f2bc0f84ac75e380f87c",
+    "B01": "8ca1bccdb6566bb7db1e5b8aeb29a2f14e57c7b13c325337f55ca72ed2d47833",
+    "B02": "c790cea9fb966d1963c4df93b59031c6836177b6a6a6063593b17eb251afb89b",
+    "B07": "b3e9e04c33fb7863a5408d9ec6ad50c779feab07350693a49487c0da6956bf30",
+    "B08": "b0f76f071b3088fb99689af2100fbbd6640585082fa11fb06667b12c65e8b655",
+    "B09": "b231adf268c0761d1724ee7708bb9ed360a91df0991f0e50fa981a5325cd0dec",
+    "B10": "6d9948900fd6cae6021e79ee21e98612dc410c6a41ca1969c3beb02d6febb853",
+    "B12": "da89a450db15ea555c7aabfb7c277fee22b7726ee82ccc7d302fa52970b3258a",
+    "B14": "e91e62325f5787de3362fef203e546f48f9f07069a4d2ec343825e2a07d43276",
+    "B15": "da07eb6c8ed43a132e5e4eef8e78c23a0de7f82b1f33db82d6c49c6abec6f6e8"
+  },
+  "completed_review_utc": "2026-09-19T17:28:54.000292+00:00"
 }
