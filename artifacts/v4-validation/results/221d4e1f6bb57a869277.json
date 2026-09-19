@@ -1,0 +1,989 @@
+{
+  "plan_id": "1e5e3d177c8797757ac7f1ccb0e630526d8100f5ab216c83a5722475c5b04b66",
+  "cell_id": "221d4e1f6bb57a869277",
+  "cell": {
+    "family": "reconciliation",
+    "case_seed": 77,
+    "scale": 4,
+    "fault": true,
+    "model": "qwen2.5-14b-instruct-awq",
+    "model_revision": "c316319844016ef12b0af11c8971988a2b69f80d9df71318ec40f3b6c7961825",
+    "config_name": "native-recovery",
+    "config": {
+      "transport": "native",
+      "strategy": "recovery",
+      "max_model_calls": 24,
+      "max_tool_calls": 40,
+      "max_output_tokens": 512,
+      "max_seconds": 240,
+      "temperature": 0.2,
+      "top_p": 0.9
+    },
+    "repeat": 0,
+    "sampling_seed": 20260919,
+    "cell_id": "221d4e1f6bb57a869277"
+  },
+  "result": {
+    "case": {
+      "family": "reconciliation",
+      "seed": 77,
+      "scale": 4,
+      "fault": true,
+      "initial": {
+        "invoices": {
+          "invoice-43125-0": {
+            "customer": "customer-43125",
+            "amount": 150,
+            "status": "open"
+          },
+          "invoice-43125-1": {
+            "customer": "customer-43125",
+            "amount": 100,
+            "status": "open"
+          },
+          "invoice-43125-2": {
+            "customer": "customer-43125",
+            "amount": 100,
+            "status": "open"
+          },
+          "invoice-43125-3": {
+            "customer": "customer-43125",
+            "amount": 100,
+            "status": "open"
+          },
+          "invoice-43125-protected": {
+            "customer": "customer-43125-other",
+            "amount": 75,
+            "status": "open"
+          }
+        },
+        "payments": {
+          "payment-43125-0": {
+            "customer": "customer-43125",
+            "amount": 150,
+            "invoice_reference": "invoice-43125-0",
+            "invoice_id": "invoice-43125-0",
+            "bank_reference": "bank-43125-0",
+            "sequence": 0,
+            "refunded": false
+          },
+          "payment-43125-1": {
+            "customer": "customer-43125",
+            "amount": 150,
+            "invoice_reference": "invoice-43125-0",
+            "invoice_id": "invoice-43125-0",
+            "bank_reference": "bank-43125-0",
+            "sequence": 1,
+            "refunded": false
+          },
+          "payment-43125-2": {
+            "customer": "customer-43125",
+            "amount": 100,
+            "invoice_reference": "invoice-43125-1",
+            "invoice_id": null,
+            "bank_reference": "bank-43125-1",
+            "sequence": 2,
+            "refunded": false
+          },
+          "payment-43125-3": {
+            "customer": "customer-43125",
+            "amount": 100,
+            "invoice_reference": "invoice-43125-2",
+            "invoice_id": "invoice-43125-2",
+            "bank_reference": "bank-43125-2",
+            "sequence": 3,
+            "refunded": false
+          },
+          "payment-43125-4": {
+            "customer": "customer-43125",
+            "amount": 100,
+            "invoice_reference": "invoice-43125-2",
+            "invoice_id": "invoice-43125-2",
+            "bank_reference": "bank-43125-2",
+            "sequence": 4,
+            "refunded": false
+          },
+          "payment-43125-5": {
+            "customer": "customer-43125",
+            "amount": 100,
+            "invoice_reference": "invoice-43125-3",
+            "invoice_id": null,
+            "bank_reference": "bank-43125-3",
+            "sequence": 5,
+            "refunded": false
+          },
+          "payment-43125-protected": {
+            "customer": "customer-43125-other",
+            "amount": 75,
+            "invoice_reference": "invoice-43125-protected",
+            "invoice_id": "invoice-43125-protected",
+            "bank_reference": "bank-protected",
+            "sequence": 999,
+            "refunded": false
+          }
+        },
+        "refunds": [],
+        "cash": 5000
+      },
+      "request": {
+        "customer": "customer-43125",
+        "instruction": "Reconcile only the requested customer's invoices and payments. Link unlinked payments using invoice_reference. Payments sharing a bank_reference are duplicates: keep the smallest-sequence payment and refund each later one exactly once. Close every invoice of this customer when its active linked payments equal its amount. Preserve all other customers' records. Read state before acting and verify before finishing. A write can time out after committing; inspect state or retry with the SAME request_id. A refund repeated with a different request_id debits cash again."
+      }
+    },
+    "case_id": "reconciliation-s77-n4-f1",
+    "family": "reconciliation",
+    "model": "qwen2.5-14b-instruct-awq",
+    "model_revision": "c316319844016ef12b0af11c8971988a2b69f80d9df71318ec40f3b6c7961825",
+    "seed": 20260919,
+    "config": {
+      "transport": "native",
+      "strategy": "recovery",
+      "max_model_calls": 24,
+      "max_tool_calls": 40,
+      "max_output_tokens": 512,
+      "max_seconds": 240,
+      "temperature": 0.2,
+      "top_p": 0.9
+    },
+    "actor_hash": "cd1745cecb15f15cae1382607b728aa98057e263cc1193d1088b21522ff5cfef",
+    "grader_hash": "c1a58287f25f6afa35bb35a0e79f4d177aaff9e7978bb9e088504013af75cb08",
+    "grader_version": "v1",
+    "grading": {
+      "success": true,
+      "checks": {
+        "requested_goal": true,
+        "full_business_state": true,
+        "no_duplicate_effects": true,
+        "effect_count": true
+      },
+      "grader_version": "v1"
+    },
+    "legacy_grading": {
+      "success": true,
+      "checks": {
+        "requested_goal": true
+      },
+      "grader_version": "v0"
+    },
+    "termination": "actor_finished",
+    "error": null,
+    "model_calls": 4,
+    "tool_calls": 10,
+    "usage": {
+      "prompt_tokens": 7392,
+      "completion_tokens": 473
+    },
+    "usage_complete": true,
+    "seconds": 8.156138514999839,
+    "effective_time_budget_seconds": 240,
+    "fault_planned": true,
+    "fault_activated": true,
+    "messages": [
+      {
+        "role": "system",
+        "content": "Complete the user's business task using the available tools. Finish only after checking the state. First inspect current records and identify exactly which records are in scope. Track necessary actions and their prerequisites. Execute one action at a time. After any write timeout, read the affected state or retry the identical operation with the same request_id. Do not repeat already successful writes. A tool error is an observation; correct the problem and continue when possible. Use a DIFFERENT request_id for each distinct operation, such as transfer-asset123 versus revoke-access456. The task ID is not an operation ID. Preserve unrelated records. Use the structured tool-call interface for actions; do not print calls in ordinary text."
+      },
+      {
+        "role": "user",
+        "content": "{\"case_id\": \"reconciliation-s77-n4-f1\", \"customer\": \"customer-43125\", \"instruction\": \"Reconcile only the requested customer's invoices and payments. Link unlinked payments using invoice_reference. Payments sharing a bank_reference are duplicates: keep the smallest-sequence payment and refund each later one exactly once. Close every invoice of this customer when its active linked payments equal its amount. Preserve all other customers' records. Read state before acting and verify before finishing. A write can time out after committing; inspect state or retry with the SAME request_id. A refund repeated with a different request_id debits cash again.\"}"
+      },
+      {
+        "role": "assistant",
+        "reasoning_content": null,
+        "content": null,
+        "tool_calls": [
+          {
+            "id": "chatcmpl-tool-b92c5bdfcd734532912733c98c4ff1c0",
+            "type": "function",
+            "function": {
+              "name": "read_state",
+              "arguments": "{\"section\": \"all\"}"
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "tool_call_id": "chatcmpl-tool-b92c5bdfcd734532912733c98c4ff1c0",
+        "content": "{\"invoices\": {\"invoice-43125-0\": {\"customer\": \"customer-43125\", \"amount\": 150, \"status\": \"open\"}, \"invoice-43125-1\": {\"customer\": \"customer-43125\", \"amount\": 100, \"status\": \"open\"}, \"invoice-43125-2\": {\"customer\": \"customer-43125\", \"amount\": 100, \"status\": \"open\"}, \"invoice-43125-3\": {\"customer\": \"customer-43125\", \"amount\": 100, \"status\": \"open\"}, \"invoice-43125-protected\": {\"customer\": \"customer-43125-other\", \"amount\": 75, \"status\": \"open\"}}, \"payments\": {\"payment-43125-0\": {\"customer\": \"customer-43125\", \"amount\": 150, \"invoice_reference\": \"invoice-43125-0\", \"invoice_id\": \"invoice-43125-0\", \"bank_reference\": \"bank-43125-0\", \"sequence\": 0, \"refunded\": false}, \"payment-43125-1\": {\"customer\": \"customer-43125\", \"amount\": 150, \"invoice_reference\": \"invoice-43125-0\", \"invoice_id\": \"invoice-43125-0\", \"bank_reference\": \"bank-43125-0\", \"sequence\": 1, \"refunded\": false}, \"payment-43125-2\": {\"customer\": \"customer-43125\", \"amount\": 100, \"invoice_reference\": \"invoice-43125-1\", \"invoice_id\": null, \"bank_reference\": \"bank-43125-1\", \"sequence\": 2, \"refunded\": false}, \"payment-43125-3\": {\"customer\": \"customer-43125\", \"amount\": 100, \"invoice_reference\": \"invoice-43125-2\", \"invoice_id\": \"invoice-43125-2\", \"bank_reference\": \"bank-43125-2\", \"sequence\": 3, \"refunded\": false}, \"payment-43125-4\": {\"customer\": \"customer-43125\", \"amount\": 100, \"invoice_reference\": \"invoice-43125-2\", \"invoice_id\": \"invoice-43125-2\", \"bank_reference\": \"bank-43125-2\", \"sequence\": 4, \"refunded\": false}, \"payment-43125-5\": {\"customer\": \"customer-43125\", \"amount\": 100, \"invoice_reference\": \"invoice-43125-3\", \"invoice_id\": null, \"bank_reference\": \"bank-43125-3\", \"sequence\": 5, \"refunded\": false}, \"payment-43125-protected\": {\"customer\": \"customer-43125-other\", \"amount\": 75, \"invoice_reference\": \"invoice-43125-protected\", \"invoice_id\": \"invoice-43125-protected\", \"bank_reference\": \"bank-protected\", \"sequence\": 999, \"refunded\": false}}, \"refunds\": [], \"cash\": 5000}"
+      },
+      {
+        "role": "assistant",
+        "reasoning_content": null,
+        "content": null,
+        "tool_calls": [
+          {
+            "id": "chatcmpl-tool-b58ef02488904c6ebb093eb042bfcb43",
+            "type": "function",
+            "function": {
+              "name": "link_payment",
+              "arguments": "{\"payment_id\": \"payment-43125-2\", \"invoice_id\": \"invoice-43125-1\", \"request_id\": \"link-payment-43125-2\"}"
+            }
+          },
+          {
+            "id": "chatcmpl-tool-46b10dfe52ae43779038ba837c6bfc1f",
+            "type": "function",
+            "function": {
+              "name": "link_payment",
+              "arguments": "{\"payment_id\": \"payment-43125-5\", \"invoice_id\": \"invoice-43125-3\", \"request_id\": \"link-payment-43125-5\"}"
+            }
+          },
+          {
+            "id": "chatcmpl-tool-ad1ce3e5cc6f48179175ff63c18a369c",
+            "type": "function",
+            "function": {
+              "name": "refund_payment",
+              "arguments": "{\"payment_id\": \"payment-43125-1\", \"request_id\": \"refund-payment-43125-1\"}"
+            }
+          },
+          {
+            "id": "chatcmpl-tool-8b5bb72953234e6ab5d33a9e5e26f22b",
+            "type": "function",
+            "function": {
+              "name": "refund_payment",
+              "arguments": "{\"payment_id\": \"payment-43125-4\", \"request_id\": \"refund-payment-43125-4\"}"
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "tool_call_id": "chatcmpl-tool-b58ef02488904c6ebb093eb042bfcb43",
+        "content": "{\"ok\": true, \"replayed\": false}"
+      },
+      {
+        "role": "tool",
+        "tool_call_id": "chatcmpl-tool-46b10dfe52ae43779038ba837c6bfc1f",
+        "content": "{\"error\": \"timeout_after_commit\", \"message\": \"Response unavailable; commit status unknown.\"}"
+      },
+      {
+        "role": "tool",
+        "tool_call_id": "chatcmpl-tool-ad1ce3e5cc6f48179175ff63c18a369c",
+        "content": "{\"ok\": true, \"replayed\": false}"
+      },
+      {
+        "role": "tool",
+        "tool_call_id": "chatcmpl-tool-8b5bb72953234e6ab5d33a9e5e26f22b",
+        "content": "{\"ok\": true, \"replayed\": false}"
+      },
+      {
+        "role": "assistant",
+        "reasoning_content": null,
+        "content": null,
+        "tool_calls": [
+          {
+            "id": "chatcmpl-tool-87a5a7794556421cb478a2e0de21c917",
+            "type": "function",
+            "function": {
+              "name": "read_state",
+              "arguments": "{\"section\": \"payments\"}"
+            }
+          },
+          {
+            "id": "chatcmpl-tool-c809ccad64664414a272764d5af7bbb9",
+            "type": "function",
+            "function": {
+              "name": "close_invoice",
+              "arguments": "{\"invoice_id\": \"invoice-43125-0\", \"request_id\": \"close-invoice-43125-0\"}"
+            }
+          },
+          {
+            "id": "chatcmpl-tool-84d65d8365644b71a67a5a59aa43b976",
+            "type": "function",
+            "function": {
+              "name": "close_invoice",
+              "arguments": "{\"invoice_id\": \"invoice-43125-1\", \"request_id\": \"close-invoice-43125-1\"}"
+            }
+          },
+          {
+            "id": "chatcmpl-tool-1e5b19e8d014455c832d25d7796605f7",
+            "type": "function",
+            "function": {
+              "name": "close_invoice",
+              "arguments": "{\"invoice_id\": \"invoice-43125-2\", \"request_id\": \"close-invoice-43125-2\"}"
+            }
+          },
+          {
+            "id": "chatcmpl-tool-a90e0d41a8834bcdb6ec84b05dc5686c",
+            "type": "function",
+            "function": {
+              "name": "close_invoice",
+              "arguments": "{\"invoice_id\": \"invoice-43125-3\", \"request_id\": \"close-invoice-43125-3\"}"
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "tool_call_id": "chatcmpl-tool-87a5a7794556421cb478a2e0de21c917",
+        "content": "{\"payment-43125-0\": {\"customer\": \"customer-43125\", \"amount\": 150, \"invoice_reference\": \"invoice-43125-0\", \"invoice_id\": \"invoice-43125-0\", \"bank_reference\": \"bank-43125-0\", \"sequence\": 0, \"refunded\": false}, \"payment-43125-1\": {\"customer\": \"customer-43125\", \"amount\": 150, \"invoice_reference\": \"invoice-43125-0\", \"invoice_id\": \"invoice-43125-0\", \"bank_reference\": \"bank-43125-0\", \"sequence\": 1, \"refunded\": true}, \"payment-43125-2\": {\"customer\": \"customer-43125\", \"amount\": 100, \"invoice_reference\": \"invoice-43125-1\", \"invoice_id\": \"invoice-43125-1\", \"bank_reference\": \"bank-43125-1\", \"sequence\": 2, \"refunded\": false}, \"payment-43125-3\": {\"customer\": \"customer-43125\", \"amount\": 100, \"invoice_reference\": \"invoice-43125-2\", \"invoice_id\": \"invoice-43125-2\", \"bank_reference\": \"bank-43125-2\", \"sequence\": 3, \"refunded\": false}, \"payment-43125-4\": {\"customer\": \"customer-43125\", \"amount\": 100, \"invoice_reference\": \"invoice-43125-2\", \"invoice_id\": \"invoice-43125-2\", \"bank_reference\": \"bank-43125-2\", \"sequence\": 4, \"refunded\": true}, \"payment-43125-5\": {\"customer\": \"customer-43125\", \"amount\": 100, \"invoice_reference\": \"invoice-43125-3\", \"invoice_id\": \"invoice-43125-3\", \"bank_reference\": \"bank-43125-3\", \"sequence\": 5, \"refunded\": false}, \"payment-43125-protected\": {\"customer\": \"customer-43125-other\", \"amount\": 75, \"invoice_reference\": \"invoice-43125-protected\", \"invoice_id\": \"invoice-43125-protected\", \"bank_reference\": \"bank-protected\", \"sequence\": 999, \"refunded\": false}}"
+      },
+      {
+        "role": "tool",
+        "tool_call_id": "chatcmpl-tool-c809ccad64664414a272764d5af7bbb9",
+        "content": "{\"ok\": true, \"replayed\": false}"
+      },
+      {
+        "role": "tool",
+        "tool_call_id": "chatcmpl-tool-84d65d8365644b71a67a5a59aa43b976",
+        "content": "{\"ok\": true, \"replayed\": false}"
+      },
+      {
+        "role": "tool",
+        "tool_call_id": "chatcmpl-tool-1e5b19e8d014455c832d25d7796605f7",
+        "content": "{\"ok\": true, \"replayed\": false}"
+      },
+      {
+        "role": "tool",
+        "tool_call_id": "chatcmpl-tool-a90e0d41a8834bcdb6ec84b05dc5686c",
+        "content": "{\"ok\": true, \"replayed\": false}"
+      },
+      {
+        "role": "assistant",
+        "reasoning_content": null,
+        "content": "All requested actions have been completed successfully. The customer's invoices have been reconciled, payments linked, and duplicate payments refunded. Invoices are now closed where appropriate. The task is finished.",
+        "tool_calls": []
+      }
+    ],
+    "provider_responses": [
+      {
+        "id": "chatcmpl-e90ab66bad574734a68335e7a398ad1c",
+        "object": "chat.completion",
+        "created": 1789812476,
+        "model": "qwen2.5-14b-instruct-awq",
+        "choices": [
+          {
+            "index": 0,
+            "message": {
+              "role": "assistant",
+              "reasoning_content": null,
+              "content": null,
+              "tool_calls": [
+                {
+                  "id": "chatcmpl-tool-b92c5bdfcd734532912733c98c4ff1c0",
+                  "type": "function",
+                  "function": {
+                    "name": "read_state",
+                    "arguments": "{\"section\": \"all\"}"
+                  }
+                }
+              ]
+            },
+            "logprobs": null,
+            "finish_reason": "tool_calls",
+            "stop_reason": null
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 841,
+          "total_tokens": 861,
+          "completion_tokens": 20,
+          "prompt_tokens_details": null
+        },
+        "prompt_logprobs": null
+      },
+      {
+        "id": "chatcmpl-34db79f923ca4c8bb0fb52122b99fb88",
+        "object": "chat.completion",
+        "created": 1789812476,
+        "model": "qwen2.5-14b-instruct-awq",
+        "choices": [
+          {
+            "index": 0,
+            "message": {
+              "role": "assistant",
+              "reasoning_content": null,
+              "content": null,
+              "tool_calls": [
+                {
+                  "id": "chatcmpl-tool-b58ef02488904c6ebb093eb042bfcb43",
+                  "type": "function",
+                  "function": {
+                    "name": "link_payment",
+                    "arguments": "{\"payment_id\": \"payment-43125-2\", \"invoice_id\": \"invoice-43125-1\", \"request_id\": \"link-payment-43125-2\"}"
+                  }
+                },
+                {
+                  "id": "chatcmpl-tool-46b10dfe52ae43779038ba837c6bfc1f",
+                  "type": "function",
+                  "function": {
+                    "name": "link_payment",
+                    "arguments": "{\"payment_id\": \"payment-43125-5\", \"invoice_id\": \"invoice-43125-3\", \"request_id\": \"link-payment-43125-5\"}"
+                  }
+                },
+                {
+                  "id": "chatcmpl-tool-ad1ce3e5cc6f48179175ff63c18a369c",
+                  "type": "function",
+                  "function": {
+                    "name": "refund_payment",
+                    "arguments": "{\"payment_id\": \"payment-43125-1\", \"request_id\": \"refund-payment-43125-1\"}"
+                  }
+                },
+                {
+                  "id": "chatcmpl-tool-8b5bb72953234e6ab5d33a9e5e26f22b",
+                  "type": "function",
+                  "function": {
+                    "name": "refund_payment",
+                    "arguments": "{\"payment_id\": \"payment-43125-4\", \"request_id\": \"refund-payment-43125-4\"}"
+                  }
+                }
+              ]
+            },
+            "logprobs": null,
+            "finish_reason": "tool_calls",
+            "stop_reason": null
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 1678,
+          "total_tokens": 1888,
+          "completion_tokens": 210,
+          "prompt_tokens_details": null
+        },
+        "prompt_logprobs": null
+      },
+      {
+        "id": "chatcmpl-be905b5131984fe9a00d9ca93abb055d",
+        "object": "chat.completion",
+        "created": 1789812480,
+        "model": "qwen2.5-14b-instruct-awq",
+        "choices": [
+          {
+            "index": 0,
+            "message": {
+              "role": "assistant",
+              "reasoning_content": null,
+              "content": null,
+              "tool_calls": [
+                {
+                  "id": "chatcmpl-tool-87a5a7794556421cb478a2e0de21c917",
+                  "type": "function",
+                  "function": {
+                    "name": "read_state",
+                    "arguments": "{\"section\": \"payments\"}"
+                  }
+                },
+                {
+                  "id": "chatcmpl-tool-c809ccad64664414a272764d5af7bbb9",
+                  "type": "function",
+                  "function": {
+                    "name": "close_invoice",
+                    "arguments": "{\"invoice_id\": \"invoice-43125-0\", \"request_id\": \"close-invoice-43125-0\"}"
+                  }
+                },
+                {
+                  "id": "chatcmpl-tool-84d65d8365644b71a67a5a59aa43b976",
+                  "type": "function",
+                  "function": {
+                    "name": "close_invoice",
+                    "arguments": "{\"invoice_id\": \"invoice-43125-1\", \"request_id\": \"close-invoice-43125-1\"}"
+                  }
+                },
+                {
+                  "id": "chatcmpl-tool-1e5b19e8d014455c832d25d7796605f7",
+                  "type": "function",
+                  "function": {
+                    "name": "close_invoice",
+                    "arguments": "{\"invoice_id\": \"invoice-43125-2\", \"request_id\": \"close-invoice-43125-2\"}"
+                  }
+                },
+                {
+                  "id": "chatcmpl-tool-a90e0d41a8834bcdb6ec84b05dc5686c",
+                  "type": "function",
+                  "function": {
+                    "name": "close_invoice",
+                    "arguments": "{\"invoice_id\": \"invoice-43125-3\", \"request_id\": \"close-invoice-43125-3\"}"
+                  }
+                }
+              ]
+            },
+            "logprobs": null,
+            "finish_reason": "tool_calls",
+            "stop_reason": null
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 1982,
+          "total_tokens": 2186,
+          "completion_tokens": 204,
+          "prompt_tokens_details": null
+        },
+        "prompt_logprobs": null
+      },
+      {
+        "id": "chatcmpl-e8aa53659a5c4f1fa504c564bd4a09ed",
+        "object": "chat.completion",
+        "created": 1789812483,
+        "model": "qwen2.5-14b-instruct-awq",
+        "choices": [
+          {
+            "index": 0,
+            "message": {
+              "role": "assistant",
+              "reasoning_content": null,
+              "content": "All requested actions have been completed successfully. The customer's invoices have been reconciled, payments linked, and duplicate payments refunded. Invoices are now closed where appropriate. The task is finished.",
+              "tool_calls": []
+            },
+            "logprobs": null,
+            "finish_reason": "stop",
+            "stop_reason": null
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 2891,
+          "total_tokens": 2930,
+          "completion_tokens": 39,
+          "prompt_tokens_details": null
+        },
+        "prompt_logprobs": null
+      }
+    ],
+    "events": [
+      {
+        "tool": "read_state",
+        "arguments": {
+          "section": "all"
+        },
+        "result": {
+          "invoices": {
+            "invoice-43125-0": {
+              "customer": "customer-43125",
+              "amount": 150,
+              "status": "open"
+            },
+            "invoice-43125-1": {
+              "customer": "customer-43125",
+              "amount": 100,
+              "status": "open"
+            },
+            "invoice-43125-2": {
+              "customer": "customer-43125",
+              "amount": 100,
+              "status": "open"
+            },
+            "invoice-43125-3": {
+              "customer": "customer-43125",
+              "amount": 100,
+              "status": "open"
+            },
+            "invoice-43125-protected": {
+              "customer": "customer-43125-other",
+              "amount": 75,
+              "status": "open"
+            }
+          },
+          "payments": {
+            "payment-43125-0": {
+              "customer": "customer-43125",
+              "amount": 150,
+              "invoice_reference": "invoice-43125-0",
+              "invoice_id": "invoice-43125-0",
+              "bank_reference": "bank-43125-0",
+              "sequence": 0,
+              "refunded": false
+            },
+            "payment-43125-1": {
+              "customer": "customer-43125",
+              "amount": 150,
+              "invoice_reference": "invoice-43125-0",
+              "invoice_id": "invoice-43125-0",
+              "bank_reference": "bank-43125-0",
+              "sequence": 1,
+              "refunded": false
+            },
+            "payment-43125-2": {
+              "customer": "customer-43125",
+              "amount": 100,
+              "invoice_reference": "invoice-43125-1",
+              "invoice_id": null,
+              "bank_reference": "bank-43125-1",
+              "sequence": 2,
+              "refunded": false
+            },
+            "payment-43125-3": {
+              "customer": "customer-43125",
+              "amount": 100,
+              "invoice_reference": "invoice-43125-2",
+              "invoice_id": "invoice-43125-2",
+              "bank_reference": "bank-43125-2",
+              "sequence": 3,
+              "refunded": false
+            },
+            "payment-43125-4": {
+              "customer": "customer-43125",
+              "amount": 100,
+              "invoice_reference": "invoice-43125-2",
+              "invoice_id": "invoice-43125-2",
+              "bank_reference": "bank-43125-2",
+              "sequence": 4,
+              "refunded": false
+            },
+            "payment-43125-5": {
+              "customer": "customer-43125",
+              "amount": 100,
+              "invoice_reference": "invoice-43125-3",
+              "invoice_id": null,
+              "bank_reference": "bank-43125-3",
+              "sequence": 5,
+              "refunded": false
+            },
+            "payment-43125-protected": {
+              "customer": "customer-43125-other",
+              "amount": 75,
+              "invoice_reference": "invoice-43125-protected",
+              "invoice_id": "invoice-43125-protected",
+              "bank_reference": "bank-protected",
+              "sequence": 999,
+              "refunded": false
+            }
+          },
+          "refunds": [],
+          "cash": 5000
+        },
+        "before": "f380a39503a593776004fb17ee12e77d41b9c69ffa8fc90b62068e50c38d6c47",
+        "after": "f380a39503a593776004fb17ee12e77d41b9c69ffa8fc90b62068e50c38d6c47"
+      },
+      {
+        "tool": "link_payment",
+        "arguments": {
+          "payment_id": "payment-43125-2",
+          "invoice_id": "invoice-43125-1",
+          "request_id": "link-payment-43125-2"
+        },
+        "result": {
+          "ok": true,
+          "replayed": false
+        },
+        "before": "f380a39503a593776004fb17ee12e77d41b9c69ffa8fc90b62068e50c38d6c47",
+        "after": "71e192d1ed76a2be3d2bb0fbd19f1c645e4d8724fb57d724be8ea13791bd7fd7"
+      },
+      {
+        "tool": "link_payment",
+        "arguments": {
+          "payment_id": "payment-43125-5",
+          "invoice_id": "invoice-43125-3",
+          "request_id": "link-payment-43125-5"
+        },
+        "result": {
+          "error": "timeout_after_commit",
+          "message": "Response unavailable; commit status unknown."
+        },
+        "before": "71e192d1ed76a2be3d2bb0fbd19f1c645e4d8724fb57d724be8ea13791bd7fd7",
+        "after": "80dc51b189e04cd2d5416f6345afdc66b51ad44d3d3bccfdba9ff3f5c069f452"
+      },
+      {
+        "tool": "refund_payment",
+        "arguments": {
+          "payment_id": "payment-43125-1",
+          "request_id": "refund-payment-43125-1"
+        },
+        "result": {
+          "ok": true,
+          "replayed": false
+        },
+        "before": "80dc51b189e04cd2d5416f6345afdc66b51ad44d3d3bccfdba9ff3f5c069f452",
+        "after": "ac347ba79da9dc0c2e591bdbc45a0ba16bc26e41897c6006a4cb6a30f7325d1c"
+      },
+      {
+        "tool": "refund_payment",
+        "arguments": {
+          "payment_id": "payment-43125-4",
+          "request_id": "refund-payment-43125-4"
+        },
+        "result": {
+          "ok": true,
+          "replayed": false
+        },
+        "before": "ac347ba79da9dc0c2e591bdbc45a0ba16bc26e41897c6006a4cb6a30f7325d1c",
+        "after": "e9fbbcd371ed56107f4d42721cb5d97a3cfd3db9da1c55e67cc54326b6ecfad4"
+      },
+      {
+        "tool": "read_state",
+        "arguments": {
+          "section": "payments"
+        },
+        "result": {
+          "payment-43125-0": {
+            "customer": "customer-43125",
+            "amount": 150,
+            "invoice_reference": "invoice-43125-0",
+            "invoice_id": "invoice-43125-0",
+            "bank_reference": "bank-43125-0",
+            "sequence": 0,
+            "refunded": false
+          },
+          "payment-43125-1": {
+            "customer": "customer-43125",
+            "amount": 150,
+            "invoice_reference": "invoice-43125-0",
+            "invoice_id": "invoice-43125-0",
+            "bank_reference": "bank-43125-0",
+            "sequence": 1,
+            "refunded": true
+          },
+          "payment-43125-2": {
+            "customer": "customer-43125",
+            "amount": 100,
+            "invoice_reference": "invoice-43125-1",
+            "invoice_id": "invoice-43125-1",
+            "bank_reference": "bank-43125-1",
+            "sequence": 2,
+            "refunded": false
+          },
+          "payment-43125-3": {
+            "customer": "customer-43125",
+            "amount": 100,
+            "invoice_reference": "invoice-43125-2",
+            "invoice_id": "invoice-43125-2",
+            "bank_reference": "bank-43125-2",
+            "sequence": 3,
+            "refunded": false
+          },
+          "payment-43125-4": {
+            "customer": "customer-43125",
+            "amount": 100,
+            "invoice_reference": "invoice-43125-2",
+            "invoice_id": "invoice-43125-2",
+            "bank_reference": "bank-43125-2",
+            "sequence": 4,
+            "refunded": true
+          },
+          "payment-43125-5": {
+            "customer": "customer-43125",
+            "amount": 100,
+            "invoice_reference": "invoice-43125-3",
+            "invoice_id": "invoice-43125-3",
+            "bank_reference": "bank-43125-3",
+            "sequence": 5,
+            "refunded": false
+          },
+          "payment-43125-protected": {
+            "customer": "customer-43125-other",
+            "amount": 75,
+            "invoice_reference": "invoice-43125-protected",
+            "invoice_id": "invoice-43125-protected",
+            "bank_reference": "bank-protected",
+            "sequence": 999,
+            "refunded": false
+          }
+        },
+        "before": "e9fbbcd371ed56107f4d42721cb5d97a3cfd3db9da1c55e67cc54326b6ecfad4",
+        "after": "e9fbbcd371ed56107f4d42721cb5d97a3cfd3db9da1c55e67cc54326b6ecfad4"
+      },
+      {
+        "tool": "close_invoice",
+        "arguments": {
+          "invoice_id": "invoice-43125-0",
+          "request_id": "close-invoice-43125-0"
+        },
+        "result": {
+          "ok": true,
+          "replayed": false
+        },
+        "before": "e9fbbcd371ed56107f4d42721cb5d97a3cfd3db9da1c55e67cc54326b6ecfad4",
+        "after": "ef1632956d663fa2324adfbb1da63f8156ea83b7dc27da9ac076a7cf4ba7be2a"
+      },
+      {
+        "tool": "close_invoice",
+        "arguments": {
+          "invoice_id": "invoice-43125-1",
+          "request_id": "close-invoice-43125-1"
+        },
+        "result": {
+          "ok": true,
+          "replayed": false
+        },
+        "before": "ef1632956d663fa2324adfbb1da63f8156ea83b7dc27da9ac076a7cf4ba7be2a",
+        "after": "281de197b7ae4d830e19915706326c1a3959ce00bd01a94cb52a3908b3cbb1b6"
+      },
+      {
+        "tool": "close_invoice",
+        "arguments": {
+          "invoice_id": "invoice-43125-2",
+          "request_id": "close-invoice-43125-2"
+        },
+        "result": {
+          "ok": true,
+          "replayed": false
+        },
+        "before": "281de197b7ae4d830e19915706326c1a3959ce00bd01a94cb52a3908b3cbb1b6",
+        "after": "73ee429af46ef7e0e9fe3e503f73dc32afb02e399cfd1915489c35e2cbdff7a4"
+      },
+      {
+        "tool": "close_invoice",
+        "arguments": {
+          "invoice_id": "invoice-43125-3",
+          "request_id": "close-invoice-43125-3"
+        },
+        "result": {
+          "ok": true,
+          "replayed": false
+        },
+        "before": "73ee429af46ef7e0e9fe3e503f73dc32afb02e399cfd1915489c35e2cbdff7a4",
+        "after": "adf959eea1e3816c44f62a4e9dd67b821f704c6a6e8d359180374ab5b54b9269"
+      }
+    ],
+    "final_state": {
+      "state": {
+        "invoices": {
+          "invoice-43125-0": {
+            "customer": "customer-43125",
+            "amount": 150,
+            "status": "closed"
+          },
+          "invoice-43125-1": {
+            "customer": "customer-43125",
+            "amount": 100,
+            "status": "closed"
+          },
+          "invoice-43125-2": {
+            "customer": "customer-43125",
+            "amount": 100,
+            "status": "closed"
+          },
+          "invoice-43125-3": {
+            "customer": "customer-43125",
+            "amount": 100,
+            "status": "closed"
+          },
+          "invoice-43125-protected": {
+            "customer": "customer-43125-other",
+            "amount": 75,
+            "status": "open"
+          }
+        },
+        "payments": {
+          "payment-43125-0": {
+            "customer": "customer-43125",
+            "amount": 150,
+            "invoice_reference": "invoice-43125-0",
+            "invoice_id": "invoice-43125-0",
+            "bank_reference": "bank-43125-0",
+            "sequence": 0,
+            "refunded": false
+          },
+          "payment-43125-1": {
+            "customer": "customer-43125",
+            "amount": 150,
+            "invoice_reference": "invoice-43125-0",
+            "invoice_id": "invoice-43125-0",
+            "bank_reference": "bank-43125-0",
+            "sequence": 1,
+            "refunded": true
+          },
+          "payment-43125-2": {
+            "customer": "customer-43125",
+            "amount": 100,
+            "invoice_reference": "invoice-43125-1",
+            "invoice_id": "invoice-43125-1",
+            "bank_reference": "bank-43125-1",
+            "sequence": 2,
+            "refunded": false
+          },
+          "payment-43125-3": {
+            "customer": "customer-43125",
+            "amount": 100,
+            "invoice_reference": "invoice-43125-2",
+            "invoice_id": "invoice-43125-2",
+            "bank_reference": "bank-43125-2",
+            "sequence": 3,
+            "refunded": false
+          },
+          "payment-43125-4": {
+            "customer": "customer-43125",
+            "amount": 100,
+            "invoice_reference": "invoice-43125-2",
+            "invoice_id": "invoice-43125-2",
+            "bank_reference": "bank-43125-2",
+            "sequence": 4,
+            "refunded": true
+          },
+          "payment-43125-5": {
+            "customer": "customer-43125",
+            "amount": 100,
+            "invoice_reference": "invoice-43125-3",
+            "invoice_id": "invoice-43125-3",
+            "bank_reference": "bank-43125-3",
+            "sequence": 5,
+            "refunded": false
+          },
+          "payment-43125-protected": {
+            "customer": "customer-43125-other",
+            "amount": 75,
+            "invoice_reference": "invoice-43125-protected",
+            "invoice_id": "invoice-43125-protected",
+            "bank_reference": "bank-protected",
+            "sequence": 999,
+            "refunded": false
+          }
+        },
+        "refunds": [
+          {
+            "payment_id": "payment-43125-1",
+            "amount": 150
+          },
+          {
+            "payment_id": "payment-43125-4",
+            "amount": 100
+          }
+        ],
+        "cash": 4750
+      },
+      "effects": [
+        {
+          "tool": "link_payment",
+          "arguments": {
+            "payment_id": "payment-43125-2",
+            "invoice_id": "invoice-43125-1"
+          }
+        },
+        {
+          "tool": "link_payment",
+          "arguments": {
+            "payment_id": "payment-43125-5",
+            "invoice_id": "invoice-43125-3"
+          }
+        },
+        {
+          "tool": "refund_payment",
+          "arguments": {
+            "payment_id": "payment-43125-1"
+          }
+        },
+        {
+          "tool": "refund_payment",
+          "arguments": {
+            "payment_id": "payment-43125-4"
+          }
+        },
+        {
+          "tool": "close_invoice",
+          "arguments": {
+            "invoice_id": "invoice-43125-0"
+          }
+        },
+        {
+          "tool": "close_invoice",
+          "arguments": {
+            "invoice_id": "invoice-43125-1"
+          }
+        },
+        {
+          "tool": "close_invoice",
+          "arguments": {
+            "invoice_id": "invoice-43125-2"
+          }
+        },
+        {
+          "tool": "close_invoice",
+          "arguments": {
+            "invoice_id": "invoice-43125-3"
+          }
+        }
+      ]
+    }
+  },
+  "result_sha256": "7f8eb515a6bd191ca0517283eef0cef5c65dbd307e69915d88f554457f0ab521",
+  "journal": "221d4e1f6bb57a869277-1789812476391350138.jsonl",
+  "journal_sha256": "abe2615a79d373bd103984c65a48b134fb0a122e266e484aabaab3a0a9434d19"
+}

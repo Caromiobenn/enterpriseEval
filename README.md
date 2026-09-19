@@ -2,7 +2,7 @@
 
 Pure-text foundation-model evaluation: tool protocol sensitivity, state-based grading, reliable evidence reuse, and versioned challenge sets. [Research foundations and scope](docs/FOUNDATIONS.md) document ACL/NeurIPS/ICML publications, AppWorld's ACL award, and Sierra/Anthropic sources. Recent unvetted preprints are not prerequisites for this design.
 
-Current status: v4 corrects an overly restrictive operation-count check discovered in the main matrix. Historical v1 grades remain unchanged; revised grades and new-seed validation are being audited. Read [methods and limitations](docs/EXPERIMENT_METHODS.md), [trace case studies](docs/CASE_STUDIES.md), and [interview questions](docs/INTERVIEW_DEFENSE.md).
+Current status: v4 corrects an overly restrictive operation-count check discovered in the main matrix. Historical v1 grades remain unchanged; all 256 v2–v4 records have been replayed exactly and audited. New parameter validation is complete. Read [methods and limitations](docs/EXPERIMENT_METHODS.md), [trace case studies](docs/CASE_STUDIES.md), and [interview questions](docs/INTERVIEW_DEFENSE.md).
 
 ## Development experiment
 
@@ -23,3 +23,9 @@ The two synthetic families are offboarding (assets/access) and invoice reconcili
 The matrix completed 64/64 planned cells. Historical v1-grader success: 14B offboarding 16/16, reconciliation 12/16; 7B offboarding 10/16, reconciliation 6/16. Total 44/64. [Audited summary](artifacts/v2-main/summary.json). This is a small, correlated synthetic workload, not a broad model ranking. No long-horizon capability or cross-domain generalization is claimed.
 
 `python -m unittest -v` checks contracts. `campaign.py plan`, `run`, and `summarize` freeze and execute schedules. Keep source hashes fixed within a batch. A completed or failed cell is not silently overwritten; interruptions remain visible in the attempt ledger.
+
+## Grader correction and new-parameter validation
+
+The revised private v2-outcome grader separates harmless initial-correct linking from outcome failure. Main matrix: 7B 22/32 and 14B 28/32, versus historical v1 16/32 and 28/32. New entity seeds 77/99: 7B 23/32 and 14B 25/32, versus historical v1 17/32 and 25/32. The six changed 7B verdicts in each set are correct final states rejected by the exact operation-count rule. This correction is exploratory and not independently human-adjudicated gold. New seeds are not new business families.
+
+[Audited replay and grades](artifacts/outcome-audit.json) cover 256 records with zero additional model calls. Raw new-parameter records and the frozen private-grader hash are under [v4-validation](artifacts/v4-validation/plan.json). All historical verdicts remain in their original files.
