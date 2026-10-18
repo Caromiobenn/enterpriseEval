@@ -1,0 +1,1662 @@
+{
+  "raw": {
+    "cell": {
+      "model": "qwen2.5-7b-instruct-awq",
+      "family": "fulfillment",
+      "fault": true,
+      "size": 3,
+      "variant": 91004,
+      "strategy": "recovery",
+      "repeat": 3,
+      "arm": "raw",
+      "phase": "validation",
+      "id": "00db601258a450a382b9024f"
+    },
+    "case": {
+      "family": "fulfillment",
+      "variant": 91004,
+      "initial": {
+        "orders": {
+          "fulfillment-91004-item-1": {
+            "sku": "sku-0",
+            "quantity": 3,
+            "reserved": false,
+            "shipped": false
+          },
+          "fulfillment-91004-item-0": {
+            "sku": "sku-1",
+            "quantity": 1,
+            "reserved": false,
+            "shipped": false
+          },
+          "fulfillment-91004-item-2": {
+            "sku": "sku-0",
+            "quantity": 1,
+            "reserved": false,
+            "shipped": false
+          }
+        },
+        "stock": {
+          "sku-0": 7,
+          "sku-1": 4
+        },
+        "dispatches": [],
+        "protected_order": {
+          "sku": "sku-0",
+          "quantity": 2,
+          "shipped": false
+        }
+      },
+      "instruction": "Fulfill all 3 orders in orders: reserve the exact requested stock for each, then ship each reserved order exactly once. Reservations debit stock; shipping must create exactly one dispatch per order. Preserve the protected order. Read the state and verify results. Writes may commit but lose their response; retry with the same request_id or inspect state. Do not repeat a committed business operation with a new request_id.",
+      "size": 3
+    },
+    "messages": [
+      {
+        "role": "system",
+        "content": "Complete the task using tools. Read the initial state and verify the final state before finishing. After a write timeout inspect state or retry exactly the same operation with the same request_id. Never issue a new write ID for an operation already committed. Track distinct operation IDs."
+      },
+      {
+        "role": "user",
+        "content": "{\"instruction\": \"Fulfill all 3 orders in orders: reserve the exact requested stock for each, then ship each reserved order exactly once. Reservations debit stock; shipping must create exactly one dispatch per order. Preserve the protected order. Read the state and verify results. Writes may commit but lose their response; retry with the same request_id or inspect state. Do not repeat a committed business operation with a new request_id.\"}"
+      },
+      {
+        "role": "assistant",
+        "reasoning_content": null,
+        "content": null,
+        "tool_calls": [
+          {
+            "id": "chatcmpl-tool-c3461ca03ebe4507afd36caa516544ac",
+            "type": "function",
+            "function": {
+              "name": "read_state",
+              "arguments": "{}"
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "tool_call_id": "chatcmpl-tool-c3461ca03ebe4507afd36caa516544ac",
+        "content": "{\"orders\": {\"fulfillment-91004-item-1\": {\"sku\": \"sku-0\", \"quantity\": 3, \"reserved\": false, \"shipped\": false}, \"fulfillment-91004-item-0\": {\"sku\": \"sku-1\", \"quantity\": 1, \"reserved\": false, \"shipped\": false}, \"fulfillment-91004-item-2\": {\"sku\": \"sku-0\", \"quantity\": 1, \"reserved\": false, \"shipped\": false}}, \"stock\": {\"sku-0\": 7, \"sku-1\": 4}, \"dispatches\": [], \"protected_order\": {\"sku\": \"sku-0\", \"quantity\": 2, \"shipped\": false}}"
+      },
+      {
+        "role": "assistant",
+        "reasoning_content": null,
+        "content": null,
+        "tool_calls": [
+          {
+            "id": "chatcmpl-tool-472545345b844e358f8c10d51e7106a3",
+            "type": "function",
+            "function": {
+              "name": "reserve",
+              "arguments": "{\"request_id\": \"fulfillment-91004-item-1\", \"record_id\": \"fulfillment-91004-item-1\"}"
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "tool_call_id": "chatcmpl-tool-472545345b844e358f8c10d51e7106a3",
+        "content": "{\"error\": \"response_timeout\", \"commit_status\": \"unknown\"}"
+      },
+      {
+        "role": "assistant",
+        "reasoning_content": null,
+        "content": null,
+        "tool_calls": [
+          {
+            "id": "chatcmpl-tool-42da22ca9bd246d988e53e912fe0966d",
+            "type": "function",
+            "function": {
+              "name": "reserve",
+              "arguments": "{\"request_id\": \"fulfillment-91004-item-1\", \"record_id\": \"fulfillment-91004-item-1\"}"
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "tool_call_id": "chatcmpl-tool-42da22ca9bd246d988e53e912fe0966d",
+        "content": "{\"ok\": true}"
+      },
+      {
+        "role": "assistant",
+        "reasoning_content": null,
+        "content": null,
+        "tool_calls": [
+          {
+            "id": "chatcmpl-tool-4247254fbc634137b87ec51a58b1d246",
+            "type": "function",
+            "function": {
+              "name": "reserve",
+              "arguments": "{\"request_id\": \"fulfillment-91004-item-0\", \"record_id\": \"fulfillment-91004-item-0\"}"
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "tool_call_id": "chatcmpl-tool-4247254fbc634137b87ec51a58b1d246",
+        "content": "{\"ok\": true}"
+      },
+      {
+        "role": "assistant",
+        "reasoning_content": null,
+        "content": "<tool_call>\n{\"name\": \"reserve\", arguments\": {\"request_id\": \"fulfillment-91004-item-2\", \"record_id\": \"fulfillment-91004-item-2\"}}\n</tool_call>",
+        "tool_calls": []
+      }
+    ],
+    "responses": [
+      {
+        "raw": {
+          "id": "chatcmpl-a14b18b446624b2981273470755705a3",
+          "object": "chat.completion",
+          "created": 1792164684,
+          "model": "qwen2.5-7b-instruct-awq",
+          "choices": [
+            {
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "reasoning_content": null,
+                "content": null,
+                "tool_calls": [
+                  {
+                    "id": "chatcmpl-tool-c3461ca03ebe4507afd36caa516544ac",
+                    "type": "function",
+                    "function": {
+                      "name": "read_state",
+                      "arguments": "{}"
+                    }
+                  }
+                ]
+              },
+              "logprobs": null,
+              "finish_reason": "tool_calls",
+              "stop_reason": null
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 441,
+            "total_tokens": 457,
+            "completion_tokens": 16,
+            "prompt_tokens_details": null
+          },
+          "prompt_logprobs": null
+        },
+        "seconds": 0.3772
+      },
+      {
+        "raw": {
+          "id": "chatcmpl-7e0e9dc4e790463abeb7b2516d9af2b2",
+          "object": "chat.completion",
+          "created": 1792164685,
+          "model": "qwen2.5-7b-instruct-awq",
+          "choices": [
+            {
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "reasoning_content": null,
+                "content": null,
+                "tool_calls": [
+                  {
+                    "id": "chatcmpl-tool-472545345b844e358f8c10d51e7106a3",
+                    "type": "function",
+                    "function": {
+                      "name": "reserve",
+                      "arguments": "{\"request_id\": \"fulfillment-91004-item-1\", \"record_id\": \"fulfillment-91004-item-1\"}"
+                    }
+                  }
+                ]
+              },
+              "logprobs": null,
+              "finish_reason": "tool_calls",
+              "stop_reason": null
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 642,
+            "total_tokens": 691,
+            "completion_tokens": 49,
+            "prompt_tokens_details": null
+          },
+          "prompt_logprobs": null
+        },
+        "seconds": 1.1857
+      },
+      {
+        "raw": {
+          "id": "chatcmpl-a50c1cdf402442658d338b1e88211485",
+          "object": "chat.completion",
+          "created": 1792164686,
+          "model": "qwen2.5-7b-instruct-awq",
+          "choices": [
+            {
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "reasoning_content": null,
+                "content": null,
+                "tool_calls": [
+                  {
+                    "id": "chatcmpl-tool-42da22ca9bd246d988e53e912fe0966d",
+                    "type": "function",
+                    "function": {
+                      "name": "reserve",
+                      "arguments": "{\"request_id\": \"fulfillment-91004-item-1\", \"record_id\": \"fulfillment-91004-item-1\"}"
+                    }
+                  }
+                ]
+              },
+              "logprobs": null,
+              "finish_reason": "tool_calls",
+              "stop_reason": null
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 722,
+            "total_tokens": 771,
+            "completion_tokens": 49,
+            "prompt_tokens_details": null
+          },
+          "prompt_logprobs": null
+        },
+        "seconds": 0.8152
+      },
+      {
+        "raw": {
+          "id": "chatcmpl-568348b35dfd447383a8815e56b6fa32",
+          "object": "chat.completion",
+          "created": 1792164687,
+          "model": "qwen2.5-7b-instruct-awq",
+          "choices": [
+            {
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "reasoning_content": null,
+                "content": null,
+                "tool_calls": [
+                  {
+                    "id": "chatcmpl-tool-4247254fbc634137b87ec51a58b1d246",
+                    "type": "function",
+                    "function": {
+                      "name": "reserve",
+                      "arguments": "{\"request_id\": \"fulfillment-91004-item-0\", \"record_id\": \"fulfillment-91004-item-0\"}"
+                    }
+                  }
+                ]
+              },
+              "logprobs": null,
+              "finish_reason": "tool_calls",
+              "stop_reason": null
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 793,
+            "total_tokens": 842,
+            "completion_tokens": 49,
+            "prompt_tokens_details": null
+          },
+          "prompt_logprobs": null
+        },
+        "seconds": 1.4234
+      },
+      {
+        "raw": {
+          "id": "chatcmpl-73d15b60dd26411196fd2ac8a9cbad0a",
+          "object": "chat.completion",
+          "created": 1792164688,
+          "model": "qwen2.5-7b-instruct-awq",
+          "choices": [
+            {
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "reasoning_content": null,
+                "content": "<tool_call>\n{\"name\": \"reserve\", arguments\": {\"request_id\": \"fulfillment-91004-item-2\", \"record_id\": \"fulfillment-91004-item-2\"}}\n</tool_call>",
+                "tool_calls": []
+              },
+              "logprobs": null,
+              "finish_reason": "stop",
+              "stop_reason": null
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 864,
+            "total_tokens": 912,
+            "completion_tokens": 48,
+            "prompt_tokens_details": null
+          },
+          "prompt_logprobs": null
+        },
+        "seconds": 0.554
+      }
+    ],
+    "mappings": [
+      {
+        "turn": 0,
+        "tool_call_id": "chatcmpl-tool-c3461ca03ebe4507afd36caa516544ac",
+        "name": "read_state",
+        "raw_arguments": {},
+        "effective_arguments": {}
+      },
+      {
+        "turn": 1,
+        "tool_call_id": "chatcmpl-tool-472545345b844e358f8c10d51e7106a3",
+        "name": "reserve",
+        "raw_arguments": {
+          "request_id": "fulfillment-91004-item-1",
+          "record_id": "fulfillment-91004-item-1"
+        },
+        "effective_arguments": {
+          "request_id": "fulfillment-91004-item-1",
+          "record_id": "fulfillment-91004-item-1"
+        }
+      },
+      {
+        "turn": 2,
+        "tool_call_id": "chatcmpl-tool-42da22ca9bd246d988e53e912fe0966d",
+        "name": "reserve",
+        "raw_arguments": {
+          "request_id": "fulfillment-91004-item-1",
+          "record_id": "fulfillment-91004-item-1"
+        },
+        "effective_arguments": {
+          "request_id": "fulfillment-91004-item-1",
+          "record_id": "fulfillment-91004-item-1"
+        }
+      },
+      {
+        "turn": 3,
+        "tool_call_id": "chatcmpl-tool-4247254fbc634137b87ec51a58b1d246",
+        "name": "reserve",
+        "raw_arguments": {
+          "request_id": "fulfillment-91004-item-0",
+          "record_id": "fulfillment-91004-item-0"
+        },
+        "effective_arguments": {
+          "request_id": "fulfillment-91004-item-0",
+          "record_id": "fulfillment-91004-item-0"
+        }
+      }
+    ],
+    "termination": "actor_finished",
+    "completed": true,
+    "started_utc": "2026-10-16T15:31:24.720264+00:00",
+    "final": {
+      "orders": {
+        "fulfillment-91004-item-1": {
+          "sku": "sku-0",
+          "quantity": 3,
+          "reserved": true,
+          "shipped": false
+        },
+        "fulfillment-91004-item-0": {
+          "sku": "sku-1",
+          "quantity": 1,
+          "reserved": true,
+          "shipped": false
+        },
+        "fulfillment-91004-item-2": {
+          "sku": "sku-0",
+          "quantity": 1,
+          "reserved": false,
+          "shipped": false
+        }
+      },
+      "stock": {
+        "sku-0": 4,
+        "sku-1": 3
+      },
+      "dispatches": [],
+      "protected_order": {
+        "sku": "sku-0",
+        "quantity": 2,
+        "shipped": false
+      }
+    },
+    "effects": [
+      {
+        "name": "reserve",
+        "record_id": "fulfillment-91004-item-1"
+      },
+      {
+        "name": "reserve",
+        "record_id": "fulfillment-91004-item-0"
+      }
+    ],
+    "events": [
+      {
+        "name": "read_state",
+        "arguments": {},
+        "response": {
+          "orders": {
+            "fulfillment-91004-item-1": {
+              "sku": "sku-0",
+              "quantity": 3,
+              "reserved": false,
+              "shipped": false
+            },
+            "fulfillment-91004-item-0": {
+              "sku": "sku-1",
+              "quantity": 1,
+              "reserved": false,
+              "shipped": false
+            },
+            "fulfillment-91004-item-2": {
+              "sku": "sku-0",
+              "quantity": 1,
+              "reserved": false,
+              "shipped": false
+            }
+          },
+          "stock": {
+            "sku-0": 7,
+            "sku-1": 4
+          },
+          "dispatches": [],
+          "protected_order": {
+            "sku": "sku-0",
+            "quantity": 2,
+            "shipped": false
+          }
+        },
+        "state_changed": false
+      },
+      {
+        "name": "reserve",
+        "arguments": {
+          "request_id": "fulfillment-91004-item-1",
+          "record_id": "fulfillment-91004-item-1"
+        },
+        "response": {
+          "error": "response_timeout",
+          "commit_status": "unknown"
+        },
+        "state_changed": true
+      },
+      {
+        "name": "reserve",
+        "arguments": {
+          "request_id": "fulfillment-91004-item-1",
+          "record_id": "fulfillment-91004-item-1"
+        },
+        "response": {
+          "ok": true
+        },
+        "state_changed": false
+      },
+      {
+        "name": "reserve",
+        "arguments": {
+          "request_id": "fulfillment-91004-item-0",
+          "record_id": "fulfillment-91004-item-0"
+        },
+        "response": {
+          "ok": true
+        },
+        "state_changed": true
+      }
+    ],
+    "fault_exposed": true,
+    "ended_utc": "2026-10-16T15:31:29.101749+00:00"
+  },
+  "namespace": {
+    "cell": {
+      "model": "qwen2.5-7b-instruct-awq",
+      "family": "fulfillment",
+      "fault": true,
+      "size": 3,
+      "variant": 91004,
+      "strategy": "recovery",
+      "repeat": 3,
+      "arm": "namespace",
+      "phase": "validation",
+      "id": "d4c864f742cd792444704da7"
+    },
+    "case": {
+      "family": "fulfillment",
+      "variant": 91004,
+      "initial": {
+        "orders": {
+          "fulfillment-91004-item-1": {
+            "sku": "sku-0",
+            "quantity": 3,
+            "reserved": false,
+            "shipped": false
+          },
+          "fulfillment-91004-item-0": {
+            "sku": "sku-1",
+            "quantity": 1,
+            "reserved": false,
+            "shipped": false
+          },
+          "fulfillment-91004-item-2": {
+            "sku": "sku-0",
+            "quantity": 1,
+            "reserved": false,
+            "shipped": false
+          }
+        },
+        "stock": {
+          "sku-0": 7,
+          "sku-1": 4
+        },
+        "dispatches": [],
+        "protected_order": {
+          "sku": "sku-0",
+          "quantity": 2,
+          "shipped": false
+        }
+      },
+      "instruction": "Fulfill all 3 orders in orders: reserve the exact requested stock for each, then ship each reserved order exactly once. Reservations debit stock; shipping must create exactly one dispatch per order. Preserve the protected order. Read the state and verify results. Writes may commit but lose their response; retry with the same request_id or inspect state. Do not repeat a committed business operation with a new request_id.",
+      "size": 3
+    },
+    "messages": [
+      {
+        "role": "system",
+        "content": "Complete the task using tools. Read the initial state and verify the final state before finishing. After a write timeout inspect state or retry exactly the same operation with the same request_id. Never issue a new write ID for an operation already committed. Track distinct operation IDs."
+      },
+      {
+        "role": "user",
+        "content": "{\"instruction\": \"Fulfill all 3 orders in orders: reserve the exact requested stock for each, then ship each reserved order exactly once. Reservations debit stock; shipping must create exactly one dispatch per order. Preserve the protected order. Read the state and verify results. Writes may commit but lose their response; retry with the same request_id or inspect state. Do not repeat a committed business operation with a new request_id.\"}"
+      },
+      {
+        "role": "assistant",
+        "reasoning_content": null,
+        "content": null,
+        "tool_calls": [
+          {
+            "id": "chatcmpl-tool-612e90f9f1774b3183a8dea41af98c65",
+            "type": "function",
+            "function": {
+              "name": "read_state",
+              "arguments": "{}"
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "tool_call_id": "chatcmpl-tool-612e90f9f1774b3183a8dea41af98c65",
+        "content": "{\"orders\": {\"fulfillment-91004-item-1\": {\"sku\": \"sku-0\", \"quantity\": 3, \"reserved\": false, \"shipped\": false}, \"fulfillment-91004-item-0\": {\"sku\": \"sku-1\", \"quantity\": 1, \"reserved\": false, \"shipped\": false}, \"fulfillment-91004-item-2\": {\"sku\": \"sku-0\", \"quantity\": 1, \"reserved\": false, \"shipped\": false}}, \"stock\": {\"sku-0\": 7, \"sku-1\": 4}, \"dispatches\": [], \"protected_order\": {\"sku\": \"sku-0\", \"quantity\": 2, \"shipped\": false}}"
+      },
+      {
+        "role": "assistant",
+        "reasoning_content": null,
+        "content": null,
+        "tool_calls": [
+          {
+            "id": "chatcmpl-tool-c61da7031ccb47398204d8e827bee1ec",
+            "type": "function",
+            "function": {
+              "name": "reserve",
+              "arguments": "{\"request_id\": \"fulfillment-91004-item-1\", \"record_id\": \"fulfillment-91004-item-1\"}"
+            }
+          },
+          {
+            "id": "chatcmpl-tool-013123c47cf14e2990a2890599e7d8a3",
+            "type": "function",
+            "function": {
+              "name": "reserve",
+              "arguments": "{\"request_id\": \"fulfillment-91004-item-0\", \"record_id\": \"fulfillment-91004-item-0\"}"
+            }
+          },
+          {
+            "id": "chatcmpl-tool-819433bc474847778112a7ad743a40fb",
+            "type": "function",
+            "function": {
+              "name": "reserve",
+              "arguments": "{\"request_id\": \"fulfillment-91004-item-2\", \"record_id\": \"fulfillment-91004-item-2\"}"
+            }
+          },
+          {
+            "id": "chatcmpl-tool-20502f40a9d2420594a8301995bdb360",
+            "type": "function",
+            "function": {
+              "name": "ship",
+              "arguments": "{\"request_id\": \"fulfillment-91004-item-1\", \"record_id\": \"fulfillment-91004-item-1\"}"
+            }
+          },
+          {
+            "id": "chatcmpl-tool-30fa03f21b54469596a355353315c343",
+            "type": "function",
+            "function": {
+              "name": "ship",
+              "arguments": "{\"request_id\": \"fulfillment-91004-item-0\", \"record_id\": \"fulfillment-91004-item-0\"}"
+            }
+          },
+          {
+            "id": "chatcmpl-tool-bdd0365a90da4325b893215097644cb7",
+            "type": "function",
+            "function": {
+              "name": "ship",
+              "arguments": "{\"request_id\": \"fulfillment-91004-item-2\", \"record_id\": \"fulfillment-91004-item-2\"}"
+            }
+          },
+          {
+            "id": "chatcmpl-tool-0737ca1b9b744c65a5da4c5aa5385b10",
+            "type": "function",
+            "function": {
+              "name": "read_state",
+              "arguments": "{}"
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "tool_call_id": "chatcmpl-tool-c61da7031ccb47398204d8e827bee1ec",
+        "content": "{\"error\": \"response_timeout\", \"commit_status\": \"unknown\"}"
+      },
+      {
+        "role": "tool",
+        "tool_call_id": "chatcmpl-tool-013123c47cf14e2990a2890599e7d8a3",
+        "content": "{\"ok\": true}"
+      },
+      {
+        "role": "tool",
+        "tool_call_id": "chatcmpl-tool-819433bc474847778112a7ad743a40fb",
+        "content": "{\"ok\": true}"
+      },
+      {
+        "role": "tool",
+        "tool_call_id": "chatcmpl-tool-20502f40a9d2420594a8301995bdb360",
+        "content": "{\"ok\": true}"
+      },
+      {
+        "role": "tool",
+        "tool_call_id": "chatcmpl-tool-30fa03f21b54469596a355353315c343",
+        "content": "{\"ok\": true}"
+      },
+      {
+        "role": "tool",
+        "tool_call_id": "chatcmpl-tool-bdd0365a90da4325b893215097644cb7",
+        "content": "{\"ok\": true}"
+      },
+      {
+        "role": "tool",
+        "tool_call_id": "chatcmpl-tool-0737ca1b9b744c65a5da4c5aa5385b10",
+        "content": "{\"orders\": {\"fulfillment-91004-item-1\": {\"sku\": \"sku-0\", \"quantity\": 3, \"reserved\": true, \"shipped\": true}, \"fulfillment-91004-item-0\": {\"sku\": \"sku-1\", \"quantity\": 1, \"reserved\": true, \"shipped\": true}, \"fulfillment-91004-item-2\": {\"sku\": \"sku-0\", \"quantity\": 1, \"reserved\": true, \"shipped\": true}}, \"stock\": {\"sku-0\": 3, \"sku-1\": 3}, \"dispatches\": [\"fulfillment-91004-item-1\", \"fulfillment-91004-item-0\", \"fulfillment-91004-item-2\"], \"protected_order\": {\"sku\": \"sku-0\", \"quantity\": 2, \"shipped\": false}}"
+      },
+      {
+        "role": "assistant",
+        "reasoning_content": null,
+        "content": "The state has been read and verified. All three orders have been successfully reserved and shipped. Here is the final state:\n\n- Stock levels:\n  - SKU-0: 3 units\n  - SKU-1: 3 units\n\n- Dispatches:\n  - fulfillment-91004-item-1\n  - fulfillment-91004-item-0\n  - fulfillment-91004-item-2\n\n- Protected order:\n  - SKU-0: 2 units, not shipped\n\nThe operation was successful, and no retries were necessary.",
+        "tool_calls": []
+      }
+    ],
+    "responses": [
+      {
+        "raw": {
+          "id": "chatcmpl-485d73980e6644a8bd98444b10039ff2",
+          "object": "chat.completion",
+          "created": 1792163265,
+          "model": "qwen2.5-7b-instruct-awq",
+          "choices": [
+            {
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "reasoning_content": null,
+                "content": null,
+                "tool_calls": [
+                  {
+                    "id": "chatcmpl-tool-612e90f9f1774b3183a8dea41af98c65",
+                    "type": "function",
+                    "function": {
+                      "name": "read_state",
+                      "arguments": "{}"
+                    }
+                  }
+                ]
+              },
+              "logprobs": null,
+              "finish_reason": "tool_calls",
+              "stop_reason": null
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 441,
+            "total_tokens": 457,
+            "completion_tokens": 16,
+            "prompt_tokens_details": null
+          },
+          "prompt_logprobs": null
+        },
+        "seconds": 0.2306
+      },
+      {
+        "raw": {
+          "id": "chatcmpl-14f4d2cb020f44d1ac16f9ea01c59f53",
+          "object": "chat.completion",
+          "created": 1792163265,
+          "model": "qwen2.5-7b-instruct-awq",
+          "choices": [
+            {
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "reasoning_content": null,
+                "content": null,
+                "tool_calls": [
+                  {
+                    "id": "chatcmpl-tool-c61da7031ccb47398204d8e827bee1ec",
+                    "type": "function",
+                    "function": {
+                      "name": "reserve",
+                      "arguments": "{\"request_id\": \"fulfillment-91004-item-1\", \"record_id\": \"fulfillment-91004-item-1\"}"
+                    }
+                  },
+                  {
+                    "id": "chatcmpl-tool-013123c47cf14e2990a2890599e7d8a3",
+                    "type": "function",
+                    "function": {
+                      "name": "reserve",
+                      "arguments": "{\"request_id\": \"fulfillment-91004-item-0\", \"record_id\": \"fulfillment-91004-item-0\"}"
+                    }
+                  },
+                  {
+                    "id": "chatcmpl-tool-819433bc474847778112a7ad743a40fb",
+                    "type": "function",
+                    "function": {
+                      "name": "reserve",
+                      "arguments": "{\"request_id\": \"fulfillment-91004-item-2\", \"record_id\": \"fulfillment-91004-item-2\"}"
+                    }
+                  },
+                  {
+                    "id": "chatcmpl-tool-20502f40a9d2420594a8301995bdb360",
+                    "type": "function",
+                    "function": {
+                      "name": "ship",
+                      "arguments": "{\"request_id\": \"fulfillment-91004-item-1\", \"record_id\": \"fulfillment-91004-item-1\"}"
+                    }
+                  },
+                  {
+                    "id": "chatcmpl-tool-30fa03f21b54469596a355353315c343",
+                    "type": "function",
+                    "function": {
+                      "name": "ship",
+                      "arguments": "{\"request_id\": \"fulfillment-91004-item-0\", \"record_id\": \"fulfillment-91004-item-0\"}"
+                    }
+                  },
+                  {
+                    "id": "chatcmpl-tool-bdd0365a90da4325b893215097644cb7",
+                    "type": "function",
+                    "function": {
+                      "name": "ship",
+                      "arguments": "{\"request_id\": \"fulfillment-91004-item-2\", \"record_id\": \"fulfillment-91004-item-2\"}"
+                    }
+                  },
+                  {
+                    "id": "chatcmpl-tool-0737ca1b9b744c65a5da4c5aa5385b10",
+                    "type": "function",
+                    "function": {
+                      "name": "read_state",
+                      "arguments": "{}"
+                    }
+                  }
+                ]
+              },
+              "logprobs": null,
+              "finish_reason": "tool_calls",
+              "stop_reason": null
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 642,
+            "total_tokens": 952,
+            "completion_tokens": 310,
+            "prompt_tokens_details": null
+          },
+          "prompt_logprobs": null
+        },
+        "seconds": 4.7605
+      },
+      {
+        "raw": {
+          "id": "chatcmpl-37654b17974d403498da3695a380b6cb",
+          "object": "chat.completion",
+          "created": 1792163270,
+          "model": "qwen2.5-7b-instruct-awq",
+          "choices": [
+            {
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "reasoning_content": null,
+                "content": "The state has been read and verified. All three orders have been successfully reserved and shipped. Here is the final state:\n\n- Stock levels:\n  - SKU-0: 3 units\n  - SKU-1: 3 units\n\n- Dispatches:\n  - fulfillment-91004-item-1\n  - fulfillment-91004-item-0\n  - fulfillment-91004-item-2\n\n- Protected order:\n  - SKU-0: 2 units, not shipped\n\nThe operation was successful, and no retries were necessary.",
+                "tool_calls": []
+              },
+              "logprobs": null,
+              "finish_reason": "stop",
+              "stop_reason": null
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 1265,
+            "total_tokens": 1385,
+            "completion_tokens": 120,
+            "prompt_tokens_details": null
+          },
+          "prompt_logprobs": null
+        },
+        "seconds": 1.7779
+      }
+    ],
+    "mappings": [
+      {
+        "turn": 0,
+        "tool_call_id": "chatcmpl-tool-612e90f9f1774b3183a8dea41af98c65",
+        "name": "read_state",
+        "raw_arguments": {},
+        "effective_arguments": {}
+      },
+      {
+        "turn": 1,
+        "tool_call_id": "chatcmpl-tool-c61da7031ccb47398204d8e827bee1ec",
+        "name": "reserve",
+        "raw_arguments": {
+          "request_id": "fulfillment-91004-item-1",
+          "record_id": "fulfillment-91004-item-1"
+        },
+        "effective_arguments": {
+          "request_id": "exec-e46e79d5d98bb08f6bf5b8d739d25156b3c8dce9600fec42b1211d01383bbca8",
+          "record_id": "fulfillment-91004-item-1"
+        }
+      },
+      {
+        "turn": 1,
+        "tool_call_id": "chatcmpl-tool-013123c47cf14e2990a2890599e7d8a3",
+        "name": "reserve",
+        "raw_arguments": {
+          "request_id": "fulfillment-91004-item-0",
+          "record_id": "fulfillment-91004-item-0"
+        },
+        "effective_arguments": {
+          "request_id": "exec-24463761ca3b5db6e1e123d5529f16a49269cccc18ddbf433052efaace2523bf",
+          "record_id": "fulfillment-91004-item-0"
+        }
+      },
+      {
+        "turn": 1,
+        "tool_call_id": "chatcmpl-tool-819433bc474847778112a7ad743a40fb",
+        "name": "reserve",
+        "raw_arguments": {
+          "request_id": "fulfillment-91004-item-2",
+          "record_id": "fulfillment-91004-item-2"
+        },
+        "effective_arguments": {
+          "request_id": "exec-92e26c2ab3a7e1490beaeb42732bcec94bfacb1522026e4ce9d7290e97757257",
+          "record_id": "fulfillment-91004-item-2"
+        }
+      },
+      {
+        "turn": 1,
+        "tool_call_id": "chatcmpl-tool-20502f40a9d2420594a8301995bdb360",
+        "name": "ship",
+        "raw_arguments": {
+          "request_id": "fulfillment-91004-item-1",
+          "record_id": "fulfillment-91004-item-1"
+        },
+        "effective_arguments": {
+          "request_id": "exec-dacdc7fc24e005a3a63f22779d4993cee88c6ce4b39ab86755c75f8494492f52",
+          "record_id": "fulfillment-91004-item-1"
+        }
+      },
+      {
+        "turn": 1,
+        "tool_call_id": "chatcmpl-tool-30fa03f21b54469596a355353315c343",
+        "name": "ship",
+        "raw_arguments": {
+          "request_id": "fulfillment-91004-item-0",
+          "record_id": "fulfillment-91004-item-0"
+        },
+        "effective_arguments": {
+          "request_id": "exec-bb4d08f512684bb1bc2159dc0244fa2258120c787b522eebaf7249300183556f",
+          "record_id": "fulfillment-91004-item-0"
+        }
+      },
+      {
+        "turn": 1,
+        "tool_call_id": "chatcmpl-tool-bdd0365a90da4325b893215097644cb7",
+        "name": "ship",
+        "raw_arguments": {
+          "request_id": "fulfillment-91004-item-2",
+          "record_id": "fulfillment-91004-item-2"
+        },
+        "effective_arguments": {
+          "request_id": "exec-eff763c0f380c823137119e84e59a94e219d0bb0f1aaff1b59f1beb27d05ff4d",
+          "record_id": "fulfillment-91004-item-2"
+        }
+      },
+      {
+        "turn": 1,
+        "tool_call_id": "chatcmpl-tool-0737ca1b9b744c65a5da4c5aa5385b10",
+        "name": "read_state",
+        "raw_arguments": {},
+        "effective_arguments": {}
+      }
+    ],
+    "termination": "actor_finished",
+    "completed": true,
+    "started_utc": "2026-10-16T15:07:45.431896+00:00",
+    "final": {
+      "orders": {
+        "fulfillment-91004-item-1": {
+          "sku": "sku-0",
+          "quantity": 3,
+          "reserved": true,
+          "shipped": true
+        },
+        "fulfillment-91004-item-0": {
+          "sku": "sku-1",
+          "quantity": 1,
+          "reserved": true,
+          "shipped": true
+        },
+        "fulfillment-91004-item-2": {
+          "sku": "sku-0",
+          "quantity": 1,
+          "reserved": true,
+          "shipped": true
+        }
+      },
+      "stock": {
+        "sku-0": 3,
+        "sku-1": 3
+      },
+      "dispatches": [
+        "fulfillment-91004-item-1",
+        "fulfillment-91004-item-0",
+        "fulfillment-91004-item-2"
+      ],
+      "protected_order": {
+        "sku": "sku-0",
+        "quantity": 2,
+        "shipped": false
+      }
+    },
+    "effects": [
+      {
+        "name": "reserve",
+        "record_id": "fulfillment-91004-item-1"
+      },
+      {
+        "name": "reserve",
+        "record_id": "fulfillment-91004-item-0"
+      },
+      {
+        "name": "reserve",
+        "record_id": "fulfillment-91004-item-2"
+      },
+      {
+        "name": "ship",
+        "record_id": "fulfillment-91004-item-1"
+      },
+      {
+        "name": "ship",
+        "record_id": "fulfillment-91004-item-0"
+      },
+      {
+        "name": "ship",
+        "record_id": "fulfillment-91004-item-2"
+      }
+    ],
+    "events": [
+      {
+        "name": "read_state",
+        "arguments": {},
+        "response": {
+          "orders": {
+            "fulfillment-91004-item-1": {
+              "sku": "sku-0",
+              "quantity": 3,
+              "reserved": false,
+              "shipped": false
+            },
+            "fulfillment-91004-item-0": {
+              "sku": "sku-1",
+              "quantity": 1,
+              "reserved": false,
+              "shipped": false
+            },
+            "fulfillment-91004-item-2": {
+              "sku": "sku-0",
+              "quantity": 1,
+              "reserved": false,
+              "shipped": false
+            }
+          },
+          "stock": {
+            "sku-0": 7,
+            "sku-1": 4
+          },
+          "dispatches": [],
+          "protected_order": {
+            "sku": "sku-0",
+            "quantity": 2,
+            "shipped": false
+          }
+        },
+        "state_changed": false
+      },
+      {
+        "name": "reserve",
+        "arguments": {
+          "request_id": "exec-e46e79d5d98bb08f6bf5b8d739d25156b3c8dce9600fec42b1211d01383bbca8",
+          "record_id": "fulfillment-91004-item-1"
+        },
+        "response": {
+          "error": "response_timeout",
+          "commit_status": "unknown"
+        },
+        "state_changed": true
+      },
+      {
+        "name": "reserve",
+        "arguments": {
+          "request_id": "exec-24463761ca3b5db6e1e123d5529f16a49269cccc18ddbf433052efaace2523bf",
+          "record_id": "fulfillment-91004-item-0"
+        },
+        "response": {
+          "ok": true
+        },
+        "state_changed": true
+      },
+      {
+        "name": "reserve",
+        "arguments": {
+          "request_id": "exec-92e26c2ab3a7e1490beaeb42732bcec94bfacb1522026e4ce9d7290e97757257",
+          "record_id": "fulfillment-91004-item-2"
+        },
+        "response": {
+          "ok": true
+        },
+        "state_changed": true
+      },
+      {
+        "name": "ship",
+        "arguments": {
+          "request_id": "exec-dacdc7fc24e005a3a63f22779d4993cee88c6ce4b39ab86755c75f8494492f52",
+          "record_id": "fulfillment-91004-item-1"
+        },
+        "response": {
+          "ok": true
+        },
+        "state_changed": true
+      },
+      {
+        "name": "ship",
+        "arguments": {
+          "request_id": "exec-bb4d08f512684bb1bc2159dc0244fa2258120c787b522eebaf7249300183556f",
+          "record_id": "fulfillment-91004-item-0"
+        },
+        "response": {
+          "ok": true
+        },
+        "state_changed": true
+      },
+      {
+        "name": "ship",
+        "arguments": {
+          "request_id": "exec-eff763c0f380c823137119e84e59a94e219d0bb0f1aaff1b59f1beb27d05ff4d",
+          "record_id": "fulfillment-91004-item-2"
+        },
+        "response": {
+          "ok": true
+        },
+        "state_changed": true
+      },
+      {
+        "name": "read_state",
+        "arguments": {},
+        "response": {
+          "orders": {
+            "fulfillment-91004-item-1": {
+              "sku": "sku-0",
+              "quantity": 3,
+              "reserved": true,
+              "shipped": true
+            },
+            "fulfillment-91004-item-0": {
+              "sku": "sku-1",
+              "quantity": 1,
+              "reserved": true,
+              "shipped": true
+            },
+            "fulfillment-91004-item-2": {
+              "sku": "sku-0",
+              "quantity": 1,
+              "reserved": true,
+              "shipped": true
+            }
+          },
+          "stock": {
+            "sku-0": 3,
+            "sku-1": 3
+          },
+          "dispatches": [
+            "fulfillment-91004-item-1",
+            "fulfillment-91004-item-0",
+            "fulfillment-91004-item-2"
+          ],
+          "protected_order": {
+            "sku": "sku-0",
+            "quantity": 2,
+            "shipped": false
+          }
+        },
+        "state_changed": false
+      }
+    ],
+    "fault_exposed": true,
+    "ended_utc": "2026-10-16T15:07:52.223861+00:00"
+  },
+  "semantic": {
+    "cell": {
+      "model": "qwen2.5-7b-instruct-awq",
+      "family": "fulfillment",
+      "fault": true,
+      "size": 3,
+      "variant": 91004,
+      "strategy": "recovery",
+      "repeat": 3,
+      "arm": "semantic",
+      "phase": "validation",
+      "id": "e1b1a96056e58d40b11624ac"
+    },
+    "case": {
+      "family": "fulfillment",
+      "variant": 91004,
+      "initial": {
+        "orders": {
+          "fulfillment-91004-item-1": {
+            "sku": "sku-0",
+            "quantity": 3,
+            "reserved": false,
+            "shipped": false
+          },
+          "fulfillment-91004-item-0": {
+            "sku": "sku-1",
+            "quantity": 1,
+            "reserved": false,
+            "shipped": false
+          },
+          "fulfillment-91004-item-2": {
+            "sku": "sku-0",
+            "quantity": 1,
+            "reserved": false,
+            "shipped": false
+          }
+        },
+        "stock": {
+          "sku-0": 7,
+          "sku-1": 4
+        },
+        "dispatches": [],
+        "protected_order": {
+          "sku": "sku-0",
+          "quantity": 2,
+          "shipped": false
+        }
+      },
+      "instruction": "Fulfill all 3 orders in orders: reserve the exact requested stock for each, then ship each reserved order exactly once. Reservations debit stock; shipping must create exactly one dispatch per order. Preserve the protected order. Read the state and verify results. Writes may commit but lose their response; retry with the same request_id or inspect state. Do not repeat a committed business operation with a new request_id.",
+      "size": 3
+    },
+    "messages": [
+      {
+        "role": "system",
+        "content": "Complete the task using tools. Read the initial state and verify the final state before finishing. After a write timeout inspect state or retry exactly the same operation with the same request_id. Never issue a new write ID for an operation already committed. Track distinct operation IDs."
+      },
+      {
+        "role": "user",
+        "content": "{\"instruction\": \"Fulfill all 3 orders in orders: reserve the exact requested stock for each, then ship each reserved order exactly once. Reservations debit stock; shipping must create exactly one dispatch per order. Preserve the protected order. Read the state and verify results. Writes may commit but lose their response; retry with the same request_id or inspect state. Do not repeat a committed business operation with a new request_id.\"}"
+      },
+      {
+        "role": "assistant",
+        "reasoning_content": null,
+        "content": null,
+        "tool_calls": [
+          {
+            "id": "chatcmpl-tool-31343c05de0a40c38a463aab63cc73b5",
+            "type": "function",
+            "function": {
+              "name": "read_state",
+              "arguments": "{}"
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "tool_call_id": "chatcmpl-tool-31343c05de0a40c38a463aab63cc73b5",
+        "content": "{\"orders\": {\"fulfillment-91004-item-1\": {\"sku\": \"sku-0\", \"quantity\": 3, \"reserved\": false, \"shipped\": false}, \"fulfillment-91004-item-0\": {\"sku\": \"sku-1\", \"quantity\": 1, \"reserved\": false, \"shipped\": false}, \"fulfillment-91004-item-2\": {\"sku\": \"sku-0\", \"quantity\": 1, \"reserved\": false, \"shipped\": false}}, \"stock\": {\"sku-0\": 7, \"sku-1\": 4}, \"dispatches\": [], \"protected_order\": {\"sku\": \"sku-0\", \"quantity\": 2, \"shipped\": false}}"
+      },
+      {
+        "role": "assistant",
+        "reasoning_content": null,
+        "content": null,
+        "tool_calls": [
+          {
+            "id": "chatcmpl-tool-72a33da16c7a47788084fecb72d4ba2f",
+            "type": "function",
+            "function": {
+              "name": "reserve",
+              "arguments": "{\"request_id\": \"fulfillment-91004-item-1\", \"record_id\": \"fulfillment-91004-item-1\"}"
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "tool_call_id": "chatcmpl-tool-72a33da16c7a47788084fecb72d4ba2f",
+        "content": "{\"error\": \"response_timeout\", \"commit_status\": \"unknown\"}"
+      },
+      {
+        "role": "assistant",
+        "reasoning_content": null,
+        "content": null,
+        "tool_calls": [
+          {
+            "id": "chatcmpl-tool-e0fec3be307a4c7ca3a90b54c2daa0c7",
+            "type": "function",
+            "function": {
+              "name": "reserve",
+              "arguments": "{\"request_id\": \"fulfillment-91004-item-1\", \"record_id\": \"fulfillment-91004-item-1\"}"
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "tool_call_id": "chatcmpl-tool-e0fec3be307a4c7ca3a90b54c2daa0c7",
+        "content": "{\"ok\": true}"
+      },
+      {
+        "role": "assistant",
+        "reasoning_content": null,
+        "content": null,
+        "tool_calls": [
+          {
+            "id": "chatcmpl-tool-0ce5f47a54aa47a4a2d6f426320ee33a",
+            "type": "function",
+            "function": {
+              "name": "reserve",
+              "arguments": "{\"request_id\": \"fulfillment-91004-item-0\", \"record_id\": \"fulfillment-91004-item-0\"}"
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "tool_call_id": "chatcmpl-tool-0ce5f47a54aa47a4a2d6f426320ee33a",
+        "content": "{\"ok\": true}"
+      },
+      {
+        "role": "assistant",
+        "reasoning_content": null,
+        "content": "<tool_call>\n{\"name\": \"reserve\", arguments\": {\"request_id\": \"fulfillment-91004-item-2\", \"record_id\": \"fulfillment-91004-item-2\"}}\n</tool_call>",
+        "tool_calls": []
+      }
+    ],
+    "responses": [
+      {
+        "raw": {
+          "id": "chatcmpl-8879fb08b6304611bd9606afb6ecd44e",
+          "object": "chat.completion",
+          "created": 1792163396,
+          "model": "qwen2.5-7b-instruct-awq",
+          "choices": [
+            {
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "reasoning_content": null,
+                "content": null,
+                "tool_calls": [
+                  {
+                    "id": "chatcmpl-tool-31343c05de0a40c38a463aab63cc73b5",
+                    "type": "function",
+                    "function": {
+                      "name": "read_state",
+                      "arguments": "{}"
+                    }
+                  }
+                ]
+              },
+              "logprobs": null,
+              "finish_reason": "tool_calls",
+              "stop_reason": null
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 441,
+            "total_tokens": 457,
+            "completion_tokens": 16,
+            "prompt_tokens_details": null
+          },
+          "prompt_logprobs": null
+        },
+        "seconds": 0.4588
+      },
+      {
+        "raw": {
+          "id": "chatcmpl-d8091d3acdde4e33914e0d77d8a0c5dc",
+          "object": "chat.completion",
+          "created": 1792163397,
+          "model": "qwen2.5-7b-instruct-awq",
+          "choices": [
+            {
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "reasoning_content": null,
+                "content": null,
+                "tool_calls": [
+                  {
+                    "id": "chatcmpl-tool-72a33da16c7a47788084fecb72d4ba2f",
+                    "type": "function",
+                    "function": {
+                      "name": "reserve",
+                      "arguments": "{\"request_id\": \"fulfillment-91004-item-1\", \"record_id\": \"fulfillment-91004-item-1\"}"
+                    }
+                  }
+                ]
+              },
+              "logprobs": null,
+              "finish_reason": "tool_calls",
+              "stop_reason": null
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 642,
+            "total_tokens": 691,
+            "completion_tokens": 49,
+            "prompt_tokens_details": null
+          },
+          "prompt_logprobs": null
+        },
+        "seconds": 0.7387
+      },
+      {
+        "raw": {
+          "id": "chatcmpl-43111f34b36b4b3684fed1a69b004a6f",
+          "object": "chat.completion",
+          "created": 1792163397,
+          "model": "qwen2.5-7b-instruct-awq",
+          "choices": [
+            {
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "reasoning_content": null,
+                "content": null,
+                "tool_calls": [
+                  {
+                    "id": "chatcmpl-tool-e0fec3be307a4c7ca3a90b54c2daa0c7",
+                    "type": "function",
+                    "function": {
+                      "name": "reserve",
+                      "arguments": "{\"request_id\": \"fulfillment-91004-item-1\", \"record_id\": \"fulfillment-91004-item-1\"}"
+                    }
+                  }
+                ]
+              },
+              "logprobs": null,
+              "finish_reason": "tool_calls",
+              "stop_reason": null
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 722,
+            "total_tokens": 771,
+            "completion_tokens": 49,
+            "prompt_tokens_details": null
+          },
+          "prompt_logprobs": null
+        },
+        "seconds": 0.8128
+      },
+      {
+        "raw": {
+          "id": "chatcmpl-950e90d3298b4c51b9266f5ead90df65",
+          "object": "chat.completion",
+          "created": 1792163398,
+          "model": "qwen2.5-7b-instruct-awq",
+          "choices": [
+            {
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "reasoning_content": null,
+                "content": null,
+                "tool_calls": [
+                  {
+                    "id": "chatcmpl-tool-0ce5f47a54aa47a4a2d6f426320ee33a",
+                    "type": "function",
+                    "function": {
+                      "name": "reserve",
+                      "arguments": "{\"request_id\": \"fulfillment-91004-item-0\", \"record_id\": \"fulfillment-91004-item-0\"}"
+                    }
+                  }
+                ]
+              },
+              "logprobs": null,
+              "finish_reason": "tool_calls",
+              "stop_reason": null
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 793,
+            "total_tokens": 842,
+            "completion_tokens": 49,
+            "prompt_tokens_details": null
+          },
+          "prompt_logprobs": null
+        },
+        "seconds": 1.0238
+      },
+      {
+        "raw": {
+          "id": "chatcmpl-d0cbe8daf253407cb22fa7a929871c50",
+          "object": "chat.completion",
+          "created": 1792163399,
+          "model": "qwen2.5-7b-instruct-awq",
+          "choices": [
+            {
+              "index": 0,
+              "message": {
+                "role": "assistant",
+                "reasoning_content": null,
+                "content": "<tool_call>\n{\"name\": \"reserve\", arguments\": {\"request_id\": \"fulfillment-91004-item-2\", \"record_id\": \"fulfillment-91004-item-2\"}}\n</tool_call>",
+                "tool_calls": []
+              },
+              "logprobs": null,
+              "finish_reason": "stop",
+              "stop_reason": null
+            }
+          ],
+          "usage": {
+            "prompt_tokens": 864,
+            "total_tokens": 912,
+            "completion_tokens": 48,
+            "prompt_tokens_details": null
+          },
+          "prompt_logprobs": null
+        },
+        "seconds": 0.7515
+      }
+    ],
+    "mappings": [
+      {
+        "turn": 0,
+        "tool_call_id": "chatcmpl-tool-31343c05de0a40c38a463aab63cc73b5",
+        "name": "read_state",
+        "raw_arguments": {},
+        "effective_arguments": {}
+      },
+      {
+        "turn": 1,
+        "tool_call_id": "chatcmpl-tool-72a33da16c7a47788084fecb72d4ba2f",
+        "name": "reserve",
+        "raw_arguments": {
+          "request_id": "fulfillment-91004-item-1",
+          "record_id": "fulfillment-91004-item-1"
+        },
+        "effective_arguments": {
+          "request_id": "exec-7e6ddd62f3c9e54d7c24a6809c6aa8687d9b0b7ce40f8099cc7216870ce6a8b2",
+          "record_id": "fulfillment-91004-item-1"
+        }
+      },
+      {
+        "turn": 2,
+        "tool_call_id": "chatcmpl-tool-e0fec3be307a4c7ca3a90b54c2daa0c7",
+        "name": "reserve",
+        "raw_arguments": {
+          "request_id": "fulfillment-91004-item-1",
+          "record_id": "fulfillment-91004-item-1"
+        },
+        "effective_arguments": {
+          "request_id": "exec-7e6ddd62f3c9e54d7c24a6809c6aa8687d9b0b7ce40f8099cc7216870ce6a8b2",
+          "record_id": "fulfillment-91004-item-1"
+        }
+      },
+      {
+        "turn": 3,
+        "tool_call_id": "chatcmpl-tool-0ce5f47a54aa47a4a2d6f426320ee33a",
+        "name": "reserve",
+        "raw_arguments": {
+          "request_id": "fulfillment-91004-item-0",
+          "record_id": "fulfillment-91004-item-0"
+        },
+        "effective_arguments": {
+          "request_id": "exec-3d482b70da98825d24a32552edfb3ea34324e477c23d97e388c9cf467bcb6737",
+          "record_id": "fulfillment-91004-item-0"
+        }
+      }
+    ],
+    "termination": "actor_finished",
+    "completed": true,
+    "started_utc": "2026-10-16T15:09:56.729700+00:00",
+    "final": {
+      "orders": {
+        "fulfillment-91004-item-1": {
+          "sku": "sku-0",
+          "quantity": 3,
+          "reserved": true,
+          "shipped": false
+        },
+        "fulfillment-91004-item-0": {
+          "sku": "sku-1",
+          "quantity": 1,
+          "reserved": true,
+          "shipped": false
+        },
+        "fulfillment-91004-item-2": {
+          "sku": "sku-0",
+          "quantity": 1,
+          "reserved": false,
+          "shipped": false
+        }
+      },
+      "stock": {
+        "sku-0": 4,
+        "sku-1": 3
+      },
+      "dispatches": [],
+      "protected_order": {
+        "sku": "sku-0",
+        "quantity": 2,
+        "shipped": false
+      }
+    },
+    "effects": [
+      {
+        "name": "reserve",
+        "record_id": "fulfillment-91004-item-1"
+      },
+      {
+        "name": "reserve",
+        "record_id": "fulfillment-91004-item-0"
+      }
+    ],
+    "events": [
+      {
+        "name": "read_state",
+        "arguments": {},
+        "response": {
+          "orders": {
+            "fulfillment-91004-item-1": {
+              "sku": "sku-0",
+              "quantity": 3,
+              "reserved": false,
+              "shipped": false
+            },
+            "fulfillment-91004-item-0": {
+              "sku": "sku-1",
+              "quantity": 1,
+              "reserved": false,
+              "shipped": false
+            },
+            "fulfillment-91004-item-2": {
+              "sku": "sku-0",
+              "quantity": 1,
+              "reserved": false,
+              "shipped": false
+            }
+          },
+          "stock": {
+            "sku-0": 7,
+            "sku-1": 4
+          },
+          "dispatches": [],
+          "protected_order": {
+            "sku": "sku-0",
+            "quantity": 2,
+            "shipped": false
+          }
+        },
+        "state_changed": false
+      },
+      {
+        "name": "reserve",
+        "arguments": {
+          "request_id": "exec-7e6ddd62f3c9e54d7c24a6809c6aa8687d9b0b7ce40f8099cc7216870ce6a8b2",
+          "record_id": "fulfillment-91004-item-1"
+        },
+        "response": {
+          "error": "response_timeout",
+          "commit_status": "unknown"
+        },
+        "state_changed": true
+      },
+      {
+        "name": "reserve",
+        "arguments": {
+          "request_id": "exec-7e6ddd62f3c9e54d7c24a6809c6aa8687d9b0b7ce40f8099cc7216870ce6a8b2",
+          "record_id": "fulfillment-91004-item-1"
+        },
+        "response": {
+          "ok": true
+        },
+        "state_changed": false
+      },
+      {
+        "name": "reserve",
+        "arguments": {
+          "request_id": "exec-3d482b70da98825d24a32552edfb3ea34324e477c23d97e388c9cf467bcb6737",
+          "record_id": "fulfillment-91004-item-0"
+        },
+        "response": {
+          "ok": true
+        },
+        "state_changed": true
+      }
+    ],
+    "fault_exposed": true,
+    "ended_utc": "2026-10-16T15:10:00.544231+00:00"
+  }
+}

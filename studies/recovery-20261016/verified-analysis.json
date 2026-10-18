@@ -1,0 +1,1413 @@
+{
+  "verification": {
+    "archive_sha256": "2cc36b790e0280f01d8e67cb5b4f71c1b26e4afa3e0b171084f88d88e13dd47f",
+    "manifest_verified_files": 11647,
+    "actor_batches": [
+      {
+        "folder": "recovery-study-20261016\\validation",
+        "replayed": 1536
+      },
+      {
+        "folder": "recovery-extension-v2-20261016\\block-01",
+        "replayed": 1536
+      },
+      {
+        "folder": "recovery-extension-v2-20261016\\block-02",
+        "replayed": 1536
+      },
+      {
+        "folder": "recovery-extension-v2-20261016\\block-03",
+        "replayed": 1536
+      },
+      {
+        "folder": "recovery-extension-v2-20261016\\block-04",
+        "replayed": 1536
+      },
+      {
+        "folder": "recovery-extension-v2-20261016\\block-05",
+        "replayed": 1536
+      },
+      {
+        "folder": "recovery-extension-v2-20261016\\block-06",
+        "replayed": 1536
+      }
+    ],
+    "actor_replayed": 10752,
+    "judge_source_hashes": 48,
+    "judge_rechecked": 768,
+    "judge_token_precheck_matches": 768
+  },
+  "formal": {
+    "overall": {
+      "n": 1536,
+      "success": 716,
+      "strict_success": 700,
+      "duplicates": 46,
+      "conflicts": 316,
+      "tokens": 22523540,
+      "calls": 10905,
+      "terminations": {
+        "actor_finished": 1271,
+        "model_call_limit": 109,
+        "output_truncated": 152,
+        "execution_error": 4
+      }
+    },
+    "by_model_arm": {
+      "qwen2.5-14b-instruct-awq|raw": {
+        "n": 256,
+        "success": 42,
+        "strict_success": 42,
+        "duplicates": 1,
+        "conflicts": 66,
+        "tokens": 2785224,
+        "calls": 1301,
+        "terminations": {
+          "actor_finished": 194,
+          "output_truncated": 57,
+          "model_call_limit": 5
+        }
+      },
+      "qwen2.5-14b-instruct-awq|namespace": {
+        "n": 256,
+        "success": 82,
+        "strict_success": 79,
+        "duplicates": 0,
+        "conflicts": 0,
+        "tokens": 1947615,
+        "calls": 1108,
+        "terminations": {
+          "actor_finished": 214,
+          "output_truncated": 42
+        }
+      },
+      "qwen2.5-14b-instruct-awq|semantic": {
+        "n": 256,
+        "success": 80,
+        "strict_success": 77,
+        "duplicates": 0,
+        "conflicts": 0,
+        "tokens": 1985524,
+        "calls": 1139,
+        "terminations": {
+          "output_truncated": 36,
+          "actor_finished": 220
+        }
+      },
+      "qwen2.5-7b-instruct-awq|raw": {
+        "n": 256,
+        "success": 13,
+        "strict_success": 8,
+        "duplicates": 45,
+        "conflicts": 250,
+        "tokens": 11777663,
+        "calls": 3896,
+        "terminations": {
+          "actor_finished": 131,
+          "model_call_limit": 104,
+          "output_truncated": 17,
+          "execution_error": 4
+        }
+      },
+      "qwen2.5-7b-instruct-awq|namespace": {
+        "n": 256,
+        "success": 249,
+        "strict_success": 247,
+        "duplicates": 0,
+        "conflicts": 0,
+        "tokens": 1990653,
+        "calls": 1720,
+        "terminations": {
+          "actor_finished": 256
+        }
+      },
+      "qwen2.5-7b-instruct-awq|semantic": {
+        "n": 256,
+        "success": 250,
+        "strict_success": 247,
+        "duplicates": 0,
+        "conflicts": 0,
+        "tokens": 2036861,
+        "calls": 1741,
+        "terminations": {
+          "actor_finished": 256
+        }
+      }
+    },
+    "paired_by_model": {
+      "qwen2.5-14b-instruct-awq": {
+        "raw->semantic": {
+          "n": 256,
+          "rescue": 55,
+          "regression": 17,
+          "delta_pp": 14.84375,
+          "cluster_count": 4,
+          "cluster_bootstrap_95ci_pp": [
+            12.5,
+            17.1875
+          ]
+        },
+        "raw->namespace": {
+          "n": 256,
+          "rescue": 60,
+          "regression": 20,
+          "delta_pp": 15.625,
+          "cluster_count": 4,
+          "cluster_bootstrap_95ci_pp": [
+            11.328125,
+            19.140625
+          ]
+        },
+        "namespace->semantic": {
+          "n": 256,
+          "rescue": 39,
+          "regression": 41,
+          "delta_pp": -0.78125,
+          "cluster_count": 4,
+          "cluster_bootstrap_95ci_pp": [
+            -5.46875,
+            2.34375
+          ]
+        }
+      },
+      "qwen2.5-7b-instruct-awq": {
+        "raw->semantic": {
+          "n": 256,
+          "rescue": 237,
+          "regression": 0,
+          "delta_pp": 92.578125,
+          "cluster_count": 4,
+          "cluster_bootstrap_95ci_pp": [
+            87.109375,
+            96.875
+          ]
+        },
+        "raw->namespace": {
+          "n": 256,
+          "rescue": 236,
+          "regression": 0,
+          "delta_pp": 92.1875,
+          "cluster_count": 4,
+          "cluster_bootstrap_95ci_pp": [
+            84.765625,
+            97.265625
+          ]
+        },
+        "namespace->semantic": {
+          "n": 256,
+          "rescue": 2,
+          "regression": 1,
+          "delta_pp": 0.390625,
+          "cluster_count": 4,
+          "cluster_bootstrap_95ci_pp": [
+            -1.171875,
+            2.34375
+          ]
+        }
+      }
+    },
+    "strata": {
+      "family": {
+        "fulfillment|raw": {
+          "n": 256,
+          "success": 50,
+          "strict_success": 50,
+          "duplicates": 34,
+          "conflicts": 131,
+          "tokens": 6134265,
+          "calls": 2355,
+          "terminations": {
+            "actor_finished": 182,
+            "model_call_limit": 35,
+            "output_truncated": 37,
+            "execution_error": 2
+          }
+        },
+        "fulfillment|namespace": {
+          "n": 256,
+          "success": 167,
+          "strict_success": 167,
+          "duplicates": 0,
+          "conflicts": 0,
+          "tokens": 1945456,
+          "calls": 1409,
+          "terminations": {
+            "actor_finished": 229,
+            "output_truncated": 27
+          }
+        },
+        "fulfillment|semantic": {
+          "n": 256,
+          "success": 166,
+          "strict_success": 166,
+          "duplicates": 0,
+          "conflicts": 0,
+          "tokens": 2008793,
+          "calls": 1424,
+          "terminations": {
+            "output_truncated": 23,
+            "actor_finished": 233
+          }
+        },
+        "release|raw": {
+          "n": 256,
+          "success": 5,
+          "strict_success": 0,
+          "duplicates": 12,
+          "conflicts": 185,
+          "tokens": 8428622,
+          "calls": 2842,
+          "terminations": {
+            "actor_finished": 143,
+            "model_call_limit": 74,
+            "output_truncated": 37,
+            "execution_error": 2
+          }
+        },
+        "release|namespace": {
+          "n": 256,
+          "success": 164,
+          "strict_success": 159,
+          "duplicates": 0,
+          "conflicts": 0,
+          "tokens": 1992812,
+          "calls": 1419,
+          "terminations": {
+            "actor_finished": 241,
+            "output_truncated": 15
+          }
+        },
+        "release|semantic": {
+          "n": 256,
+          "success": 164,
+          "strict_success": 158,
+          "duplicates": 0,
+          "conflicts": 0,
+          "tokens": 2013592,
+          "calls": 1456,
+          "terminations": {
+            "actor_finished": 243,
+            "output_truncated": 13
+          }
+        }
+      },
+      "size": {
+        "3|raw": {
+          "n": 256,
+          "success": 36,
+          "strict_success": 31,
+          "duplicates": 18,
+          "conflicts": 171,
+          "tokens": 7384029,
+          "calls": 2439,
+          "terminations": {
+            "actor_finished": 177,
+            "model_call_limit": 44,
+            "output_truncated": 33,
+            "execution_error": 2
+          }
+        },
+        "3|namespace": {
+          "n": 256,
+          "success": 194,
+          "strict_success": 193,
+          "duplicates": 0,
+          "conflicts": 0,
+          "tokens": 1722436,
+          "calls": 1229,
+          "terminations": {
+            "actor_finished": 244,
+            "output_truncated": 12
+          }
+        },
+        "3|semantic": {
+          "n": 256,
+          "success": 183,
+          "strict_success": 182,
+          "duplicates": 0,
+          "conflicts": 0,
+          "tokens": 1622962,
+          "calls": 1186,
+          "terminations": {
+            "actor_finished": 251,
+            "output_truncated": 5
+          }
+        },
+        "5|raw": {
+          "n": 256,
+          "success": 19,
+          "strict_success": 19,
+          "duplicates": 28,
+          "conflicts": 145,
+          "tokens": 7178858,
+          "calls": 2758,
+          "terminations": {
+            "actor_finished": 148,
+            "model_call_limit": 65,
+            "output_truncated": 41,
+            "execution_error": 2
+          }
+        },
+        "5|namespace": {
+          "n": 256,
+          "success": 137,
+          "strict_success": 133,
+          "duplicates": 0,
+          "conflicts": 0,
+          "tokens": 2215832,
+          "calls": 1599,
+          "terminations": {
+            "actor_finished": 226,
+            "output_truncated": 30
+          }
+        },
+        "5|semantic": {
+          "n": 256,
+          "success": 147,
+          "strict_success": 142,
+          "duplicates": 0,
+          "conflicts": 0,
+          "tokens": 2399423,
+          "calls": 1694,
+          "terminations": {
+            "output_truncated": 31,
+            "actor_finished": 225
+          }
+        }
+      },
+      "strategy": {
+        "minimal|raw": {
+          "n": 256,
+          "success": 43,
+          "strict_success": 38,
+          "duplicates": 43,
+          "conflicts": 163,
+          "tokens": 6578017,
+          "calls": 2070,
+          "terminations": {
+            "actor_finished": 185,
+            "model_call_limit": 33,
+            "output_truncated": 35,
+            "execution_error": 3
+          }
+        },
+        "minimal|namespace": {
+          "n": 256,
+          "success": 184,
+          "strict_success": 181,
+          "duplicates": 0,
+          "conflicts": 0,
+          "tokens": 1360323,
+          "calls": 1011,
+          "terminations": {
+            "actor_finished": 235,
+            "output_truncated": 21
+          }
+        },
+        "minimal|semantic": {
+          "n": 256,
+          "success": 184,
+          "strict_success": 181,
+          "duplicates": 0,
+          "conflicts": 0,
+          "tokens": 1486187,
+          "calls": 1049,
+          "terminations": {
+            "output_truncated": 23,
+            "actor_finished": 233
+          }
+        },
+        "recovery|raw": {
+          "n": 256,
+          "success": 12,
+          "strict_success": 12,
+          "duplicates": 3,
+          "conflicts": 153,
+          "tokens": 7984870,
+          "calls": 3127,
+          "terminations": {
+            "actor_finished": 140,
+            "model_call_limit": 76,
+            "output_truncated": 39,
+            "execution_error": 1
+          }
+        },
+        "recovery|namespace": {
+          "n": 256,
+          "success": 147,
+          "strict_success": 145,
+          "duplicates": 0,
+          "conflicts": 0,
+          "tokens": 2577945,
+          "calls": 1817,
+          "terminations": {
+            "actor_finished": 235,
+            "output_truncated": 21
+          }
+        },
+        "recovery|semantic": {
+          "n": 256,
+          "success": 146,
+          "strict_success": 143,
+          "duplicates": 0,
+          "conflicts": 0,
+          "tokens": 2536198,
+          "calls": 1831,
+          "terminations": {
+            "actor_finished": 243,
+            "output_truncated": 13
+          }
+        }
+      },
+      "fault": {
+        "False|raw": {
+          "n": 256,
+          "success": 31,
+          "strict_success": 29,
+          "duplicates": 18,
+          "conflicts": 157,
+          "tokens": 7121607,
+          "calls": 2614,
+          "terminations": {
+            "actor_finished": 168,
+            "model_call_limit": 53,
+            "output_truncated": 32,
+            "execution_error": 3
+          }
+        },
+        "False|namespace": {
+          "n": 256,
+          "success": 161,
+          "strict_success": 159,
+          "duplicates": 0,
+          "conflicts": 0,
+          "tokens": 1910328,
+          "calls": 1397,
+          "terminations": {
+            "actor_finished": 235,
+            "output_truncated": 21
+          }
+        },
+        "False|semantic": {
+          "n": 256,
+          "success": 164,
+          "strict_success": 161,
+          "duplicates": 0,
+          "conflicts": 0,
+          "tokens": 1871716,
+          "calls": 1354,
+          "terminations": {
+            "actor_finished": 241,
+            "output_truncated": 15
+          }
+        },
+        "True|raw": {
+          "n": 256,
+          "success": 24,
+          "strict_success": 21,
+          "duplicates": 28,
+          "conflicts": 159,
+          "tokens": 7441280,
+          "calls": 2583,
+          "terminations": {
+            "actor_finished": 157,
+            "model_call_limit": 56,
+            "output_truncated": 42,
+            "execution_error": 1
+          }
+        },
+        "True|namespace": {
+          "n": 256,
+          "success": 170,
+          "strict_success": 167,
+          "duplicates": 0,
+          "conflicts": 0,
+          "tokens": 2027940,
+          "calls": 1431,
+          "terminations": {
+            "actor_finished": 235,
+            "output_truncated": 21
+          }
+        },
+        "True|semantic": {
+          "n": 256,
+          "success": 166,
+          "strict_success": 163,
+          "duplicates": 0,
+          "conflicts": 0,
+          "tokens": 2150669,
+          "calls": 1526,
+          "terminations": {
+            "output_truncated": 21,
+            "actor_finished": 235
+          }
+        }
+      }
+    }
+  },
+  "extension": {
+    "overall": {
+      "n": 9216,
+      "success": 4378,
+      "strict_success": 4265,
+      "duplicates": 268,
+      "conflicts": 1882,
+      "tokens": 130298413,
+      "calls": 64433,
+      "terminations": {
+        "actor_finished": 7718,
+        "output_truncated": 843,
+        "model_call_limit": 636,
+        "execution_error": 19
+      }
+    },
+    "by_model_arm": {
+      "qwen2.5-14b-instruct-awq|raw": {
+        "n": 1536,
+        "success": 248,
+        "strict_success": 246,
+        "duplicates": 4,
+        "conflicts": 363,
+        "tokens": 15354019,
+        "calls": 7545,
+        "terminations": {
+          "actor_finished": 1209,
+          "output_truncated": 308,
+          "model_call_limit": 18,
+          "execution_error": 1
+        }
+      },
+      "qwen2.5-14b-instruct-awq|namespace": {
+        "n": 1536,
+        "success": 521,
+        "strict_success": 505,
+        "duplicates": 1,
+        "conflicts": 0,
+        "tokens": 12601444,
+        "calls": 6962,
+        "terminations": {
+          "actor_finished": 1310,
+          "output_truncated": 222,
+          "model_call_limit": 4
+        }
+      },
+      "qwen2.5-14b-instruct-awq|semantic": {
+        "n": 1536,
+        "success": 512,
+        "strict_success": 490,
+        "duplicates": 0,
+        "conflicts": 0,
+        "tokens": 12378404,
+        "calls": 7016,
+        "terminations": {
+          "actor_finished": 1327,
+          "output_truncated": 206,
+          "model_call_limit": 3
+        }
+      },
+      "qwen2.5-7b-instruct-awq|raw": {
+        "n": 1536,
+        "success": 74,
+        "strict_success": 58,
+        "duplicates": 263,
+        "conflicts": 1519,
+        "tokens": 66580996,
+        "calls": 23002,
+        "terminations": {
+          "actor_finished": 802,
+          "model_call_limit": 611,
+          "output_truncated": 106,
+          "execution_error": 17
+        }
+      },
+      "qwen2.5-7b-instruct-awq|namespace": {
+        "n": 1536,
+        "success": 1512,
+        "strict_success": 1483,
+        "duplicates": 0,
+        "conflicts": 0,
+        "tokens": 11659560,
+        "calls": 9990,
+        "terminations": {
+          "actor_finished": 1536
+        }
+      },
+      "qwen2.5-7b-instruct-awq|semantic": {
+        "n": 1536,
+        "success": 1511,
+        "strict_success": 1483,
+        "duplicates": 0,
+        "conflicts": 0,
+        "tokens": 11723990,
+        "calls": 9918,
+        "terminations": {
+          "actor_finished": 1534,
+          "execution_error": 1,
+          "output_truncated": 1
+        }
+      }
+    },
+    "paired_by_model": {
+      "qwen2.5-14b-instruct-awq": {
+        "raw->semantic": {
+          "n": 1536,
+          "rescue": 388,
+          "regression": 124,
+          "delta_pp": 17.1875,
+          "cluster_count": 48,
+          "cluster_bootstrap_95ci_pp": [
+            14.84375,
+            19.53125
+          ]
+        },
+        "raw->namespace": {
+          "n": 1536,
+          "rescue": 411,
+          "regression": 138,
+          "delta_pp": 17.7734375,
+          "cluster_count": 48,
+          "cluster_bootstrap_95ci_pp": [
+            15.299479166666666,
+            20.3125
+          ]
+        },
+        "namespace->semantic": {
+          "n": 1536,
+          "rescue": 286,
+          "regression": 295,
+          "delta_pp": -0.5859375,
+          "cluster_count": 48,
+          "cluster_bootstrap_95ci_pp": [
+            -3.7760416666666665,
+            2.604166666666667
+          ]
+        }
+      },
+      "qwen2.5-7b-instruct-awq": {
+        "raw->semantic": {
+          "n": 1536,
+          "rescue": 1439,
+          "regression": 2,
+          "delta_pp": 93.5546875,
+          "cluster_count": 48,
+          "cluster_bootstrap_95ci_pp": [
+            92.1875,
+            94.921875
+          ]
+        },
+        "raw->namespace": {
+          "n": 1536,
+          "rescue": 1439,
+          "regression": 1,
+          "delta_pp": 93.61979166666666,
+          "cluster_count": 48,
+          "cluster_bootstrap_95ci_pp": [
+            92.25260416666666,
+            94.98697916666666
+          ]
+        },
+        "namespace->semantic": {
+          "n": 1536,
+          "rescue": 9,
+          "regression": 10,
+          "delta_pp": -0.06510416666666666,
+          "cluster_count": 48,
+          "cluster_bootstrap_95ci_pp": [
+            -0.5208333333333333,
+            0.390625
+          ]
+        }
+      }
+    },
+    "strata": {
+      "family": {
+        "fulfillment|raw": {
+          "n": 1536,
+          "success": 304,
+          "strict_success": 301,
+          "duplicates": 161,
+          "conflicts": 785,
+          "tokens": 30400442,
+          "calls": 13412,
+          "terminations": {
+            "actor_finished": 1148,
+            "model_call_limit": 197,
+            "output_truncated": 179,
+            "execution_error": 12
+          }
+        },
+        "fulfillment|namespace": {
+          "n": 1536,
+          "success": 1005,
+          "strict_success": 1005,
+          "duplicates": 1,
+          "conflicts": 0,
+          "tokens": 11871076,
+          "calls": 8344,
+          "terminations": {
+            "actor_finished": 1411,
+            "output_truncated": 124,
+            "model_call_limit": 1
+          }
+        },
+        "fulfillment|semantic": {
+          "n": 1536,
+          "success": 1020,
+          "strict_success": 1020,
+          "duplicates": 0,
+          "conflicts": 0,
+          "tokens": 12044435,
+          "calls": 8453,
+          "terminations": {
+            "actor_finished": 1406,
+            "output_truncated": 129,
+            "execution_error": 1
+          }
+        },
+        "release|raw": {
+          "n": 1536,
+          "success": 18,
+          "strict_success": 3,
+          "duplicates": 106,
+          "conflicts": 1097,
+          "tokens": 51534573,
+          "calls": 17135,
+          "terminations": {
+            "actor_finished": 863,
+            "output_truncated": 235,
+            "model_call_limit": 432,
+            "execution_error": 6
+          }
+        },
+        "release|namespace": {
+          "n": 1536,
+          "success": 1028,
+          "strict_success": 983,
+          "duplicates": 0,
+          "conflicts": 0,
+          "tokens": 12389928,
+          "calls": 8608,
+          "terminations": {
+            "actor_finished": 1435,
+            "output_truncated": 98,
+            "model_call_limit": 3
+          }
+        },
+        "release|semantic": {
+          "n": 1536,
+          "success": 1003,
+          "strict_success": 953,
+          "duplicates": 0,
+          "conflicts": 0,
+          "tokens": 12057959,
+          "calls": 8481,
+          "terminations": {
+            "actor_finished": 1455,
+            "output_truncated": 78,
+            "model_call_limit": 3
+          }
+        }
+      },
+      "size": {
+        "3|raw": {
+          "n": 1536,
+          "success": 201,
+          "strict_success": 186,
+          "duplicates": 124,
+          "conflicts": 970,
+          "tokens": 40063486,
+          "calls": 14269,
+          "terminations": {
+            "actor_finished": 1116,
+            "output_truncated": 169,
+            "model_call_limit": 242,
+            "execution_error": 9
+          }
+        },
+        "3|namespace": {
+          "n": 1536,
+          "success": 1102,
+          "strict_success": 1092,
+          "duplicates": 1,
+          "conflicts": 0,
+          "tokens": 9905575,
+          "calls": 7188,
+          "terminations": {
+            "actor_finished": 1483,
+            "output_truncated": 50,
+            "model_call_limit": 3
+          }
+        },
+        "3|semantic": {
+          "n": 1536,
+          "success": 1109,
+          "strict_success": 1094,
+          "duplicates": 0,
+          "conflicts": 0,
+          "tokens": 10028895,
+          "calls": 7302,
+          "terminations": {
+            "actor_finished": 1484,
+            "output_truncated": 50,
+            "model_call_limit": 2
+          }
+        },
+        "5|raw": {
+          "n": 1536,
+          "success": 121,
+          "strict_success": 118,
+          "duplicates": 143,
+          "conflicts": 912,
+          "tokens": 41871529,
+          "calls": 16278,
+          "terminations": {
+            "actor_finished": 895,
+            "model_call_limit": 387,
+            "output_truncated": 245,
+            "execution_error": 9
+          }
+        },
+        "5|namespace": {
+          "n": 1536,
+          "success": 931,
+          "strict_success": 896,
+          "duplicates": 0,
+          "conflicts": 0,
+          "tokens": 14355429,
+          "calls": 9764,
+          "terminations": {
+            "actor_finished": 1363,
+            "output_truncated": 172,
+            "model_call_limit": 1
+          }
+        },
+        "5|semantic": {
+          "n": 1536,
+          "success": 914,
+          "strict_success": 879,
+          "duplicates": 0,
+          "conflicts": 0,
+          "tokens": 14073499,
+          "calls": 9632,
+          "terminations": {
+            "actor_finished": 1377,
+            "output_truncated": 157,
+            "execution_error": 1,
+            "model_call_limit": 1
+          }
+        }
+      },
+      "strategy": {
+        "minimal|raw": {
+          "n": 1536,
+          "success": 241,
+          "strict_success": 227,
+          "duplicates": 232,
+          "conflicts": 979,
+          "tokens": 35095119,
+          "calls": 12066,
+          "terminations": {
+            "actor_finished": 1133,
+            "model_call_limit": 174,
+            "output_truncated": 216,
+            "execution_error": 13
+          }
+        },
+        "minimal|namespace": {
+          "n": 1536,
+          "success": 1106,
+          "strict_success": 1080,
+          "duplicates": 1,
+          "conflicts": 0,
+          "tokens": 8115303,
+          "calls": 5859,
+          "terminations": {
+            "actor_finished": 1404,
+            "output_truncated": 132
+          }
+        },
+        "minimal|semantic": {
+          "n": 1536,
+          "success": 1094,
+          "strict_success": 1065,
+          "duplicates": 0,
+          "conflicts": 0,
+          "tokens": 8271434,
+          "calls": 5982,
+          "terminations": {
+            "actor_finished": 1426,
+            "output_truncated": 110
+          }
+        },
+        "recovery|raw": {
+          "n": 1536,
+          "success": 81,
+          "strict_success": 77,
+          "duplicates": 35,
+          "conflicts": 903,
+          "tokens": 46839896,
+          "calls": 18481,
+          "terminations": {
+            "actor_finished": 878,
+            "output_truncated": 198,
+            "model_call_limit": 455,
+            "execution_error": 5
+          }
+        },
+        "recovery|namespace": {
+          "n": 1536,
+          "success": 927,
+          "strict_success": 908,
+          "duplicates": 0,
+          "conflicts": 0,
+          "tokens": 16145701,
+          "calls": 11093,
+          "terminations": {
+            "actor_finished": 1442,
+            "output_truncated": 90,
+            "model_call_limit": 4
+          }
+        },
+        "recovery|semantic": {
+          "n": 1536,
+          "success": 929,
+          "strict_success": 908,
+          "duplicates": 0,
+          "conflicts": 0,
+          "tokens": 15830960,
+          "calls": 10952,
+          "terminations": {
+            "actor_finished": 1435,
+            "output_truncated": 97,
+            "execution_error": 1,
+            "model_call_limit": 3
+          }
+        }
+      },
+      "fault": {
+        "False|raw": {
+          "n": 1536,
+          "success": 181,
+          "strict_success": 171,
+          "duplicates": 105,
+          "conflicts": 936,
+          "tokens": 39060449,
+          "calls": 14752,
+          "terminations": {
+            "actor_finished": 1018,
+            "model_call_limit": 297,
+            "output_truncated": 211,
+            "execution_error": 10
+          }
+        },
+        "False|namespace": {
+          "n": 1536,
+          "success": 1016,
+          "strict_success": 994,
+          "duplicates": 1,
+          "conflicts": 0,
+          "tokens": 12125900,
+          "calls": 8443,
+          "terminations": {
+            "actor_finished": 1423,
+            "output_truncated": 109,
+            "model_call_limit": 4
+          }
+        },
+        "False|semantic": {
+          "n": 1536,
+          "success": 1019,
+          "strict_success": 997,
+          "duplicates": 0,
+          "conflicts": 0,
+          "tokens": 11721032,
+          "calls": 8388,
+          "terminations": {
+            "actor_finished": 1438,
+            "output_truncated": 96,
+            "model_call_limit": 2
+          }
+        },
+        "True|raw": {
+          "n": 1536,
+          "success": 141,
+          "strict_success": 133,
+          "duplicates": 162,
+          "conflicts": 946,
+          "tokens": 42874566,
+          "calls": 15795,
+          "terminations": {
+            "actor_finished": 993,
+            "output_truncated": 203,
+            "model_call_limit": 332,
+            "execution_error": 8
+          }
+        },
+        "True|namespace": {
+          "n": 1536,
+          "success": 1017,
+          "strict_success": 994,
+          "duplicates": 0,
+          "conflicts": 0,
+          "tokens": 12135104,
+          "calls": 8509,
+          "terminations": {
+            "actor_finished": 1423,
+            "output_truncated": 113
+          }
+        },
+        "True|semantic": {
+          "n": 1536,
+          "success": 1004,
+          "strict_success": 976,
+          "duplicates": 0,
+          "conflicts": 0,
+          "tokens": 12381362,
+          "calls": 8546,
+          "terminations": {
+            "actor_finished": 1423,
+            "output_truncated": 111,
+            "execution_error": 1,
+            "model_call_limit": 1
+          }
+        }
+      }
+    }
+  },
+  "judge": {
+    "groups": {
+      "qwen2.5-14b-instruct-awq|direct|full": {
+        "n": 48,
+        "gold_fail": 19,
+        "gold_pass": 29,
+        "false_pass": 1,
+        "false_fail": 1,
+        "correct": 38,
+        "binary": 40,
+        "abstain": 8,
+        "status": {
+          "parsed": 48
+        },
+        "tokens": 124161
+      },
+      "qwen2.5-14b-instruct-awq|direct|compact": {
+        "n": 48,
+        "gold_fail": 19,
+        "gold_pass": 29,
+        "false_pass": 1,
+        "false_fail": 2,
+        "correct": 38,
+        "binary": 41,
+        "abstain": 7,
+        "status": {
+          "parsed": 48
+        },
+        "tokens": 55323
+      },
+      "qwen2.5-14b-instruct-awq|direct|distractor": {
+        "n": 48,
+        "gold_fail": 19,
+        "gold_pass": 29,
+        "false_pass": 2,
+        "false_fail": 2,
+        "correct": 37,
+        "binary": 41,
+        "abstain": 7,
+        "status": {
+          "parsed": 48
+        },
+        "tokens": 128405
+      },
+      "qwen2.5-14b-instruct-awq|direct|missing": {
+        "n": 48,
+        "gold_fail": 0,
+        "gold_pass": 0,
+        "false_pass": 0,
+        "false_fail": 0,
+        "correct": 48,
+        "binary": 0,
+        "abstain": 48,
+        "status": {
+          "parsed": 48
+        },
+        "tokens": 31450
+      },
+      "qwen2.5-14b-instruct-awq|rubric|full": {
+        "n": 48,
+        "gold_fail": 19,
+        "gold_pass": 29,
+        "false_pass": 5,
+        "false_fail": 4,
+        "correct": 33,
+        "binary": 42,
+        "abstain": 6,
+        "status": {
+          "parsed": 48
+        },
+        "tokens": 129522
+      },
+      "qwen2.5-14b-instruct-awq|rubric|compact": {
+        "n": 48,
+        "gold_fail": 19,
+        "gold_pass": 29,
+        "false_pass": 5,
+        "false_fail": 7,
+        "correct": 34,
+        "binary": 46,
+        "abstain": 2,
+        "status": {
+          "parsed": 48
+        },
+        "tokens": 60867
+      },
+      "qwen2.5-14b-instruct-awq|rubric|distractor": {
+        "n": 48,
+        "gold_fail": 19,
+        "gold_pass": 29,
+        "false_pass": 6,
+        "false_fail": 2,
+        "correct": 37,
+        "binary": 45,
+        "abstain": 3,
+        "status": {
+          "parsed": 48
+        },
+        "tokens": 133777
+      },
+      "qwen2.5-14b-instruct-awq|rubric|missing": {
+        "n": 48,
+        "gold_fail": 0,
+        "gold_pass": 0,
+        "false_pass": 0,
+        "false_fail": 0,
+        "correct": 48,
+        "binary": 0,
+        "abstain": 48,
+        "status": {
+          "parsed": 48
+        },
+        "tokens": 36609
+      },
+      "qwen2.5-7b-instruct-awq|direct|full": {
+        "n": 48,
+        "gold_fail": 19,
+        "gold_pass": 29,
+        "false_pass": 1,
+        "false_fail": 2,
+        "correct": 45,
+        "binary": 48,
+        "abstain": 0,
+        "status": {
+          "parsed": 48
+        },
+        "tokens": 123833
+      },
+      "qwen2.5-7b-instruct-awq|direct|compact": {
+        "n": 48,
+        "gold_fail": 19,
+        "gold_pass": 29,
+        "false_pass": 1,
+        "false_fail": 9,
+        "correct": 38,
+        "binary": 48,
+        "abstain": 0,
+        "status": {
+          "parsed": 48
+        },
+        "tokens": 55365
+      },
+      "qwen2.5-7b-instruct-awq|direct|distractor": {
+        "n": 48,
+        "gold_fail": 19,
+        "gold_pass": 29,
+        "false_pass": 1,
+        "false_fail": 1,
+        "correct": 45,
+        "binary": 47,
+        "abstain": 1,
+        "status": {
+          "parsed": 48
+        },
+        "tokens": 128106
+      },
+      "qwen2.5-7b-instruct-awq|direct|missing": {
+        "n": 48,
+        "gold_fail": 0,
+        "gold_pass": 0,
+        "false_pass": 0,
+        "false_fail": 0,
+        "correct": 47,
+        "binary": 1,
+        "abstain": 47,
+        "status": {
+          "parsed": 48
+        },
+        "tokens": 31263
+      },
+      "qwen2.5-7b-instruct-awq|rubric|full": {
+        "n": 48,
+        "gold_fail": 19,
+        "gold_pass": 29,
+        "false_pass": 1,
+        "false_fail": 2,
+        "correct": 40,
+        "binary": 43,
+        "abstain": 5,
+        "status": {
+          "parsed": 48
+        },
+        "tokens": 129238
+      },
+      "qwen2.5-7b-instruct-awq|rubric|compact": {
+        "n": 48,
+        "gold_fail": 19,
+        "gold_pass": 29,
+        "false_pass": 1,
+        "false_fail": 7,
+        "correct": 38,
+        "binary": 46,
+        "abstain": 2,
+        "status": {
+          "parsed": 48
+        },
+        "tokens": 60710
+      },
+      "qwen2.5-7b-instruct-awq|rubric|distractor": {
+        "n": 48,
+        "gold_fail": 19,
+        "gold_pass": 29,
+        "false_pass": 1,
+        "false_fail": 5,
+        "correct": 38,
+        "binary": 44,
+        "abstain": 4,
+        "status": {
+          "parsed": 48
+        },
+        "tokens": 133501
+      },
+      "qwen2.5-7b-instruct-awq|rubric|missing": {
+        "n": 48,
+        "gold_fail": 0,
+        "gold_pass": 0,
+        "false_pass": 0,
+        "false_fail": 0,
+        "correct": 48,
+        "binary": 0,
+        "abstain": 48,
+        "status": {
+          "parsed": 48
+        },
+        "tokens": 36625
+      }
+    },
+    "paired_views": {
+      "qwen2.5-14b-instruct-awq|direct|compact": {
+        "n": 48,
+        "flips": 8,
+        "improved": 4,
+        "worsened": 4,
+        "token_ratio": 0.445574697368739
+      },
+      "qwen2.5-14b-instruct-awq|direct|distractor": {
+        "n": 48,
+        "flips": 4,
+        "improved": 1,
+        "worsened": 2,
+        "token_ratio": 1.0341814257294963
+      },
+      "qwen2.5-14b-instruct-awq|rubric|compact": {
+        "n": 48,
+        "flips": 9,
+        "improved": 5,
+        "worsened": 4,
+        "token_ratio": 0.469935609394543
+      },
+      "qwen2.5-14b-instruct-awq|rubric|distractor": {
+        "n": 48,
+        "flips": 5,
+        "improved": 4,
+        "worsened": 0,
+        "token_ratio": 1.0328515618968206
+      },
+      "qwen2.5-7b-instruct-awq|direct|compact": {
+        "n": 48,
+        "flips": 9,
+        "improved": 1,
+        "worsened": 8,
+        "token_ratio": 0.4470940702397584
+      },
+      "qwen2.5-7b-instruct-awq|direct|distractor": {
+        "n": 48,
+        "flips": 2,
+        "improved": 1,
+        "worsened": 1,
+        "token_ratio": 1.0345061494109002
+      },
+      "qwen2.5-7b-instruct-awq|rubric|compact": {
+        "n": 48,
+        "flips": 12,
+        "improved": 5,
+        "worsened": 7,
+        "token_ratio": 0.4697534780792027
+      },
+      "qwen2.5-7b-instruct-awq|rubric|distractor": {
+        "n": 48,
+        "flips": 6,
+        "improved": 2,
+        "worsened": 4,
+        "token_ratio": 1.0329856543741005
+      }
+    },
+    "paired_prompts": {
+      "qwen2.5-14b-instruct-awq|full": {
+        "n": 48,
+        "flips": 13,
+        "improved": 3,
+        "worsened": 8
+      },
+      "qwen2.5-14b-instruct-awq|compact": {
+        "n": 48,
+        "flips": 11,
+        "improved": 2,
+        "worsened": 6
+      },
+      "qwen2.5-14b-instruct-awq|distractor": {
+        "n": 48,
+        "flips": 8,
+        "improved": 3,
+        "worsened": 3
+      },
+      "qwen2.5-14b-instruct-awq|missing": {
+        "n": 48,
+        "flips": 0,
+        "improved": 0,
+        "worsened": 0
+      },
+      "qwen2.5-7b-instruct-awq|full": {
+        "n": 48,
+        "flips": 7,
+        "improved": 1,
+        "worsened": 6
+      },
+      "qwen2.5-7b-instruct-awq|compact": {
+        "n": 48,
+        "flips": 6,
+        "improved": 3,
+        "worsened": 3
+      },
+      "qwen2.5-7b-instruct-awq|distractor": {
+        "n": 48,
+        "flips": 7,
+        "improved": 0,
+        "worsened": 7
+      },
+      "qwen2.5-7b-instruct-awq|missing": {
+        "n": 48,
+        "flips": 1,
+        "improved": 1,
+        "worsened": 0
+      }
+    }
+  }
+}
